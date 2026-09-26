@@ -211,15 +211,20 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
                     <div class="font-bold text-xs uppercase tracking-wider">
                         <?= $is_registration_open ? 'Pendaftaran Bantuan PIP Sedang Dibuka' : 'Periode Pendaftaran Telah Ditutup' ?>
                     </div>
-                    <div class="text-[11px] text-slate-600 mt-0.5">
-                        Tahun Ajaran: <b><?= htmlspecialchars($pengaturan['tahun_ajaran']) ?></b> &bull; Jadwal: <?= format_tgl_indo($tgl_buka) ?> s.d. <?= format_tgl_indo($tgl_tutup) ?>
+                    <div class="text-[11px] text-slate-600 mt-1 flex flex-wrap items-center gap-1.5">
+                        <span>Tahun Ajaran: <b><?= htmlspecialchars($pengaturan['tahun_ajaran']) ?></b></span>
+                        <span class="text-slate-300">&bull;</span>
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg <?= $is_registration_open ? 'bg-white/90 hover:bg-white text-emerald-800 border border-emerald-200/90 hover:border-emerald-300' : 'bg-white/90 hover:bg-white text-rose-800 border border-rose-200/90 hover:border-rose-300' ?> font-semibold shadow-2xs hover:shadow-xs transition-all cursor-default" title="Rentang Waktu Pendaftaran">
+                            <i class="fa-regular fa-clock text-[10px] <?= $is_registration_open ? 'text-emerald-600' : 'text-rose-600' ?>"></i>
+                            <span>Jadwal: <b><?= format_tgl_indo($tgl_buka) ?> s.d. <?= format_tgl_indo($tgl_tutup) ?></b></span>
+                        </span>
                     </div>
                 </div>
             </div>
             <div>
                 <a href="login_siswa.php" class="px-3.5 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-xl text-xs font-bold transition-colors inline-flex items-center gap-1.5 shadow-xs">
                     <i class="fa-solid fa-right-to-bracket text-xs"></i>
-                    <span>Sudah punya akun? Login di sini &rarr;</span>
+                    <span>Sudah punya akun? Login di sini</span>
                 </a>
             </div>
         </div>
