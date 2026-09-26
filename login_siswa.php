@@ -181,19 +181,16 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
             </button>
         </form>
 
-        <!-- LINK DAFTAR BARU -->
-        <div class="mt-2.5 text-center">
-            <p class="text-xs text-slate-500">
-                Belum mendaftarkan pengajuan PIP? 
-                <a href="daftar_siswa.php" class="font-bold text-blue-600 hover:underline">
-                    Daftar Akun Baru
-                </a>
-            </p>
+        <!-- TOMBOL DAFTAR AKUN BARU -->
+        <div class="pt-3 mt-3 border-t border-slate-100">
+            <a href="daftar_siswa.php" class="w-full py-2.5 bg-slate-600 hover:bg-slate-700 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all text-xs tracking-wide cursor-pointer flex items-center justify-center">
+                Daftar Akun Baru
+            </a>
         </div>
 
-        <!-- TOMBOL KE LOGIN ADMIN (DESAIN SAMA DENGAN LOGIN.PHP) -->
-        <div class="pt-3 mt-3 border-t border-slate-100">
-            <a href="login.php" class="w-full py-2.5 bg-slate-600 hover:bg-slate-700 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all text-xs tracking-wide cursor-pointer flex items-center justify-center">
+        <!-- LINK LOGIN ADMIN / GURU -->
+        <div class="pt-2 text-center">
+            <a href="login.php" class="text-xs text-blue-600 hover:text-blue-800 font-semibold hover:underline transition-colors">
                 Login Admin / Guru
             </a>
         </div>

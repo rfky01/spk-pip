@@ -313,34 +313,6 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
                 </div>
             </div>
 
-            <!-- INSTRUKSI TAHAPAN BERKAS -->
-            <div class="mt-5 p-4 rounded-xl text-xs leading-relaxed
-                <?php if ($siswa['status_verifikasi'] === 'Terverifikasi'): ?>
-                    bg-emerald-50/80 border border-emerald-200 text-emerald-900
-                <?php elseif ($siswa['status_verifikasi'] === 'Ditolak'): ?>
-                    bg-rose-50/80 border border-rose-200 text-rose-900
-                <?php else: ?>
-                    bg-blue-50/80 border border-blue-200 text-blue-900
-                <?php endif; ?>">
-                
-                <div class="flex items-start gap-2.5">
-                    <i class="fa-solid fa-circle-info text-sm mt-0.5 shrink-0
-                        <?= $siswa['status_verifikasi'] === 'Terverifikasi' ? 'text-emerald-600' : ($siswa['status_verifikasi'] === 'Ditolak' ? 'text-rose-600' : 'text-blue-600') ?>"></i>
-                    <div class="space-y-1">
-                        <?php if ($siswa['status_verifikasi'] === 'Terverifikasi'): ?>
-                            <b class="font-bold text-xs block text-emerald-800">Berkas Telah Sah &amp; Masuk Tahap Seleksi AHP</b>
-                            <span>Selamat! Berkas fisik dan data pengajuan Anda telah divalidasi oleh panitia sekolah. Data telah dikunci demi objektivitas pemeringkatan sistem SPK PIP dengan metode <em>Analytical Hierarchy Process</em>.</span>
-                        <?php elseif ($siswa['status_verifikasi'] === 'Ditolak'): ?>
-                            <b class="font-bold text-xs block text-rose-800">Pemberitahuan Perbaikan Berkas</b>
-                            <span>Mohon maaf, berkas fisik yang Anda serahkan dinyatakan belum lengkap atau tidak sesuai kriteria. Silakan periksa kembali dan perbarui formulir di bawah ini serta temui Panitia PIP di ruang Tata Usaha.</span>
-                        <?php else: ?>
-                            <b class="font-bold text-xs block text-blue-800">Langkah Selanjutnya: Serahkan Berkas Fisik ke Sekolah</b>
-                            <span>Data pendaftaran online Anda telah tersimpan. Segera serahkan fotokopi berkas pendukung (Fotokopi KK, KIP/KKS/PKH atau Surat Keterangan Tidak Mampu dari Desa) ke <b>Ruang Tata Usaha <?= htmlspecialchars($nama_sekolah) ?></b> untuk diverifikasi langsung oleh panitia.</span>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            </div>
-
             <!-- ACTION BAR: CETAK BUKTI & EDIT BUTTON -->
             <div class="mt-5 pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 no-print">
                 <button type="button" onclick="window.print()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold shadow-xs transition-colors inline-flex items-center gap-2 cursor-pointer">
@@ -364,14 +336,9 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
         <!-- FORM DETAIL DATA PENGAJUAN (BISA DIEDIT JIKA BELUM TERVERIFIKASI) -->
         <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
             <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
-                <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-sm">
-                        <i class="fa-solid fa-address-card"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-sm font-bold text-slate-900">Rincian &amp; Formulir Pembaruan Data</h3>
-                        <p class="text-[11px] text-slate-500">Kelola informasi pribadi dan kriteria sosial ekonomi pendaftar</p>
-                    </div>
+                <div>
+                    <h3 class="text-sm font-bold text-slate-900">Rincian &amp; Formulir Pembaruan Data</h3>
+                    <p class="text-[11px] text-slate-500">Kelola informasi pribadi dan kriteria sosial ekonomi pendaftar</p>
                 </div>
 
                 <?php if ($is_locked): ?>
@@ -384,8 +351,8 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
 
                 <!-- BAGIAN 1: BIODATA SISWA -->
                 <div>
-                    <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-700 mb-3 flex items-center gap-1.5">
-                        <i class="fa-solid fa-user text-blue-600"></i> Biodata Siswa &amp; Wali Murid
+                    <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-700 mb-3">
+                        Biodata Siswa &amp; Wali Murid
                     </h4>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
@@ -439,13 +406,13 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
 
                 <!-- BAGIAN 2: KRITERIA SOSIAL EKONOMI -->
                 <div class="pt-4 border-t border-slate-100">
-                    <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-700 mb-3 flex items-center gap-1.5">
-                        <i class="fa-solid fa-clipboard-list text-amber-500"></i> Kriteria Penilaian AHP
+                    <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-700 mb-3">
+                        Kriteria Penilaian AHP
                     </h4>
 
                     <div class="space-y-4 text-xs">
                         <div>
-                            <label class="block font-bold text-slate-700 mb-1">1. Penghasilan Rata-rata Orang Tua per Bulan *</label>
+                            <label class="block font-bold text-slate-700 mb-1">Penghasilan Rata-rata Orang Tua per Bulan *</label>
                             <?php $c1 = (int)($siswa['penghasilan'] ?? 5); ?>
                             <select name="penghasilan" <?= $is_locked ? 'disabled' : '' ?>
                                 class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none text-xs font-semibold text-slate-900 <?= $is_locked ? 'bg-slate-100 cursor-not-allowed' : 'bg-white' ?>">
@@ -458,7 +425,7 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
                         </div>
 
                         <div>
-                            <label class="block font-bold text-slate-700 mb-1">2. Jumlah Anggota Keluarga yang Ditanggung *</label>
+                            <label class="block font-bold text-slate-700 mb-1">Jumlah Anggota Keluarga yang Ditanggung *</label>
                             <?php $c2 = (int)($siswa['tanggungan'] ?? 5); ?>
                             <select name="tanggungan" <?= $is_locked ? 'disabled' : '' ?>
                                 class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none text-xs font-semibold text-slate-900 <?= $is_locked ? 'bg-slate-100 cursor-not-allowed' : 'bg-white' ?>">
@@ -471,7 +438,7 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
                         </div>
 
                         <div>
-                            <label class="block font-bold text-slate-700 mb-1">3. Kondisi Fisik Tempat Tinggal / Rumah *</label>
+                            <label class="block font-bold text-slate-700 mb-1">Kondisi Fisik Tempat Tinggal / Rumah *</label>
                             <?php $c3 = (int)($siswa['kondisi_rumah'] ?? 5); ?>
                             <select name="kondisi_rumah" <?= $is_locked ? 'disabled' : '' ?>
                                 class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none text-xs font-semibold text-slate-900 <?= $is_locked ? 'bg-slate-100 cursor-not-allowed' : 'bg-white' ?>">
@@ -484,7 +451,7 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
                         </div>
 
                         <div>
-                            <label class="block font-bold text-slate-700 mb-1">4. Prestasi Akademik Tertinggi Siswa *</label>
+                            <label class="block font-bold text-slate-700 mb-1">Prestasi Akademik Tertinggi Siswa *</label>
                             <?php $c4 = (int)($siswa['prestasi'] ?? 3); ?>
                             <select name="prestasi" <?= $is_locked ? 'disabled' : '' ?>
                                 class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none text-xs font-semibold text-slate-900 <?= $is_locked ? 'bg-slate-100 cursor-not-allowed' : 'bg-white' ?>">
@@ -497,7 +464,7 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
                         </div>
 
                         <div>
-                            <label class="block font-bold text-slate-700 mb-1">5. Jarak Rumah Siswa ke Sekolah *</label>
+                            <label class="block font-bold text-slate-700 mb-1">Jarak Rumah Siswa ke Sekolah *</label>
                             <?php $c5 = (int)($siswa['jarak'] ?? 4); ?>
                             <select name="jarak" <?= $is_locked ? 'disabled' : '' ?>
                                 class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none text-xs font-semibold text-slate-900 <?= $is_locked ? 'bg-slate-100 cursor-not-allowed' : 'bg-white' ?>">
@@ -512,25 +479,22 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
                 </div>
 
                 <!-- SUBMIT PERUBAHAN -->
-                <div class="pt-4 border-t border-slate-100 flex items-center justify-between no-print">
-                    <?php if ($is_locked): ?>
-                        <div class="w-full p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl text-xs flex items-center gap-2">
-                            <i class="fa-solid fa-lock text-emerald-600"></i>
-                            <span>Data Anda telah resmi diverifikasi oleh panitia sekolah dan dikunci demi menjaga objektivitas pemeringkatan AHP.</span>
-                        </div>
-                    <?php elseif (!$is_registration_open): ?>
-                        <div class="w-full p-3 bg-slate-100 border border-slate-200 text-slate-600 rounded-xl text-xs flex items-center gap-2">
-                            <i class="fa-solid fa-calendar-xmark text-slate-500"></i>
-                            <span>Periode pendaftaran telah ditutup, pembaruan data telah berakhir.</span>
-                        </div>
-                    <?php else: ?>
-                        <span class="text-xs text-slate-500">Pastikan data yang diperbarui sudah sesuai dengan dokumen fisik.</span>
-                        <button type="submit" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs shadow-md transition-all cursor-pointer flex items-center gap-2">
-                            <i class="fa-solid fa-floppy-disk text-xs"></i>
-                            <span>Simpan Pembaruan Data</span>
-                        </button>
-                    <?php endif; ?>
-                </div>
+                <?php if (!$is_locked): ?>
+                    <div class="pt-4 border-t border-slate-100 flex items-center justify-between no-print">
+                        <?php if (!$is_registration_open): ?>
+                            <div class="w-full p-3 bg-slate-100 border border-slate-200 text-slate-600 rounded-xl text-xs flex items-center gap-2">
+                                <i class="fa-solid fa-calendar-xmark text-slate-500"></i>
+                                <span>Periode pendaftaran telah ditutup, pembaruan data telah berakhir.</span>
+                            </div>
+                        <?php else: ?>
+                            <span class="text-xs text-slate-500">Pastikan data yang diperbarui sudah sesuai dengan dokumen fisik.</span>
+                            <button type="submit" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs shadow-md transition-all cursor-pointer flex items-center gap-2">
+                                <i class="fa-solid fa-floppy-disk text-xs"></i>
+                                <span>Simpan Pembaruan Data</span>
+                            </button>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
 
             </form>
         </div>
@@ -638,13 +602,8 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
 
     <!-- FOOTER -->
     <footer class="bg-white border-t border-slate-200 py-5 text-center text-xs text-slate-400 no-print">
-        <div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+        <div class="max-w-5xl mx-auto px-4 flex items-center justify-center">
             <span>&copy; <?= date('Y') ?> <?= htmlspecialchars($nama_sekolah) ?> &bull; Sistem SPK PIP (Metode AHP)</span>
-            <div class="flex items-center gap-3">
-                <a href="logout_siswa.php" class="text-rose-600 hover:underline font-semibold">Logout Pendaftar</a>
-                <span class="text-slate-300">|</span>
-                <a href="login.php" class="text-slate-500 hover:text-slate-700">Login Administrator</a>
-            </div>
         </div>
     </footer>
 

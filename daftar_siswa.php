@@ -189,9 +189,6 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
                     <i class="fa-solid fa-right-to-bracket text-xs"></i>
                     <span>Login Pendaftar</span>
                 </a>
-                <a href="login.php" class="hidden sm:inline-flex px-3 py-1.5 text-slate-500 hover:text-slate-800 text-xs font-semibold transition-colors items-center gap-1">
-                    <i class="fa-solid fa-user-shield text-[11px]"></i> Login Admin
-                </a>
             </div>
         </div>
     </header>
@@ -200,32 +197,20 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
     <main class="max-w-4xl w-full mx-auto px-4 sm:px-6 py-8 flex-1">
 
         <!-- KARTU INFORMASI JADWAL -->
-        <div class="mb-6 p-4 rounded-2xl border text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs
+        <div class="mb-6 p-4 rounded-2xl border text-xs shadow-xs
             <?= $is_registration_open ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-rose-50 border-rose-200 text-rose-900' ?>">
-            <div class="flex items-center gap-3">
-                <div class="w-9 h-9 rounded-xl flex items-center justify-center text-base shrink-0
-                    <?= $is_registration_open ? 'bg-emerald-500 text-white' : 'bg-rose-500 text-white' ?>">
-                    <i class="fa-solid <?= $is_registration_open ? 'fa-calendar-check' : 'fa-calendar-xmark' ?>"></i>
-                </div>
-                <div>
-                    <div class="font-bold text-xs uppercase tracking-wider">
-                        <?= $is_registration_open ? 'Pendaftaran Bantuan PIP Sedang Dibuka' : 'Periode Pendaftaran Telah Ditutup' ?>
-                    </div>
-                    <div class="text-[11px] text-slate-600 mt-1 flex flex-wrap items-center gap-1.5">
-                        <span>Tahun Ajaran: <b><?= htmlspecialchars($pengaturan['tahun_ajaran']) ?></b></span>
-                        <span class="text-slate-300">&bull;</span>
-                        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg <?= $is_registration_open ? 'bg-white/90 hover:bg-white text-emerald-800 border border-emerald-200/90 hover:border-emerald-300' : 'bg-white/90 hover:bg-white text-rose-800 border border-rose-200/90 hover:border-rose-300' ?> font-semibold shadow-2xs hover:shadow-xs transition-all cursor-default" title="Rentang Waktu Pendaftaran">
-                            <i class="fa-regular fa-clock text-[10px] <?= $is_registration_open ? 'text-emerald-600' : 'text-rose-600' ?>"></i>
-                            <span>Jadwal: <b><?= format_tgl_indo($tgl_buka) ?> s.d. <?= format_tgl_indo($tgl_tutup) ?></b></span>
-                        </span>
-                    </div>
-                </div>
-            </div>
             <div>
-                <a href="login_siswa.php" class="px-3.5 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-xl text-xs font-bold transition-colors inline-flex items-center gap-1.5 shadow-xs">
-                    <i class="fa-solid fa-right-to-bracket text-xs"></i>
-                    <span>Sudah punya akun? Login di sini</span>
-                </a>
+                <div class="font-bold text-xs uppercase tracking-wider">
+                    <?= $is_registration_open ? 'Pendaftaran Bantuan PIP Sedang Dibuka' : 'Periode Pendaftaran Telah Ditutup' ?>
+                </div>
+                <div class="text-[11px] text-slate-600 mt-1 flex flex-wrap items-center gap-1.5">
+                    <span>Tahun Ajaran: <b><?= htmlspecialchars($pengaturan['tahun_ajaran']) ?></b></span>
+                    <span class="text-slate-300">&bull;</span>
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg <?= $is_registration_open ? 'bg-white/90 hover:bg-white text-emerald-800 border border-emerald-200/90 hover:border-emerald-300' : 'bg-white/90 hover:bg-white text-rose-800 border border-rose-200/90 hover:border-rose-300' ?> font-semibold shadow-2xs hover:shadow-xs transition-all cursor-default" title="Rentang Waktu Pendaftaran">
+                        <i class="fa-regular fa-clock text-[10px] <?= $is_registration_open ? 'text-emerald-600' : 'text-rose-600' ?>"></i>
+                        <span>Jadwal: <b><?= format_tgl_indo($tgl_buka) ?> s.d. <?= format_tgl_indo($tgl_tutup) ?></b></span>
+                    </span>
+                </div>
             </div>
         </div>
 
@@ -243,17 +228,10 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
         <div class="bg-white rounded-2xl border border-slate-200 shadow-xl overflow-hidden">
             
             <div class="p-6 bg-gradient-to-r from-slate-900 to-blue-900 text-white">
-                <div class="flex items-center gap-3">
-                    <div class="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-xs flex items-center justify-center text-xl text-blue-300">
-                        <i class="fa-solid fa-user-plus"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-lg font-bold">Formulir Pendaftaran Akun Pendaftar PIP</h2>
-                        <p class="text-xs text-blue-200 mt-0.5">
-                            Isi biodata anak, buat PIN keamanan akun Anda, dan lengkapi kriteria sosial ekonomi.
-                        </p>
-                    </div>
-                </div>
+                <h2 class="text-lg font-bold">Formulir Pendaftaran Akun Pendaftar PIP</h2>
+                <p class="text-xs text-blue-200 mt-1">
+                    Isi biodata anak, buat PIN keamanan akun Anda, dan lengkapi kriteria sosial ekonomi.
+                </p>
             </div>
 
             <form action="daftar_siswa.php" method="POST" class="p-6 sm:p-8 space-y-6">
