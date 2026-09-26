@@ -217,8 +217,9 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
                 </div>
             </div>
             <div>
-                <a href="login_siswa.php" class="text-xs font-bold underline hover:no-underline flex items-center gap-1">
-                    Sudah punya akun? Login di sini &rarr;
+                <a href="login_siswa.php" class="px-3.5 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-xl text-xs font-bold transition-colors inline-flex items-center gap-1.5 shadow-xs">
+                    <i class="fa-solid fa-right-to-bracket text-xs"></i>
+                    <span>Sudah punya akun? Login di sini &rarr;</span>
                 </a>
             </div>
         </div>
@@ -254,22 +255,6 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
 
                 <!-- BAGIAN 1: KEAMANAN AKUN (NISN & PIN) -->
                 <div>
-                    <div class="flex items-center gap-2 pb-2.5 border-b border-slate-100 mb-4">
-                        <div class="w-6 h-6 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-xs font-bold">1</div>
-                        <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-800">
-                            Keamanan Akun Pendaftar (Wajib Diingat)
-                        </h3>
-                    </div>
-
-                    <div class="p-4 bg-amber-50/60 border border-amber-200 rounded-xl mb-4 text-xs text-amber-900 space-y-1">
-                        <div class="font-bold flex items-center gap-1.5 text-amber-800">
-                            <i class="fa-solid fa-shield-halved text-amber-600"></i> Penting: Lindungi Data Anda dengan PIN
-                        </div>
-                        <p class="text-[11px] leading-relaxed text-amber-800">
-                            Nomor <b>NISN</b> dan <b>PIN Keamanan</b> yang Anda buat di bawah ini akan digunakan untuk login kembali ke portal siswa agar orang lain tidak dapat melihat atau mengubah data anak Anda.
-                        </p>
-                    </div>
-
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
                         <div class="sm:col-span-2">
                             <label class="block font-bold text-slate-700 mb-1">

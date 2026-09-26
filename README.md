@@ -51,3 +51,4 @@ Aplikasi web Sistem Pendukung Keputusan (SPK) berbasis PHP Native & MySQL dengan
    - **Halaman Utama / Pendaftaran:** `http://localhost/spk-pip/`
    - **Login Administrator:** `http://localhost/spk-pip/login.php`
    - **Login Portal Siswa:** `http://localhost/spk-pip/login_siswa.php`
+
