@@ -1,0 +1,24 @@
+# Dependencies & Environment
+.env
+*.log
+
+# IDE & Editor
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Archives
+*.zip
+*.rar
+*.7z
+*.tar.gz
+
+# Uploads directory (abaikan file berkas upload siswa jika ada, tapi pertahankan folder)
+uploads/*
+!uploads/.gitkeep
