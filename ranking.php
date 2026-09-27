@@ -143,16 +143,16 @@ $halaman_siswa = array_slice($tampil_siswa, $offset_ranking, $limit_ranking);
 
     <!-- Banner Peringatan jika ada berkas Menunggu Verifikasi -->
     <?php if ($count_menunggu > 0): ?>
-        <div class="p-4 bg-amber-50/80 border border-amber-200/80 text-amber-900 rounded-xl text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm">
+        <div class="p-4 bg-amber-950/60 border border-amber-600/70 text-amber-200 rounded-xl text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-md">
             <div class="flex items-center gap-2.5">
-                <i class="fa-solid fa-clock text-amber-600 text-base"></i>
-                <span>Terdapat <b><?= $count_menunggu ?> berkas pengajuan</b> berstatus <b>Menunggu Verifikasi</b>. Siswa yang belum diverifikasi belum dimasukkan ke kuota resmi.</span>
+                <i class="fa-solid fa-clock text-amber-400 text-base"></i>
+                <span>Terdapat <b class="text-white"><?= $count_menunggu ?> berkas pengajuan</b> berstatus <b class="text-white">Menunggu Verifikasi</b>. Siswa yang belum diverifikasi belum dimasukkan ke kuota resmi.</span>
             </div>
             <div class="flex items-center gap-2 shrink-0">
-                <a href="ranking.php?tab=menunggu" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-bold text-xs transition-colors">
+                <a href="ranking.php?tab=menunggu" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold text-xs shadow-sm transition-colors">
                     Lihat Berkas (<?= $count_menunggu ?>)
                 </a>
-                <a href="data_calon_penerima.php?status=menunggu" class="px-3 py-1.5 bg-white border border-amber-300 text-amber-900 hover:bg-amber-100 rounded-lg font-bold text-xs transition-colors">
+                <a href="data_calon_penerima.php?status=menunggu" class="px-3 py-1.5 bg-[#1E3A5F] hover:bg-[#274872] border border-[#2E5A8F] text-amber-200 rounded-lg font-bold text-xs transition-colors">
                     Kelola di Data Siswa
                 </a>
             </div>
@@ -171,45 +171,45 @@ $halaman_siswa = array_slice($tampil_siswa, $offset_ranking, $limit_ranking);
             <label class="text-xs font-semibold text-slate-600 whitespace-nowrap">Kuota Bantuan:</label>
             <input type="number" name="kuota_pip" min="1" max="500" value="<?= $kuota ?>" 
                 class="w-16 px-2 py-1 text-xs border border-slate-300 rounded-lg text-center font-bold text-slate-900 focus:outline-none focus:border-slate-800 focus:ring-1 focus:ring-slate-800">
-            <button type="submit" class="px-3 py-1 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-medium transition-colors">Ubah</button>
+            <button type="submit" class="px-3 py-1 bg-[#162B4D] hover:bg-[#1E3A5F] text-white border border-[#2E5A8F] hover:border-blue-400 rounded-lg text-xs font-semibold shadow-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]">Ubah</button>
         </form>
     </div>
 
     <!-- Filter Tab Status Verifikasi & Kelolosan Kuota -->
     <div class="flex items-center gap-2 overflow-x-auto pb-1">
-        <a href="ranking.php?tab=lolos" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap inline-flex items-center <?= $tab_filter === 'lolos' ? 'bg-slate-900 text-white shadow-sm' : 'bg-slate-50 border border-slate-200 text-slate-700 hover:bg-slate-100 hover:text-slate-900' ?>">
+        <a href="ranking.php?tab=lolos" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors inline-flex items-center <?= $tab_filter === 'lolos' ? 'bg-[#162B4D] text-white border border-[#3B82F6] shadow-sm' : 'bg-[#112240] text-slate-300 hover:bg-[#162B4D] hover:text-white border border-[#1E3A5F]' ?>">
             <span>Prioritas Lolos</span>
-            <span class="ml-2 px-2 py-0.5 rounded-full text-[11px] font-bold transition-colors <?= $tab_filter === 'lolos' ? 'bg-white text-slate-900 shadow-sm' : 'bg-slate-200/90 text-slate-800' ?>">
+            <span class="ml-2 px-2 py-0.5 rounded-full text-[11px] font-bold transition-colors <?= $tab_filter === 'lolos' ? 'bg-[#1E3A5F] text-blue-200 border border-[#2E5A8F]' : 'bg-[#07101E] text-slate-400 border border-[#1E3A5F]' ?>">
                 <?= $count_lolos ?>
             </span>
         </a>
-        <a href="ranking.php?tab=cadangan" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap inline-flex items-center <?= $tab_filter === 'cadangan' ? 'bg-slate-900 text-white shadow-sm' : 'bg-slate-50 border border-slate-200 text-slate-700 hover:bg-slate-100 hover:text-slate-900' ?>">
+        <a href="ranking.php?tab=cadangan" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors inline-flex items-center <?= $tab_filter === 'cadangan' ? 'bg-[#162B4D] text-white border border-[#3B82F6] shadow-sm' : 'bg-[#112240] text-slate-300 hover:bg-[#162B4D] hover:text-white border border-[#1E3A5F]' ?>">
             <span>Cadangan</span>
-            <span class="ml-2 px-2 py-0.5 rounded-full text-[11px] font-bold transition-colors <?= $tab_filter === 'cadangan' ? 'bg-white text-slate-900 shadow-sm' : 'bg-slate-200/90 text-slate-800' ?>">
+            <span class="ml-2 px-2 py-0.5 rounded-full text-[11px] font-bold transition-colors <?= $tab_filter === 'cadangan' ? 'bg-[#1E3A5F] text-blue-200 border border-[#2E5A8F]' : 'bg-[#07101E] text-slate-400 border border-[#1E3A5F]' ?>">
                 <?= $count_cadangan ?>
             </span>
         </a>
-        <a href="ranking.php?tab=terverifikasi" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap inline-flex items-center <?= $tab_filter === 'terverifikasi' ? 'bg-slate-900 text-white shadow-sm' : 'bg-slate-50 border border-slate-200 text-slate-700 hover:bg-slate-100 hover:text-slate-900' ?>">
+        <a href="ranking.php?tab=terverifikasi" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors inline-flex items-center <?= $tab_filter === 'terverifikasi' ? 'bg-[#162B4D] text-white border border-[#3B82F6] shadow-sm' : 'bg-[#112240] text-slate-300 hover:bg-[#162B4D] hover:text-white border border-[#1E3A5F]' ?>">
             <span>Terverifikasi</span>
-            <span class="ml-2 px-2 py-0.5 rounded-full text-[11px] font-bold transition-colors <?= $tab_filter === 'terverifikasi' ? 'bg-white text-slate-900 shadow-sm' : 'bg-slate-200/90 text-slate-800' ?>">
+            <span class="ml-2 px-2 py-0.5 rounded-full text-[11px] font-bold transition-colors <?= $tab_filter === 'terverifikasi' ? 'bg-[#1E3A5F] text-blue-200 border border-[#2E5A8F]' : 'bg-[#07101E] text-slate-400 border border-[#1E3A5F]' ?>">
                 <?= $count_terverifikasi ?>
             </span>
         </a>
-        <a href="ranking.php?tab=menunggu" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap inline-flex items-center <?= $tab_filter === 'menunggu' ? 'bg-slate-900 text-white shadow-sm' : 'bg-slate-50 border border-slate-200 text-slate-700 hover:bg-slate-100 hover:text-slate-900' ?>">
+        <a href="ranking.php?tab=menunggu" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors inline-flex items-center <?= $tab_filter === 'menunggu' ? 'bg-[#162B4D] text-white border border-[#3B82F6] shadow-sm' : 'bg-[#112240] text-slate-300 hover:bg-[#162B4D] hover:text-white border border-[#1E3A5F]' ?>">
             <span>Menunggu Verifikasi</span>
-            <span class="ml-2 px-2 py-0.5 rounded-full text-[11px] font-bold transition-colors <?= $tab_filter === 'menunggu' ? 'bg-white text-slate-900 shadow-sm' : 'bg-slate-200/90 text-slate-800' ?>">
+            <span class="ml-2 px-2 py-0.5 rounded-full text-[11px] font-bold transition-colors <?= $tab_filter === 'menunggu' ? 'bg-[#1E3A5F] text-blue-200 border border-[#2E5A8F]' : 'bg-[#07101E] text-slate-400 border border-[#1E3A5F]' ?>">
                 <?= $count_menunggu ?>
             </span>
         </a>
-        <a href="ranking.php?tab=ditolak" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap inline-flex items-center <?= $tab_filter === 'ditolak' ? 'bg-slate-900 text-white shadow-sm' : 'bg-slate-50 border border-slate-200 text-slate-700 hover:bg-slate-100 hover:text-slate-900' ?>">
+        <a href="ranking.php?tab=ditolak" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors inline-flex items-center <?= $tab_filter === 'ditolak' ? 'bg-[#162B4D] text-white border border-[#3B82F6] shadow-sm' : 'bg-[#112240] text-slate-300 hover:bg-[#162B4D] hover:text-white border border-[#1E3A5F]' ?>">
             <span>Ditolak</span>
-            <span class="ml-2 px-2 py-0.5 rounded-full text-[11px] font-bold transition-colors <?= $tab_filter === 'ditolak' ? 'bg-white text-slate-900 shadow-sm' : 'bg-slate-200/90 text-slate-800' ?>">
+            <span class="ml-2 px-2 py-0.5 rounded-full text-[11px] font-bold transition-colors <?= $tab_filter === 'ditolak' ? 'bg-[#1E3A5F] text-blue-200 border border-[#2E5A8F]' : 'bg-[#07101E] text-slate-400 border border-[#1E3A5F]' ?>">
                 <?= $count_ditolak ?>
             </span>
         </a>
-        <a href="ranking.php?tab=all" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap inline-flex items-center <?= $tab_filter === 'all' ? 'bg-slate-900 text-white shadow-sm' : 'bg-slate-50 border border-slate-200 text-slate-700 hover:bg-slate-100 hover:text-slate-900' ?>">
+        <a href="ranking.php?tab=all" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors inline-flex items-center <?= $tab_filter === 'all' ? 'bg-[#162B4D] text-white border border-[#3B82F6] shadow-sm' : 'bg-[#112240] text-slate-300 hover:bg-[#162B4D] hover:text-white border border-[#1E3A5F]' ?>">
             <span>Semua Calon</span>
-            <span class="ml-2 px-2 py-0.5 rounded-full text-[11px] font-bold transition-colors <?= $tab_filter === 'all' ? 'bg-white text-slate-900 shadow-sm' : 'bg-slate-200/90 text-slate-800' ?>">
+            <span class="ml-2 px-2 py-0.5 rounded-full text-[11px] font-bold transition-colors <?= $tab_filter === 'all' ? 'bg-[#1E3A5F] text-blue-200 border border-[#2E5A8F]' : 'bg-[#07101E] text-slate-400 border border-[#1E3A5F]' ?>">
                 <?= $count_all ?>
             </span>
         </a>
@@ -246,11 +246,11 @@ $halaman_siswa = array_slice($tampil_siswa, $offset_ranking, $limit_ranking);
                         </p>
                     </div>
                     <div class="flex items-center gap-2 shrink-0">
-                    <a href="cetak_laporan.php?kategori=<?= urlencode($tab_filter) ?>&tahun=<?= urlencode($pengaturan['tahun_ajaran'] ?? '2025/2026') ?>" target="_blank" class="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-medium shadow-sm transition-colors flex items-center gap-2 whitespace-nowrap" title="Cetak data yang saat ini tampil di layar (PDF)">
-                        <i class="fa-solid fa-print"></i> Cetak Laporan PDF
+                    <a href="cetak_laporan.php?kategori=<?= urlencode($tab_filter) ?>&tahun=<?= urlencode($pengaturan['tahun_ajaran'] ?? '2025/2026') ?>" target="_blank" class="px-3.5 py-2 bg-[#162B4D] hover:bg-[#1E3A5F] text-white border border-[#2E5A8F] hover:border-blue-400 rounded-lg text-xs font-semibold shadow-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] flex items-center gap-2 whitespace-nowrap" title="Cetak data yang saat ini tampil di layar (PDF)">
+                        <i class="fa-solid fa-print text-blue-400"></i> Cetak Laporan PDF
                     </a>
-                    <a href="ekspor_excel.php?kategori=<?= urlencode($tab_filter) ?>&tahun=<?= urlencode($pengaturan['tahun_ajaran'] ?? '2025/2026') ?>" class="px-3.5 py-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-lg text-xs font-medium shadow-sm transition-colors flex items-center gap-2 whitespace-nowrap" title="Ekspor data yang saat ini tampil di layar ke Excel (.xls)">
-                        <i class="fa-solid fa-file-excel text-emerald-600"></i> Ekspor Excel
+                    <a href="ekspor_excel.php?kategori=<?= urlencode($tab_filter) ?>&tahun=<?= urlencode($pengaturan['tahun_ajaran'] ?? '2025/2026') ?>" class="px-3.5 py-2 bg-[#112240] hover:bg-[#162B4D] text-slate-200 border border-[#1E3A5F] hover:border-[#2E5A8F] rounded-lg text-xs font-medium shadow-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] flex items-center gap-2 whitespace-nowrap" title="Ekspor data yang saat ini tampil di layar ke Excel (.xls)">
+                        <i class="fa-solid fa-file-excel text-emerald-400"></i> Ekspor Excel
                     </a>
                 </div>
             </div>
@@ -463,11 +463,11 @@ $halaman_siswa = array_slice($tampil_siswa, $offset_ranking, $limit_ranking);
             </div>
 
             <div class="pt-4 border-t border-slate-100 space-y-2">
-                <button type="button" onclick="openModalPilihanCetak()" class="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded-lg text-xs transition-colors shadow flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap">
-                    <i class="fa-solid fa-file-pdf"></i> Cetak PDF (Pilih Kategori)
+                <button type="button" onclick="openModalPilihanCetak()" class="w-full py-2.5 bg-[#162B4D] hover:bg-[#1E3A5F] text-white border border-[#2E5A8F] hover:border-blue-400 font-semibold rounded-lg text-xs transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-sm flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap">
+                    <i class="fa-solid fa-file-pdf text-blue-400"></i> Cetak PDF (Pilih Kategori)
                 </button>
-                <button type="button" onclick="openModalPilihanExcel()" class="w-full py-2.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-medium rounded-lg text-xs transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap">
-                    <i class="fa-solid fa-file-excel text-emerald-600"></i> Ekspor Excel (Pilih Kategori)
+                <button type="button" onclick="openModalPilihanExcel()" class="w-full py-2.5 bg-[#112240] hover:bg-[#162B4D] text-slate-200 border border-[#1E3A5F] hover:border-[#2E5A8F] font-medium rounded-lg text-xs transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-sm flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap">
+                    <i class="fa-solid fa-file-excel text-emerald-400"></i> Ekspor Excel (Pilih Kategori)
                 </button>
             </div>
         </div>

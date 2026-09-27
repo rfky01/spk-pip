@@ -218,34 +218,34 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
         .print-only { display: none; }
     </style>
 </head>
-<body class="bg-slate-100 min-h-screen text-slate-800 font-sans flex flex-col justify-between">
+<body class="bg-[#0B192C] min-h-screen text-slate-100 font-sans flex flex-col justify-between">
 
     <!-- NAVBAR PENDAFTAR -->
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-xs no-print">
+    <header class="bg-[#112240] border-b border-[#1E3A5F] sticky top-0 z-30 shadow-md no-print">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200 p-1 flex items-center justify-center shrink-0">
+                <div class="w-10 h-10 rounded-xl bg-[#0B192C] border border-[#1E3A5F] p-1 flex items-center justify-center shrink-0">
                     <img src="<?= htmlspecialchars($logo_sekolah) ?>" alt="Logo Sekolah" class="max-h-full max-w-full object-contain">
                 </div>
                 <div>
-                    <h1 class="text-sm font-extrabold text-slate-900 leading-tight">Portal Akun Pendaftar PIP</h1>
-                    <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider"><?= htmlspecialchars($nama_sekolah) ?></p>
+                    <h1 class="text-sm font-extrabold text-white leading-tight">Portal Akun Pendaftar PIP</h1>
+                    <p class="text-[11px] font-semibold text-blue-300 uppercase tracking-wider"><?= htmlspecialchars($nama_sekolah) ?></p>
                 </div>
             </div>
 
             <!-- USER INFO & LOGOUT -->
             <div class="flex items-center gap-2 sm:gap-3">
                 <div class="hidden md:block text-right">
-                    <div class="text-xs font-bold text-slate-900 leading-tight"><?= htmlspecialchars($siswa['nama']) ?></div>
-                    <div class="text-[11px] text-slate-500 font-mono">NISN: <?= htmlspecialchars($siswa['nisn']) ?></div>
+                    <div class="text-xs font-bold text-white leading-tight"><?= htmlspecialchars($siswa['nama']) ?></div>
+                    <div class="text-[11px] text-slate-400 font-mono">NISN: <?= htmlspecialchars($siswa['nisn']) ?></div>
                 </div>
 
-                <button type="button" onclick="bukaModalGantiPin()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer" title="Ganti PIN Keamanan">
+                <button type="button" onclick="bukaModalGantiPin()" class="px-3 py-1.5 bg-[#1E3A5F] hover:bg-[#274872] text-white rounded-xl text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer" title="Ganti PIN Keamanan">
                     <i class="fa-solid fa-key text-xs"></i>
                     <span class="hidden sm:inline">Ganti PIN</span>
                 </button>
 
-                <a href="logout_siswa.php" onclick="return confirm('Apakah Anda yakin ingin keluar dari Akun Pendaftar?')" class="px-3.5 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5">
+                <a href="logout_siswa.php" onclick="return confirm('Apakah Anda yakin ingin keluar dari Akun Pendaftar?')" class="px-3.5 py-1.5 bg-rose-950/40 hover:bg-rose-900/60 text-rose-300 border border-rose-800/60 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5">
                     <i class="fa-solid fa-arrow-right-from-bracket text-xs"></i>
                     <span class="hidden sm:inline">Logout</span>
                 </a>
@@ -258,7 +258,7 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
 
         <!-- NOTIFIKASI SUKSES / ERROR -->
         <?php if (isset($_GET['status']) && $_GET['status'] === 'sukses_daftar'): ?>
-            <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-300 text-emerald-900 text-xs font-semibold shadow-xs flex items-start justify-between gap-3 no-print">
+            <div class="p-4 rounded-2xl bg-emerald-950/40 border border-emerald-700/60 text-emerald-200 text-xs font-semibold shadow-xs flex items-start justify-between gap-3 no-print">
                 <div class="flex items-start gap-2.5">
                     <i class="fa-solid fa-circle-check text-emerald-600 text-base mt-0.5 shrink-0"></i>
                     <div>
@@ -272,7 +272,7 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
 
         <?php if (!empty($msg)): ?>
             <div class="p-4 rounded-2xl text-xs font-semibold shadow-xs flex items-start justify-between gap-3 no-print
-                <?= $msg_type === 'success' ? 'bg-emerald-50 border border-emerald-300 text-emerald-900' : 'bg-rose-50 border border-rose-300 text-rose-900' ?>">
+                <?= $msg_type === 'success' ? 'bg-emerald-950/50 border border-emerald-700/60 text-emerald-200' : 'bg-rose-950/50 border border-rose-700/60 text-rose-200' ?>">
                 <div class="flex items-start gap-2.5">
                     <i class="fa-solid <?= $msg_type === 'success' ? 'fa-circle-check text-emerald-600' : 'fa-triangle-exclamation text-rose-500' ?> text-base mt-0.5 shrink-0"></i>
                     <div class="leading-relaxed"><?= $msg ?></div>
@@ -282,30 +282,30 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
         <?php endif; ?>
 
         <!-- KARTU STATUS PENGAJUAN (HERO BANNER) -->
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 overflow-hidden">
+        <div class="bg-[#112240] rounded-2xl border border-[#1E3A5F] shadow-lg p-6 overflow-hidden">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-100">
                 <div>
-                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block">Status Pengajuan PIP Siswa:</span>
-                    <h2 class="text-xl font-extrabold text-slate-900 mt-1"><?= htmlspecialchars($siswa['nama']) ?></h2>
-                    <p class="text-xs text-slate-500 mt-0.5">
-                        NISN: <span class="font-mono font-bold text-slate-700"><?= htmlspecialchars($siswa['nisn']) ?></span> &bull; Asal: <?= htmlspecialchars($siswa['sekolah_asal'] ?: 'SD/MI') ?> &bull; Tingkat: <?= htmlspecialchars($siswa['kelas']) ?>
+                    <span class="text-xs font-bold text-blue-400 uppercase tracking-wider block">Status Pengajuan PIP Siswa:</span>
+                    <h2 class="text-xl font-extrabold text-white mt-1"><?= htmlspecialchars($siswa['nama']) ?></h2>
+                    <p class="text-xs text-slate-300 mt-0.5">
+                        NISN: <span class="font-mono font-bold text-blue-300"><?= htmlspecialchars($siswa['nisn']) ?></span> &bull; Asal: <?= htmlspecialchars($siswa['sekolah_asal'] ?: 'SD/MI') ?> &bull; Tingkat: <?= htmlspecialchars($siswa['kelas']) ?>
                     </p>
                 </div>
 
                 <!-- BADGE STATUS -->
                 <div class="shrink-0">
                     <?php if ($siswa['status_verifikasi'] === 'Terverifikasi'): ?>
-                        <div class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-100 text-emerald-800 rounded-xl text-xs font-extrabold border border-emerald-300 shadow-xs">
+                        <div class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-950/60 text-emerald-300 rounded-xl text-xs font-extrabold border border-emerald-700 shadow-xs">
                             <i class="fa-solid fa-circle-check text-emerald-600 text-sm"></i>
                             <span>Terverifikasi Resmi</span>
                         </div>
                     <?php elseif ($siswa['status_verifikasi'] === 'Ditolak'): ?>
-                        <div class="inline-flex items-center gap-2 px-4 py-2 bg-rose-100 text-rose-800 rounded-xl text-xs font-extrabold border border-rose-300 shadow-xs">
+                        <div class="inline-flex items-center gap-2 px-4 py-2 bg-rose-950/60 text-rose-300 rounded-xl text-xs font-extrabold border border-rose-700 shadow-xs">
                             <i class="fa-solid fa-circle-xmark text-rose-600 text-sm"></i>
                             <span>Perlu Perbaikan Berkas</span>
                         </div>
                     <?php else: ?>
-                        <div class="inline-flex items-center gap-2 px-4 py-2 bg-amber-100 text-amber-900 rounded-xl text-xs font-extrabold border border-amber-300 shadow-xs">
+                        <div class="inline-flex items-center gap-2 px-4 py-2 bg-amber-950/60 text-amber-300 rounded-xl text-xs font-extrabold border border-amber-700 shadow-xs">
                             <i class="fa-solid fa-clock-rotate-left text-amber-600 text-sm"></i>
                             <span>Menunggu Verifikasi Berkas</span>
                         </div>
@@ -314,19 +314,19 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
             </div>
 
             <!-- ACTION BAR: CETAK BUKTI & EDIT BUTTON -->
-            <div class="mt-5 pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 no-print">
-                <button type="button" onclick="window.print()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold shadow-xs transition-colors inline-flex items-center gap-2 cursor-pointer">
-                    <i class="fa-solid fa-print text-xs"></i>
+            <div class="mt-5 pt-4 border-t border-[#1E3A5F] flex flex-wrap items-center justify-between gap-3 no-print">
+                <button type="button" onclick="window.print()" class="px-4 py-2 bg-[#162B4D] hover:bg-[#1E3A5F] text-white border border-[#2E5A8F] hover:border-blue-400 rounded-xl text-xs font-semibold shadow-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] inline-flex items-center gap-2 cursor-pointer">
+                    <i class="fa-solid fa-print text-xs text-blue-400"></i>
                     <span>Cetak Tanda Terima Pengajuan</span>
                 </button>
 
                 <div class="flex items-center gap-2 text-xs text-slate-500">
                     <?php if ($is_locked): ?>
-                        <span class="inline-flex items-center gap-1.5 text-emerald-700 font-bold bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-200">
+                        <span class="inline-flex items-center gap-1.5 text-emerald-300 font-bold bg-emerald-950/60 px-3 py-1.5 rounded-lg border border-emerald-800">
                             <i class="fa-solid fa-lock text-xs"></i> Data Terkunci (Terverifikasi)
                         </span>
                     <?php elseif (!$is_registration_open): ?>
-                        <span class="inline-flex items-center gap-1.5 text-slate-600 font-bold bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200">
+                        <span class="inline-flex items-center gap-1.5 text-slate-300 font-bold bg-[#0B192C] px-3 py-1.5 rounded-lg border border-[#1E3A5F]">
                             <i class="fa-solid fa-lock text-xs"></i> Pendaftaran Telah Ditutup
                     <?php endif; ?>
                 </div>
@@ -334,11 +334,11 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
         </div>
 
         <!-- FORM DETAIL DATA PENGAJUAN (BISA DIEDIT JIKA BELUM TERVERIFIKASI) -->
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-            <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
+        <div class="bg-[#112240] rounded-2xl border border-[#1E3A5F] shadow-lg p-6">
+            <div class="flex items-center justify-between pb-4 border-b border-[#1E3A5F] mb-6">
                 <div>
-                    <h3 class="text-sm font-bold text-slate-900">Rincian &amp; Formulir Pembaruan Data</h3>
-                    <p class="text-[11px] text-slate-500">Kelola informasi pribadi dan kriteria sosial ekonomi pendaftar</p>
+                    <h3 class="text-sm font-bold text-white">Rincian &amp; Formulir Pembaruan Data</h3>
+                    <p class="text-[11px] text-slate-400">Kelola informasi pribadi dan kriteria sosial ekonomi pendaftar</p>
                 </div>
 
                 <?php if ($is_locked): ?>
@@ -351,71 +351,71 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
 
                 <!-- BAGIAN 1: BIODATA SISWA -->
                 <div>
-                    <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-700 mb-3">
+                    <h4 class="text-xs font-extrabold uppercase tracking-wider text-blue-300 mb-3">
                         Biodata Siswa &amp; Wali Murid
                     </h4>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
                         <div>
-                            <label class="block font-bold text-slate-700 mb-1">Nomor Induk Siswa Nasional (NISN)</label>
+                            <label class="block font-bold text-slate-300 mb-1">Nomor Induk Siswa Nasional (NISN)</label>
                             <input type="text" value="<?= htmlspecialchars($siswa['nisn']) ?>" disabled 
-                                class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl bg-slate-100 text-slate-600 font-mono font-bold cursor-not-allowed">
+                                class="w-full px-3.5 py-2.5 border border-[#1E3A5F] rounded-xl bg-[#0B192C] text-slate-400 font-mono font-bold cursor-not-allowed">
                             <span class="text-[10px] text-slate-400 mt-1 block">NISN merupakan nomor identitas unik dan tidak dapat diubah.</span>
                         </div>
 
                         <div>
-                            <label class="block font-bold text-slate-700 mb-1">Nama Lengkap Siswa *</label>
+                            <label class="block font-bold text-slate-300 mb-1">Nama Lengkap Siswa *</label>
                             <input type="text" name="nama" required value="<?= htmlspecialchars($siswa['nama']) ?>" <?= $is_locked ? 'disabled' : '' ?>
-                                class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none text-xs font-semibold text-slate-900 <?= $is_locked ? 'bg-slate-100 cursor-not-allowed' : 'bg-white' ?>">
+                                class="w-full px-3.5 py-2.5 border border-[#1E3A5F] rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-xs font-semibold text-white <?= $is_locked ? 'bg-[#0B192C] text-slate-400 cursor-not-allowed' : 'bg-[#0B192C]' ?>">
                         </div>
 
                         <div>
-                            <label class="block font-bold text-slate-700 mb-1">Sekolah Asal (SD / MI) *</label>
+                            <label class="block font-bold text-slate-300 mb-1">Sekolah Asal (SD / MI) *</label>
                             <input type="text" name="sekolah_asal" required value="<?= htmlspecialchars($siswa['sekolah_asal'] ?: 'SD/MI') ?>" <?= $is_locked ? 'disabled' : '' ?>
-                                class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none text-xs font-semibold text-slate-900 <?= $is_locked ? 'bg-slate-100 cursor-not-allowed' : 'bg-white' ?>">
+                                class="w-full px-3.5 py-2.5 border border-[#1E3A5F] rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-xs font-semibold text-white <?= $is_locked ? 'bg-[#0B192C] text-slate-400 cursor-not-allowed' : 'bg-[#0B192C]' ?>">
                         </div>
 
                         <div>
-                            <label class="block font-bold text-slate-700 mb-1">Jenis Kelamin</label>
+                            <label class="block font-bold text-slate-300 mb-1">Jenis Kelamin</label>
                             <select name="jenis_kelamin" <?= $is_locked ? 'disabled' : '' ?>
-                                class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none text-xs font-semibold text-slate-900 <?= $is_locked ? 'bg-slate-100 cursor-not-allowed' : 'bg-white' ?>">
+                                class="w-full px-3.5 py-2.5 border border-[#1E3A5F] rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-xs font-semibold text-white <?= $is_locked ? 'bg-[#0B192C] text-slate-400 cursor-not-allowed' : 'bg-[#0B192C]' ?>">
                                 <option value="Laki-laki" <?= ($siswa['jenis_kelamin'] ?? '') === 'Laki-laki' ? 'selected' : '' ?>>Laki-laki</option>
                                 <option value="Perempuan" <?= ($siswa['jenis_kelamin'] ?? '') === 'Perempuan' ? 'selected' : '' ?>>Perempuan</option>
                             </select>
                         </div>
 
                         <div>
-                            <label class="block font-bold text-slate-700 mb-1">Nama Orang Tua / Wali *</label>
+                            <label class="block font-bold text-slate-300 mb-1">Nama Orang Tua / Wali *</label>
                             <input type="text" name="nama_ortu" required value="<?= htmlspecialchars($siswa['nama_ortu'] ?? '') ?>" <?= $is_locked ? 'disabled' : '' ?>
-                                class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none text-xs font-semibold text-slate-900 <?= $is_locked ? 'bg-slate-100 cursor-not-allowed' : 'bg-white' ?>">
+                                class="w-full px-3.5 py-2.5 border border-[#1E3A5F] rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-xs font-semibold text-white <?= $is_locked ? 'bg-[#0B192C] text-slate-400 cursor-not-allowed' : 'bg-[#0B192C]' ?>">
                         </div>
 
                         <div>
-                            <label class="block font-bold text-slate-700 mb-1">No. WhatsApp / HP Wali Murid *</label>
+                            <label class="block font-bold text-slate-300 mb-1">No. WhatsApp / HP Wali Murid *</label>
                             <input type="tel" name="no_hp" required value="<?= htmlspecialchars($siswa['no_hp'] ?? '') ?>" <?= $is_locked ? 'disabled' : '' ?>
-                                class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none text-xs font-semibold text-slate-900 <?= $is_locked ? 'bg-slate-100 cursor-not-allowed' : 'bg-white' ?>">
+                                class="w-full px-3.5 py-2.5 border border-[#1E3A5F] rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-xs font-semibold text-white <?= $is_locked ? 'bg-[#0B192C] text-slate-400 cursor-not-allowed' : 'bg-[#0B192C]' ?>">
                         </div>
 
                         <div class="sm:col-span-2">
-                            <label class="block font-bold text-slate-700 mb-1">Alamat Tempat Tinggal</label>
+                            <label class="block font-bold text-slate-300 mb-1">Alamat Tempat Tinggal</label>
                             <textarea name="alamat" rows="2" <?= $is_locked ? 'disabled' : '' ?>
-                                class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none text-xs font-semibold text-slate-900 <?= $is_locked ? 'bg-slate-100 cursor-not-allowed' : 'bg-white' ?>"><?= htmlspecialchars($siswa['alamat'] ?? '') ?></textarea>
+                                class="w-full px-3.5 py-2.5 border border-[#1E3A5F] rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-xs font-semibold text-white <?= $is_locked ? 'bg-[#0B192C] text-slate-400 cursor-not-allowed' : 'bg-[#0B192C]' ?>"><?= htmlspecialchars($siswa['alamat'] ?? '') ?></textarea>
                         </div>
                     </div>
                 </div>
 
                 <!-- BAGIAN 2: KRITERIA SOSIAL EKONOMI -->
-                <div class="pt-4 border-t border-slate-100">
-                    <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-700 mb-3">
+                <div class="pt-4 border-t border-[#1E3A5F]">
+                    <h4 class="text-xs font-extrabold uppercase tracking-wider text-blue-300 mb-3">
                         Kriteria Penilaian AHP
                     </h4>
 
                     <div class="space-y-4 text-xs">
                         <div>
-                            <label class="block font-bold text-slate-700 mb-1">Penghasilan Rata-rata Orang Tua per Bulan *</label>
+                            <label class="block font-bold text-slate-300 mb-1">Penghasilan Rata-rata Orang Tua per Bulan *</label>
                             <?php $c1 = (int)($siswa['penghasilan'] ?? 5); ?>
                             <select name="penghasilan" <?= $is_locked ? 'disabled' : '' ?>
-                                class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none text-xs font-semibold text-slate-900 <?= $is_locked ? 'bg-slate-100 cursor-not-allowed' : 'bg-white' ?>">
+                                class="w-full px-3.5 py-2.5 border border-[#1E3A5F] rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-xs font-semibold text-white <?= $is_locked ? 'bg-[#0B192C] text-slate-400 cursor-not-allowed' : 'bg-[#0B192C]' ?>">
                                 <option value="5" <?= $c1 === 5 ? 'selected' : '' ?>>&lt; Rp 500.000</option>
                                 <option value="4" <?= $c1 === 4 ? 'selected' : '' ?>>Rp 600.000 - Rp 1.000.000</option>
                                 <option value="3" <?= $c1 === 3 ? 'selected' : '' ?>>Rp 1.000.000 - Rp 2.000.000</option>
@@ -425,10 +425,10 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
                         </div>
 
                         <div>
-                            <label class="block font-bold text-slate-700 mb-1">Jumlah Anggota Keluarga yang Ditanggung *</label>
+                            <label class="block font-bold text-slate-300 mb-1">Jumlah Anggota Keluarga yang Ditanggung *</label>
                             <?php $c2 = (int)($siswa['tanggungan'] ?? 5); ?>
                             <select name="tanggungan" <?= $is_locked ? 'disabled' : '' ?>
-                                class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none text-xs font-semibold text-slate-900 <?= $is_locked ? 'bg-slate-100 cursor-not-allowed' : 'bg-white' ?>">
+                                class="w-full px-3.5 py-2.5 border border-[#1E3A5F] rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-xs font-semibold text-white <?= $is_locked ? 'bg-[#0B192C] text-slate-400 cursor-not-allowed' : 'bg-[#0B192C]' ?>">
                                 <option value="5" <?= $c2 === 5 ? 'selected' : '' ?>>&gt; 5 Orang</option>
                                 <option value="4" <?= $c2 === 4 ? 'selected' : '' ?>>4 Orang</option>
                                 <option value="3" <?= $c2 === 3 ? 'selected' : '' ?>>3 Orang</option>
@@ -438,10 +438,10 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
                         </div>
 
                         <div>
-                            <label class="block font-bold text-slate-700 mb-1">Kondisi Fisik Tempat Tinggal / Rumah *</label>
+                            <label class="block font-bold text-slate-300 mb-1">Kondisi Fisik Tempat Tinggal / Rumah *</label>
                             <?php $c3 = (int)($siswa['kondisi_rumah'] ?? 5); ?>
                             <select name="kondisi_rumah" <?= $is_locked ? 'disabled' : '' ?>
-                                class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none text-xs font-semibold text-slate-900 <?= $is_locked ? 'bg-slate-100 cursor-not-allowed' : 'bg-white' ?>">
+                                class="w-full px-3.5 py-2.5 border border-[#1E3A5F] rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-xs font-semibold text-white <?= $is_locked ? 'bg-[#0B192C] text-slate-400 cursor-not-allowed' : 'bg-[#0B192C]' ?>">
                                 <option value="5" <?= $c3 === 5 ? 'selected' : '' ?>>Tidak Layak</option>
                                 <option value="4" <?= $c3 === 4 ? 'selected' : '' ?>>Dinding Kayu</option>
                                 <option value="3" <?= $c3 === 3 ? 'selected' : '' ?>>Dinding Batu Atap Seng</option>
@@ -451,10 +451,10 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
                         </div>
 
                         <div>
-                            <label class="block font-bold text-slate-700 mb-1">Prestasi Akademik Tertinggi Siswa *</label>
+                            <label class="block font-bold text-slate-300 mb-1">Prestasi Akademik Tertinggi Siswa *</label>
                             <?php $c4 = (int)($siswa['prestasi'] ?? 3); ?>
                             <select name="prestasi" <?= $is_locked ? 'disabled' : '' ?>
-                                class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none text-xs font-semibold text-slate-900 <?= $is_locked ? 'bg-slate-100 cursor-not-allowed' : 'bg-white' ?>">
+                                class="w-full px-3.5 py-2.5 border border-[#1E3A5F] rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-xs font-semibold text-white <?= $is_locked ? 'bg-[#0B192C] text-slate-400 cursor-not-allowed' : 'bg-[#0B192C]' ?>">
                                 <option value="5" <?= $c4 === 5 ? 'selected' : '' ?>>Juara 1 - 3 Tingkat Kabupaten</option>
                                 <option value="4" <?= $c4 === 4 ? 'selected' : '' ?>>Juara Harapan</option>
                                 <option value="3" <?= $c4 === 3 ? 'selected' : '' ?>>Juara Kelas 1 - 3</option>
@@ -464,10 +464,10 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
                         </div>
 
                         <div>
-                            <label class="block font-bold text-slate-700 mb-1">Jarak Rumah Siswa ke Sekolah *</label>
+                            <label class="block font-bold text-slate-300 mb-1">Jarak Rumah Siswa ke Sekolah *</label>
                             <?php $c5 = (int)($siswa['jarak'] ?? 4); ?>
                             <select name="jarak" <?= $is_locked ? 'disabled' : '' ?>
-                                class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none text-xs font-semibold text-slate-900 <?= $is_locked ? 'bg-slate-100 cursor-not-allowed' : 'bg-white' ?>">
+                                class="w-full px-3.5 py-2.5 border border-[#1E3A5F] rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-xs font-semibold text-white <?= $is_locked ? 'bg-[#0B192C] text-slate-400 cursor-not-allowed' : 'bg-[#0B192C]' ?>">
                                 <option value="5" <?= $c5 === 5 ? 'selected' : '' ?>>&gt; 5 km</option>
                                 <option value="4" <?= $c5 === 4 ? 'selected' : '' ?>>3 – 5 km</option>
                                 <option value="3" <?= $c5 === 3 ? 'selected' : '' ?>>2 km</option>
@@ -480,16 +480,16 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
 
                 <!-- SUBMIT PERUBAHAN -->
                 <?php if (!$is_locked): ?>
-                    <div class="pt-4 border-t border-slate-100 flex items-center justify-between no-print">
+                    <div class="pt-4 border-t border-[#1E3A5F] flex items-center justify-between no-print">
                         <?php if (!$is_registration_open): ?>
-                            <div class="w-full p-3 bg-slate-100 border border-slate-200 text-slate-600 rounded-xl text-xs flex items-center gap-2">
+                            <div class="w-full p-3 bg-[#0B192C] border border-[#1E3A5F] text-slate-300 rounded-xl text-xs flex items-center gap-2">
                                 <i class="fa-solid fa-calendar-xmark text-slate-500"></i>
                                 <span>Periode pendaftaran telah ditutup, pembaruan data telah berakhir.</span>
                             </div>
                         <?php else: ?>
                             <span class="text-xs text-slate-500">Pastikan data yang diperbarui sudah sesuai dengan dokumen fisik.</span>
-                            <button type="submit" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs shadow-md transition-all cursor-pointer flex items-center gap-2">
-                                <i class="fa-solid fa-floppy-disk text-xs"></i>
+                            <button type="submit" class="px-6 py-2.5 bg-[#162B4D] hover:bg-[#1E3A5F] text-white border border-[#2E5A8F] hover:border-blue-400 font-bold rounded-xl text-xs shadow-md transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] cursor-pointer flex items-center gap-2">
+                                <i class="fa-solid fa-floppy-disk text-xs text-blue-400"></i>
                                 <span>Simpan Pembaruan Data</span>
                             </button>
                         <?php endif; ?>
@@ -503,18 +503,18 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
 
     <!-- MODAL GANTI PIN -->
     <div id="modal-ganti-pin" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden no-print">
-        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl border border-slate-200 p-6 space-y-4">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div class="bg-[#112240] w-full max-w-md rounded-2xl shadow-2xl border border-[#1E3A5F] p-6 space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-[#1E3A5F]">
                 <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-sm">
+                    <div class="w-8 h-8 rounded-lg bg-blue-950/60 text-blue-400 border border-blue-800/60 flex items-center justify-center text-sm">
                         <i class="fa-solid fa-key"></i>
                     </div>
-                    <h3 class="font-bold text-slate-900 text-sm">Ganti PIN Keamanan Akun</h3>
+                    <h3 class="font-bold text-white text-sm">Ganti PIN Keamanan Akun</h3>
                 </div>
                 <button type="button" onclick="tutupModalGantiPin()" class="text-slate-400 hover:text-slate-600 font-bold text-lg leading-none cursor-pointer">&times;</button>
             </div>
 
-            <p class="text-xs text-slate-600 leading-relaxed">
+            <p class="text-xs text-slate-300 leading-relaxed">
                 PIN ini digunakan untuk login ke portal akun pendaftar agar data anak Anda terlindungi dari pihak lain.
             </p>
 
@@ -522,28 +522,28 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
                 <input type="hidden" name="action" value="ganti_pin">
 
                 <div>
-                    <label class="block font-bold text-slate-700 mb-1">PIN Lama <span class="text-rose-500">*</span></label>
+                    <label class="block font-bold text-slate-300 mb-1">PIN Lama <span class="text-rose-500">*</span></label>
                     <input type="password" name="pin_lama" required placeholder="Masukkan PIN saat ini"
-                        class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none font-semibold text-slate-900">
+                        class="w-full px-3.5 py-2.5 border border-[#1E3A5F] rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none font-semibold text-white bg-[#0B192C]">
                 </div>
 
                 <div>
-                    <label class="block font-bold text-slate-700 mb-1">PIN Baru (4 - 6 digit) <span class="text-rose-500">*</span></label>
+                    <label class="block font-bold text-slate-300 mb-1">PIN Baru (4 - 6 digit) <span class="text-rose-500">*</span></label>
                     <input type="password" name="pin_baru" required maxlength="10" placeholder="Ketik PIN baru"
-                        class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none font-semibold text-slate-900">
+                        class="w-full px-3.5 py-2.5 border border-[#1E3A5F] rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none font-semibold text-white bg-[#0B192C]">
                 </div>
 
                 <div>
-                    <label class="block font-bold text-slate-700 mb-1">Konfirmasi PIN Baru <span class="text-rose-500">*</span></label>
+                    <label class="block font-bold text-slate-300 mb-1">Konfirmasi PIN Baru <span class="text-rose-500">*</span></label>
                     <input type="password" name="pin_baru_konf" required maxlength="10" placeholder="Ulangi PIN baru"
-                        class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none font-semibold text-slate-900">
+                        class="w-full px-3.5 py-2.5 border border-[#1E3A5F] rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none font-semibold text-white bg-[#0B192C]">
                 </div>
 
                 <div class="pt-2 flex items-center justify-end gap-2.5">
-                    <button type="button" onclick="tutupModalGantiPin()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-semibold transition-colors cursor-pointer">
+                    <button type="button" onclick="tutupModalGantiPin()" class="px-4 py-2 bg-[#112240] hover:bg-[#162B4D] text-slate-300 border border-[#1E3A5F] hover:border-[#2E5A8F] rounded-xl font-semibold transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] cursor-pointer">
                         Batal
                     </button>
-                    <button type="submit" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold shadow-md transition-all cursor-pointer">
+                    <button type="submit" class="px-5 py-2 bg-[#162B4D] hover:bg-[#1E3A5F] text-white border border-[#2E5A8F] hover:border-blue-400 rounded-xl font-bold transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] cursor-pointer">
                         Simpan PIN Baru
                     </button>
                 </div>
@@ -601,7 +601,7 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
     </div>
 
     <!-- FOOTER -->
-    <footer class="bg-white border-t border-slate-200 py-5 text-center text-xs text-slate-400 no-print">
+    <footer class="bg-[#112240] border-t border-[#1E3A5F] py-5 text-center text-xs text-slate-400 no-print">
         <div class="max-w-5xl mx-auto px-4 flex items-center justify-center">
             <span>&copy; <?= date('Y') ?> <?= htmlspecialchars($nama_sekolah) ?> &bull; Sistem SPK PIP (Metode AHP)</span>
         </div>

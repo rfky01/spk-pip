@@ -186,19 +186,31 @@ $pengaturan = mysqli_fetch_assoc($res_p);
                             <td class="p-2">
                                 <?php if ($i_idx === $j_idx): ?>
                                     <input type="text" disabled value="1" 
-                                        class="w-16 mx-auto text-center py-1.5 bg-slate-100 border border-slate-200 rounded-lg text-slate-400 font-bold text-xs">
+                                        class="w-20 mx-auto text-center py-1.5 bg-[#0B192C] border border-[#1E3A5F] rounded-lg text-slate-400 font-bold text-xs">
                                 <?php elseif ($i_idx < $j_idx): ?>
-                                    <input type="number" step="0.01" min="0.11" max="9" 
-                                        name="nilai_<?= $k1 ?>_<?= $k2 ?>" 
-                                        id="cell_<?= $k1 ?>_<?= $k2 ?>"
-                                        value="<?= number_format($stored_val, 2, '.', '') ?>" 
-                                        onchange="updateReciprocal('<?= $k1 ?>', '<?= $k2 ?>')"
-                                        class="w-16 mx-auto text-center py-1.5 border border-slate-300 rounded-lg focus:outline-none focus:border-slate-800 focus:ring-1 focus:ring-slate-800 font-bold text-xs text-slate-900 bg-white">
+                                    <div class="relative group/spin w-20 mx-auto">
+                                        <input type="number" step="0.01" min="0.11" max="9" 
+                                            name="nilai_<?= $k1 ?>_<?= $k2 ?>" 
+                                            id="cell_<?= $k1 ?>_<?= $k2 ?>"
+                                            value="<?= number_format($stored_val, 2, '.', '') ?>" 
+                                            onchange="updateReciprocal('<?= $k1 ?>', '<?= $k2 ?>')"
+                                            class="w-full text-center py-1.5 pl-3 pr-4 border border-[#1E3A5F] rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 font-bold text-xs text-white bg-[#07101E]">
+                                        <div class="absolute right-1.5 top-0 bottom-0 flex flex-col justify-center items-center opacity-0 group-hover/spin:opacity-100 group-focus-within/spin:opacity-100 transition-opacity pointer-events-auto">
+                                            <button type="button" tabindex="-1" onclick="stepValue('cell_<?= $k1 ?>_<?= $k2 ?>', 1)" 
+                                                class="text-slate-400 hover:text-blue-400 focus:outline-none leading-none p-0 cursor-pointer bg-transparent border-none">
+                                                <i class="fa-solid fa-caret-up text-[10px] block"></i>
+                                            </button>
+                                            <button type="button" tabindex="-1" onclick="stepValue('cell_<?= $k1 ?>_<?= $k2 ?>', -1)" 
+                                                class="text-slate-400 hover:text-blue-400 focus:outline-none leading-none p-0 cursor-pointer bg-transparent border-none">
+                                                <i class="fa-solid fa-caret-down text-[10px] block"></i>
+                                            </button>
+                                        </div>
+                                    </div>
                                 <?php else: ?>
                                     <input type="text" readonly 
                                         id="recip_<?= $k1 ?>_<?= $k2 ?>"
                                         value="<?= number_format($stored_val, 2, '.', '') ?>" 
-                                        class="w-16 mx-auto text-center py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-600 text-xs font-semibold cursor-not-allowed">
+                                        class="w-20 mx-auto text-center py-1.5 bg-[#0B192C] border border-[#1E3A5F] rounded-lg text-slate-300 text-xs font-semibold cursor-not-allowed">
                                 <?php endif; ?>
                             </td>
                             <?php endforeach; ?>
@@ -209,8 +221,8 @@ $pengaturan = mysqli_fetch_assoc($res_p);
             </div>
 
             <div class="mt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-4 border-t border-slate-100">
-                <button type="submit" class="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-lg text-xs transition-colors shadow flex items-center justify-center gap-2 whitespace-nowrap">
-                    <i class="fa-solid fa-calculator"></i> Hitung Bobot Kriteria & Uji Konsistensi
+                <button type="submit" class="px-5 py-2.5 bg-[#162B4D] hover:bg-[#1E3A5F] text-white border border-[#2E5A8F] hover:border-blue-400 font-semibold rounded-lg text-xs transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-sm flex items-center justify-center gap-2 whitespace-nowrap">
+                    <i class="fa-solid fa-calculator text-blue-400"></i> Hitung Bobot Kriteria & Uji Konsistensi
                 </button>
                 <span class="text-xs text-slate-400">Parameter Saaty: Random Index RI (n=5) = 1.12</span>
             </div>
@@ -283,6 +295,38 @@ $pengaturan = mysqli_fetch_assoc($res_p);
                 recip.value = (1.0 / val).toFixed(2);
             }
         }
+    }
+
+    function stepValue(id, delta) {
+        const input = document.getElementById(id);
+        if (!input) return;
+        let val = parseFloat(input.value);
+        if (isNaN(val)) val = 1.0;
+        
+        // Skala Saaty AHP: 1 s.d. 9 (dan pecahan 1/2, 1/3, dst jika < 1)
+        if (delta > 0) {
+            if (val < 1.0) {
+                val = 1.0;
+            } else {
+                val = Math.min(9.0, Math.floor(val) + 1.0);
+            }
+        } else {
+            if (val > 1.0) {
+                val = Math.max(1.0, Math.ceil(val) - 1.0);
+            } else if (val === 1.0) {
+                val = 0.50;
+            } else if (val > 0.33) {
+                val = 0.33;
+            } else if (val > 0.25) {
+                val = 0.25;
+            } else if (val > 0.20) {
+                val = 0.20;
+            } else {
+                val = 0.11;
+            }
+        }
+        input.value = val.toFixed(2);
+        input.dispatchEvent(new Event('change'));
     }
 </script>
 

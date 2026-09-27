@@ -29,11 +29,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $msg = "NISN dan Nama Lengkap siswa wajib diisi!";
         $msg_type = "error";
     } else {
+        $foto_path = null;
+        if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+            $file_tmp = $_FILES['foto']['tmp_name'];
+            $file_ext = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
+            $allowed_ext = ['jpg', 'jpeg', 'png', 'webp'];
+            if (in_array($file_ext, $allowed_ext) && $_FILES['foto']['size'] <= 3 * 1024 * 1024) {
+                $clean_nisn = preg_replace('/[^a-zA-Z0-9_-]/', '', $nisn);
+                $new_foto_name = "uploads/foto_siswa/siswa_" . $clean_nisn . "_" . time() . "." . $file_ext;
+                if (!is_dir("uploads/foto_siswa")) @mkdir("uploads/foto_siswa", 0777, true);
+                if (move_uploaded_file($file_tmp, $new_foto_name)) {
+                    $foto_path = $new_foto_name;
+                }
+            }
+        }
+
         $pin_default = password_hash(substr($nisn, -4) ?: '123456', PASSWORD_DEFAULT);
         $stmt = mysqli_prepare($koneksi, "INSERT INTO `calon_penerima` 
-            (`nisn`, `nama`, `nama_ortu`, `no_hp`, `pin`, `jenis_kelamin`, `kelas`, `sekolah_asal`, `alamat`, `penghasilan`, `tanggungan`, `kondisi_rumah`, `prestasi`, `jarak`, `status_verifikasi`, `tahun`) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Terverifikasi', ?)");
-        mysqli_stmt_bind_param($stmt, "sssssssssiiiiis", $nisn, $nama, $nama_ortu, $no_hp, $pin_default, $jenis_kelamin, $kelas, $sekolah_asal, $alamat, $c1, $c2, $c3, $c4, $c5, $tahun);
+            (`nisn`, `nama`, `nama_ortu`, `no_hp`, `foto`, `pin`, `jenis_kelamin`, `kelas`, `sekolah_asal`, `alamat`, `penghasilan`, `tanggungan`, `kondisi_rumah`, `prestasi`, `jarak`, `status_verifikasi`, `tahun`) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Terverifikasi', ?)");
+        mysqli_stmt_bind_param($stmt, "ssssssssssiiiiis", $nisn, $nama, $nama_ortu, $no_hp, $foto_path, $pin_default, $jenis_kelamin, $kelas, $sekolah_asal, $alamat, $c1, $c2, $c3, $c4, $c5, $tahun);
         if (mysqli_stmt_execute($stmt)) {
             $msg = "Data calon penerima ($nama) berhasil disimpan untuk Tahun Ajaran $tahun dan langsung Terverifikasi! (PIN Akun Default: 4 digit terakhir NISN)";
             $msg_type = "success";
@@ -63,6 +78,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     $status_verifikasi = $_POST['status_verifikasi'] ?? 'Menunggu Verifikasi';
     $tahun             = trim($_POST['tahun'] ?? ($pengaturan['tahun_ajaran'] ?? '2025/2026'));
     if (empty($tahun)) $tahun = '2025/2026';
+
+    // Cek jika ada unggahan foto baru
+    if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+        $file_tmp = $_FILES['foto']['tmp_name'];
+        $file_ext = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
+        $allowed_ext = ['jpg', 'jpeg', 'png', 'webp'];
+        if (in_array($file_ext, $allowed_ext) && $_FILES['foto']['size'] <= 3 * 1024 * 1024) {
+            $clean_nisn = preg_replace('/[^a-zA-Z0-9_-]/', '', $nisn);
+            $new_foto_name = "uploads/foto_siswa/siswa_" . $clean_nisn . "_" . time() . "." . $file_ext;
+            if (!is_dir("uploads/foto_siswa")) @mkdir("uploads/foto_siswa", 0777, true);
+            if (move_uploaded_file($file_tmp, $new_foto_name)) {
+                mysqli_query($koneksi, "UPDATE `calon_penerima` SET `foto` = '$new_foto_name' WHERE `id_siswa` = $id_siswa");
+            }
+        }
+    }
 
     $stmt = mysqli_prepare($koneksi, "UPDATE `calon_penerima` SET 
         `nisn`=?, `nama`=?, `nama_ortu`=?, `no_hp`=?, `jenis_kelamin`=?, `kelas`=?, `sekolah_asal`=?, `alamat`=?, 
@@ -173,8 +203,8 @@ $count_ditolak = mysqli_num_rows(mysqli_query($koneksi, "SELECT id_siswa FROM `c
             <p class="text-xs text-slate-500 mt-1">Pengelolaan berkas usulan pendaftar murid baru kelas VII SMP Tunas Bangsa</p>
         </div>
         <div class="flex items-center gap-2 shrink-0">
-            <button type="button" onclick="openTambahModal()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded-lg text-xs shadow-sm flex items-center gap-2 transition-colors cursor-pointer whitespace-nowrap">
-                <i class="fa-solid fa-user-plus text-xs"></i>
+            <button type="button" onclick="openTambahModal()" class="px-4 py-2 bg-[#162B4D] hover:bg-[#1E3A5F] text-white font-semibold rounded-lg text-xs border border-[#2E5A8F] hover:border-blue-400 shadow-sm flex items-center gap-2 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] cursor-pointer whitespace-nowrap">
+                <i class="fa-solid fa-user-plus text-xs text-blue-400"></i>
                 <span>Tambah Siswa Manual</span>
             </button>
         </div>
@@ -186,27 +216,27 @@ $count_ditolak = mysqli_num_rows(mysqli_query($koneksi, "SELECT id_siswa FROM `c
         <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-100">
             <!-- Filter Status Seragam & Profesional -->
             <div class="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0">
-                <a href="data_calon_penerima.php?status=all" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors inline-flex items-center <?= $filter_status === 'all' ? 'bg-slate-900 text-white shadow-sm' : 'bg-slate-50 text-slate-700 hover:bg-slate-100 hover:text-slate-900 border border-slate-200' ?>">
+                <a href="data_calon_penerima.php?status=all" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors inline-flex items-center <?= $filter_status === 'all' ? 'bg-[#162B4D] text-white border border-[#3B82F6] shadow-sm' : 'bg-[#112240] text-slate-300 hover:bg-[#162B4D] hover:text-white border border-[#1E3A5F]' ?>">
                     <span>Semua Usulan</span>
-                    <span class="ml-2 px-2 py-0.5 rounded-full text-[11px] font-bold transition-colors <?= $filter_status === 'all' ? 'bg-white text-slate-900 shadow-sm' : 'bg-slate-200/90 text-slate-800' ?>">
+                    <span class="ml-2 px-2 py-0.5 rounded-full text-[11px] font-bold transition-colors <?= $filter_status === 'all' ? 'bg-[#1E3A5F] text-blue-200 border border-[#2E5A8F]' : 'bg-[#07101E] text-slate-400 border border-[#1E3A5F]' ?>">
                         <?= $count_all ?>
                     </span>
                 </a>
-                <a href="data_calon_penerima.php?status=menunggu" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors inline-flex items-center <?= $filter_status === 'menunggu' ? 'bg-slate-900 text-white shadow-sm' : 'bg-slate-50 text-slate-700 hover:bg-slate-100 hover:text-slate-900 border border-slate-200' ?>">
+                <a href="data_calon_penerima.php?status=menunggu" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors inline-flex items-center <?= $filter_status === 'menunggu' ? 'bg-[#162B4D] text-white border border-[#3B82F6] shadow-sm' : 'bg-[#112240] text-slate-300 hover:bg-[#162B4D] hover:text-white border border-[#1E3A5F]' ?>">
                     <span>Menunggu</span>
-                    <span class="ml-2 px-2 py-0.5 rounded-full text-[11px] font-bold transition-colors <?= $filter_status === 'menunggu' ? 'bg-white text-slate-900 shadow-sm' : 'bg-slate-200/90 text-slate-800' ?>">
+                    <span class="ml-2 px-2 py-0.5 rounded-full text-[11px] font-bold transition-colors <?= $filter_status === 'menunggu' ? 'bg-[#1E3A5F] text-blue-200 border border-[#2E5A8F]' : 'bg-[#07101E] text-slate-400 border border-[#1E3A5F]' ?>">
                         <?= $count_menunggu ?>
                     </span>
                 </a>
-                <a href="data_calon_penerima.php?status=terverifikasi" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors inline-flex items-center <?= $filter_status === 'terverifikasi' ? 'bg-slate-900 text-white shadow-sm' : 'bg-slate-50 text-slate-700 hover:bg-slate-100 hover:text-slate-900 border border-slate-200' ?>">
+                <a href="data_calon_penerima.php?status=terverifikasi" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors inline-flex items-center <?= $filter_status === 'terverifikasi' ? 'bg-[#162B4D] text-white border border-[#3B82F6] shadow-sm' : 'bg-[#112240] text-slate-300 hover:bg-[#162B4D] hover:text-white border border-[#1E3A5F]' ?>">
                     <span>Terverifikasi</span>
-                    <span class="ml-2 px-2 py-0.5 rounded-full text-[11px] font-bold transition-colors <?= $filter_status === 'terverifikasi' ? 'bg-white text-slate-900 shadow-sm' : 'bg-slate-200/90 text-slate-800' ?>">
+                    <span class="ml-2 px-2 py-0.5 rounded-full text-[11px] font-bold transition-colors <?= $filter_status === 'terverifikasi' ? 'bg-[#1E3A5F] text-blue-200 border border-[#2E5A8F]' : 'bg-[#07101E] text-slate-400 border border-[#1E3A5F]' ?>">
                         <?= $count_terverifikasi ?>
                     </span>
                 </a>
-                <a href="data_calon_penerima.php?status=ditolak" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors inline-flex items-center <?= $filter_status === 'ditolak' ? 'bg-slate-900 text-white shadow-sm' : 'bg-slate-50 text-slate-700 hover:bg-slate-100 hover:text-slate-900 border border-slate-200' ?>">
+                <a href="data_calon_penerima.php?status=ditolak" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors inline-flex items-center <?= $filter_status === 'ditolak' ? 'bg-[#162B4D] text-white border border-[#3B82F6] shadow-sm' : 'bg-[#112240] text-slate-300 hover:bg-[#162B4D] hover:text-white border border-[#1E3A5F]' ?>">
                     <span>Ditolak</span>
-                    <span class="ml-2 px-2 py-0.5 rounded-full text-[11px] font-bold transition-colors <?= $filter_status === 'ditolak' ? 'bg-white text-slate-900 shadow-sm' : 'bg-slate-200/90 text-slate-800' ?>">
+                    <span class="ml-2 px-2 py-0.5 rounded-full text-[11px] font-bold transition-colors <?= $filter_status === 'ditolak' ? 'bg-[#1E3A5F] text-blue-200 border border-[#2E5A8F]' : 'bg-[#07101E] text-slate-400 border border-[#1E3A5F]' ?>">
                         <?= $count_ditolak ?>
                     </span>
                 </a>
@@ -220,32 +250,32 @@ $count_ditolak = mysqli_num_rows(mysqli_query($koneksi, "SELECT id_siswa FROM `c
             </div>
         </div>
 
-        <!-- Tabel Responsive -->
-        <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs min-w-[850px]" id="table-calon">
+        <!-- Tabel Responsive (Full 1 Layar Tanpa Scroll Kanan Kiri) -->
+        <div class="w-full overflow-hidden rounded-lg border border-[#1E3A5F]">
+            <table class="w-full table-fixed text-left text-xs" id="table-calon">
                 <thead>
-                    <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold uppercase text-[11px] tracking-wider">
-                        <th class="p-3 w-10 text-center">No</th>
-                        <th class="p-3">NISN & Siswa</th>
-                        <th class="p-3">Sekolah Asal</th>
-                        <th class="p-3">Orang Tua / Kontak</th>
-                        <th class="p-3 text-center" title="Penghasilan Orang Tua">C1</th>
-                        <th class="p-3 text-center" title="Jumlah Tanggungan">C2</th>
-                        <th class="p-3 text-center" title="Kondisi Rumah">C3</th>
-                        <th class="p-3 text-center" title="Prestasi Akademik">C4</th>
-                        <th class="p-3 text-center" title="Jarak ke Sekolah">C5</th>
-                        <th class="p-3 text-center">Status Verifikasi</th>
-                        <th class="p-3 text-center">Aksi</th>
+                    <tr class="bg-[#07101E] border-b border-[#1E3A5F] text-slate-400 font-semibold uppercase text-[11px] tracking-wider">
+                        <th class="py-3 px-2 w-10 text-center">No</th>
+                        <th class="py-3 px-3 w-[20%] text-left">NISN & Siswa</th>
+                        <th class="py-3 px-3 w-[18%] text-left">Sekolah Asal</th>
+                        <th class="py-3 px-3 w-[18%] text-left">Orang Tua / Kontak</th>
+                        <th class="py-3 px-1 w-8 text-center" title="C1 - Penghasilan Orang Tua">C1</th>
+                        <th class="py-3 px-1 w-8 text-center" title="C2 - Tanggungan Keluarga">C2</th>
+                        <th class="py-3 px-1 w-8 text-center" title="C3 - Kondisi Rumah">C3</th>
+                        <th class="py-3 px-1 w-8 text-center" title="C4 - Prestasi Akademik">C4</th>
+                        <th class="py-3 px-1 w-8 text-center" title="C5 - Jarak ke Sekolah">C5</th>
+                        <th class="py-3 px-2 w-[12%] text-center">Status</th>
+                        <th class="py-3 px-2 w-[14%] text-center">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-100 text-gray-700">
+                <tbody class="divide-y divide-[#1E3A5F] text-slate-200">
                     <?php if ($total_tampil == 0): ?>
                         <tr>
-                            <td colspan="11" class="p-8 text-center text-gray-400">
+                            <td colspan="11" class="p-8 text-center text-slate-400">
                                 <div class="flex flex-col items-center justify-center space-y-2">
-                                    <i class="fa-solid fa-inbox text-3xl text-gray-300"></i>
+                                    <i class="fa-solid fa-inbox text-3xl text-slate-500"></i>
                                     <span>Belum ada data usulan calon siswa sesuai filter saat ini.</span>
-                                    <button type="button" onclick="openTambahModal()" class="text-xs text-blue-600 hover:underline font-semibold mt-1">
+                                    <button type="button" onclick="openTambahModal()" class="text-xs text-blue-400 hover:underline font-semibold mt-1">
                                         + Tambah Siswa Manual Sekarang
                                     </button>
                                 </div>
@@ -256,85 +286,114 @@ $count_ditolak = mysqli_num_rows(mysqli_query($koneksi, "SELECT id_siswa FROM `c
                         while ($siswa = mysqli_fetch_assoc($res_calon)): 
                             $status_v = $siswa['status_verifikasi'] ?? 'Menunggu Verifikasi';
                     ?>
-                    <tr class="hover:bg-gray-50/80 transition-colors">
-                        <td class="p-3 text-center font-medium"><?= $no++ ?></td>
-                        <td class="p-3 font-medium">
-                            <button type="button" onclick='openDetailModal(<?= htmlspecialchars(json_encode($siswa), ENT_QUOTES, 'UTF-8') ?>)' 
-                                class="font-bold text-gray-800 hover:text-blue-600 text-sm text-left transition-colors flex items-center gap-1.5 group cursor-pointer" 
-                                title="Klik untuk melihat detail lengkap <?= htmlspecialchars($siswa['nama']) ?>">
-                                <span class="group-hover:underline underline-offset-2"><?= htmlspecialchars($siswa['nama']) ?></span>
-                                <i class="fa-solid fa-circle-info text-[11px] text-gray-400 group-hover:text-blue-600 transition-colors"></i>
-                            </button>
-                            <span class="font-semibold text-blue-600 text-[11px] block"><?= htmlspecialchars($siswa['nisn']) ?></span>
-                            <span class="text-[10px] text-gray-400 block"><?= htmlspecialchars($siswa['jenis_kelamin']) ?></span>
-                        </td>
-                        <td class="p-3">
-                            <span class="font-semibold text-gray-800 block"><?= htmlspecialchars($siswa['sekolah_asal'] ?: '-') ?></span>
-                            <div class="flex items-center gap-1 mt-0.5">
-                                <span class="text-[10px] text-blue-600 font-semibold bg-blue-50 px-1.5 py-0.5 rounded">Kelas VII</span>
-                                <span class="text-[10px] text-slate-500 font-medium bg-slate-100 px-1.5 py-0.5 rounded"><?= htmlspecialchars($siswa['tahun'] ?? '2025/2026') ?></span>
+                    <tr class="hover:bg-[#162B4D] transition-colors">
+                        <td class="py-3 px-2 text-center font-bold text-slate-400 text-xs"><?= $no++ ?></td>
+                        <td class="py-3 px-3 min-w-0">
+                            <div class="flex items-center gap-2.5">
+                                <?php if (!empty($siswa['foto']) && file_exists($siswa['foto'])): ?>
+                                    <img src="<?= htmlspecialchars($siswa['foto']) ?>" alt="Foto <?= htmlspecialchars($siswa['nama']) ?>" 
+                                        onclick='openDetailModal(<?= htmlspecialchars(json_encode($siswa), ENT_QUOTES, 'UTF-8') ?>)'
+                                        class="w-10 h-10 rounded-xl object-cover border border-[#1E3A5F] shrink-0 shadow-sm cursor-pointer hover:border-blue-400 hover:scale-105 transition-all">
+                                <?php else: ?>
+                                    <div onclick='openDetailModal(<?= htmlspecialchars(json_encode($siswa), ENT_QUOTES, 'UTF-8') ?>)'
+                                        class="w-10 h-10 rounded-xl bg-[#07101E] border border-[#1E3A5F] text-blue-300 flex items-center justify-center font-bold text-xs shrink-0 cursor-pointer hover:border-blue-400 hover:scale-105 transition-all"
+                                        title="Klik untuk melihat detail siswa">
+                                        <?= strtoupper(substr($siswa['nama'], 0, 1)) ?>
+                                    </div>
+                                <?php endif; ?>
+                                <div class="min-w-0 flex-1">
+                                    <button type="button" onclick='openDetailModal(<?= htmlspecialchars(json_encode($siswa), ENT_QUOTES, 'UTF-8') ?>)' 
+                                        class="font-bold text-white hover:text-blue-400 text-xs text-left transition-colors flex items-center gap-1 group cursor-pointer max-w-full" 
+                                        title="Klik untuk melihat detail lengkap: <?= htmlspecialchars($siswa['nama']) ?>">
+                                        <span class="truncate block group-hover:underline underline-offset-2"><?= htmlspecialchars($siswa['nama']) ?></span>
+                                        <i class="fa-solid fa-circle-info text-[10px] text-blue-400 shrink-0"></i>
+                                    </button>
+                                    <span class="font-mono font-semibold text-blue-300 text-[11px] block truncate mt-0.5"><?= htmlspecialchars($siswa['nisn']) ?></span>
+                                    <span class="text-[10px] text-slate-400 block truncate"><?= htmlspecialchars($siswa['jenis_kelamin']) ?></span>
+                                </div>
                             </div>
                         </td>
-                        <td class="p-3">
-                            <span class="font-medium text-gray-700 block"><?= htmlspecialchars($siswa['nama_ortu'] ?: '-') ?></span>
-                            <?php if (!empty($siswa['no_hp'])): ?>
-                                <a href="https://wa.me/<?= preg_replace('/[^0-9]/', '', $siswa['no_hp']) ?>" target="_blank" class="text-[11px] text-emerald-600 hover:underline flex items-center gap-1 mt-0.5">
-                                    <i class="fa-brands fa-whatsapp text-xs"></i> <?= htmlspecialchars($siswa['no_hp']) ?>
-                                </a>
-                            <?php else: ?>
-                                <span class="text-[10px] text-gray-400">-</span>
-                            <?php endif; ?>
+                        <td class="py-3 px-3 min-w-0">
+                            <div class="min-w-0">
+                                <span class="font-semibold text-white text-xs block truncate" title="<?= htmlspecialchars($siswa['sekolah_asal'] ?: '-') ?>">
+                                    <?= htmlspecialchars($siswa['sekolah_asal'] ?: '-') ?>
+                                </span>
+                                <div class="flex items-center gap-1 mt-1 flex-wrap">
+                                    <span class="text-[9px] text-blue-300 font-semibold bg-[#162B4D] border border-[#1E3A5F] px-1.5 py-0.5 rounded shrink-0">Kelas VII</span>
+                                    <span class="text-[9px] text-slate-400 font-medium bg-[#0B192C] border border-[#1E3A5F] px-1.5 py-0.5 rounded shrink-0"><?= htmlspecialchars($siswa['tahun'] ?? '2025/2026') ?></span>
+                                </div>
+                            </div>
                         </td>
-                        <td class="p-3 text-center text-slate-700 font-semibold font-mono"><?= $siswa['penghasilan'] ?></td>
-                        <td class="p-3 text-center text-slate-700 font-semibold font-mono"><?= $siswa['tanggungan'] ?></td>
-                        <td class="p-3 text-center text-slate-700 font-semibold font-mono"><?= $siswa['kondisi_rumah'] ?></td>
-                        <td class="p-3 text-center text-slate-700 font-semibold font-mono"><?= $siswa['prestasi'] ?></td>
-                        <td class="p-3 text-center text-slate-700 font-semibold font-mono"><?= $siswa['jarak'] ?></td>
+                        <td class="py-3 px-3 min-w-0">
+                            <div class="min-w-0">
+                                <span class="font-medium text-slate-200 text-xs block truncate" title="<?= htmlspecialchars($siswa['nama_ortu'] ?: '-') ?>">
+                                    <?= htmlspecialchars($siswa['nama_ortu'] ?: '-') ?>
+                                </span>
+                                <?php if (!empty($siswa['no_hp'])): ?>
+                                    <a href="https://wa.me/<?= preg_replace('/[^0-9]/', '', $siswa['no_hp']) ?>" target="_blank" 
+                                        class="text-[11px] text-emerald-400 hover:text-emerald-300 hover:underline inline-flex items-center gap-1 mt-0.5 max-w-full" 
+                                        title="Hubungi via WhatsApp: <?= htmlspecialchars($siswa['no_hp']) ?>">
+                                        <i class="fa-brands fa-whatsapp text-xs shrink-0"></i>
+                                        <span class="truncate"><?= htmlspecialchars($siswa['no_hp']) ?></span>
+                                    </a>
+                                <?php else: ?>
+                                    <span class="text-[10px] text-slate-500 block">-</span>
+                                <?php endif; ?>
+                            </div>
+                        </td>
+                        <td class="py-3 px-1 text-center text-slate-200 font-bold font-mono text-xs"><?= $siswa['penghasilan'] ?></td>
+                        <td class="py-3 px-1 text-center text-slate-200 font-bold font-mono text-xs"><?= $siswa['tanggungan'] ?></td>
+                        <td class="py-3 px-1 text-center text-slate-200 font-bold font-mono text-xs"><?= $siswa['kondisi_rumah'] ?></td>
+                        <td class="py-3 px-1 text-center text-slate-200 font-bold font-mono text-xs"><?= $siswa['prestasi'] ?></td>
+                        <td class="py-3 px-1 text-center text-slate-200 font-bold font-mono text-xs"><?= $siswa['jarak'] ?></td>
                         
                         <!-- Status Verifikasi -->
-                        <td class="p-3 text-center whitespace-nowrap">
+                        <td class="py-3 px-1 text-center whitespace-nowrap min-w-0">
                             <?php if ($status_v === 'Terverifikasi'): ?>
-                                <span class="px-2.5 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full text-[10px] font-semibold inline-flex items-center gap-1 whitespace-nowrap">
-                                    <i class="fa-solid fa-check text-[9px]"></i> Terverifikasi
+                                <span class="px-2 py-0.5 bg-emerald-950/80 text-emerald-300 border border-emerald-700/80 rounded-full text-[10px] font-bold inline-flex items-center gap-1">
+                                    <i class="fa-solid fa-circle-check text-[9px]"></i> <span>Terverifikasi</span>
                                 </span>
                             <?php elseif ($status_v === 'Ditolak'): ?>
-                                <span class="px-2.5 py-0.5 bg-slate-100 text-slate-600 border border-slate-200 rounded-full text-[10px] font-semibold inline-flex items-center gap-1 whitespace-nowrap">
-                                    <i class="fa-solid fa-xmark text-[9px]"></i> Ditolak
+                                <span class="px-2 py-0.5 bg-rose-950/80 text-rose-300 border border-rose-700/80 rounded-full text-[10px] font-bold inline-flex items-center gap-1">
+                                    <i class="fa-solid fa-circle-xmark text-[9px]"></i> <span>Ditolak</span>
                                 </span>
                             <?php else: ?>
-                                <span class="px-2.5 py-0.5 bg-amber-50 text-amber-700 border border-amber-200 rounded-full text-[10px] font-semibold inline-flex items-center gap-1 whitespace-nowrap">
-                                    <i class="fa-solid fa-clock text-[9px]"></i> Menunggu
+                                <span class="px-2 py-0.5 bg-amber-950/80 text-amber-300 border border-amber-700/80 rounded-full text-[10px] font-bold inline-flex items-center gap-1">
+                                    <i class="fa-solid fa-clock text-[9px]"></i> <span>Menunggu</span>
                                 </span>
                             <?php endif; ?>
                         </td>
 
                         <!-- Tombol Aksi -->
-                        <td class="p-3 text-center space-x-1 whitespace-nowrap">
-                            <?php if ($status_v === 'Menunggu Verifikasi'): ?>
-                                <a href="data_calon_penerima.php?action=verifikasi_siswa&id=<?= $siswa['id_siswa'] ?>" 
-                                    class="px-2.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-[11px] font-medium transition-colors shadow-sm inline-flex items-center gap-1" title="Setujui Berkas">
-                                    <i class="fa-solid fa-check"></i> Setujui
-                                </a>
-                                <a href="data_calon_penerima.php?action=tolak_siswa&id=<?= $siswa['id_siswa'] ?>" 
-                                    onclick="return confirm('Apakah berkas siswa <?= htmlspecialchars($siswa['nama']) ?> ditolak?')"
-                                    class="px-2.5 py-1.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 rounded-lg text-[11px] font-medium transition-colors inline-flex items-center gap-1" title="Tolak">
-                                    <i class="fa-solid fa-xmark"></i> Tolak
-                                </a>
-                            <?php endif; ?>
+                        <td class="py-3 px-2 text-center whitespace-nowrap">
+                            <div class="inline-flex items-center justify-center gap-1">
+                                <?php if ($status_v === 'Menunggu Verifikasi'): ?>
+                                    <a href="data_calon_penerima.php?action=verifikasi_siswa&id=<?= $siswa['id_siswa'] ?>" 
+                                        class="w-7 h-7 flex items-center justify-center bg-emerald-600 hover:bg-emerald-500 text-white rounded text-xs transition-colors shadow-xs" title="Setujui Berkas">
+                                        <i class="fa-solid fa-check text-[11px]"></i>
+                                    </a>
+                                    <a href="data_calon_penerima.php?action=tolak_siswa&id=<?= $siswa['id_siswa'] ?>" 
+                                        onclick="return confirm('Apakah berkas siswa <?= htmlspecialchars(addslashes($siswa['nama'])) ?> ditolak?')"
+                                        class="w-7 h-7 flex items-center justify-center bg-rose-700/90 hover:bg-rose-600 border border-rose-600 text-white rounded text-xs transition-colors shadow-xs" title="Tolak Berkas">
+                                        <i class="fa-solid fa-xmark text-[11px]"></i>
+                                    </a>
+                                <?php endif; ?>
 
-                            <a href="data_calon_penerima.php?action=reset_pin_siswa&id=<?= $siswa['id_siswa'] ?>" 
-                                onclick="return confirm('Reset PIN akun pendaftar <?= htmlspecialchars(addslashes($siswa['nama'])) ?> menjadi 4 digit terakhir NISN?')" 
-                                class="px-2.5 py-1.5 bg-white hover:bg-amber-50 border border-slate-200 text-slate-500 hover:text-amber-700 rounded-lg text-[11px] transition-colors inline-block" title="Reset PIN Akun Siswa">
-                                <i class="fa-solid fa-key"></i>
-                            </a>
-                            <button type="button" onclick='openEditModal(<?= json_encode($siswa) ?>)' class="px-2.5 py-1.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-600 rounded-lg text-[11px] transition-colors cursor-pointer" title="Edit Data Siswa">
-                                <i class="fa-solid fa-pen"></i>
-                            </button>
-                            <a href="data_calon_penerima.php?action=hapus_siswa&id=<?= $siswa['id_siswa'] ?>" 
-                                onclick="return confirm('Apakah Anda yakin ingin menghapus data <?= htmlspecialchars($siswa['nama']) ?>?')"
-                                class="px-2.5 py-1.5 bg-white hover:bg-rose-50 border border-slate-200 text-slate-400 hover:text-rose-600 rounded-lg text-[11px] transition-colors" title="Hapus">
-                                <i class="fa-solid fa-trash"></i>
-                            </a>
+                                <a href="data_calon_penerima.php?action=reset_pin_siswa&id=<?= $siswa['id_siswa'] ?>" 
+                                    onclick="return confirm('Reset PIN akun pendaftar <?= htmlspecialchars(addslashes($siswa['nama'])) ?> menjadi 4 digit terakhir NISN?')" 
+                                    class="w-7 h-7 flex items-center justify-center bg-[#162B4D] hover:bg-amber-900/60 border border-[#1E3A5F] hover:border-amber-500 text-slate-300 hover:text-amber-300 rounded text-xs transition-colors" title="Reset PIN Akun Siswa">
+                                    <i class="fa-solid fa-key text-[10px]"></i>
+                                </a>
+                                <button type="button" onclick='openEditModal(<?= json_encode($siswa) ?>)' 
+                                    class="w-7 h-7 flex items-center justify-center bg-[#162B4D] hover:bg-blue-900/60 border border-[#1E3A5F] hover:border-blue-500 text-slate-300 hover:text-blue-300 rounded text-xs transition-colors cursor-pointer" title="Edit Data Siswa">
+                                    <i class="fa-solid fa-pen text-[10px]"></i>
+                                </button>
+                                <a href="data_calon_penerima.php?action=hapus_siswa&id=<?= $siswa['id_siswa'] ?>" 
+                                    onclick="return confirm('Apakah Anda yakin ingin menghapus data <?= htmlspecialchars(addslashes($siswa['nama'])) ?>?')"
+                                    class="w-7 h-7 flex items-center justify-center bg-[#162B4D] hover:bg-rose-900/60 border border-[#1E3A5F] hover:border-rose-500 text-slate-400 hover:text-rose-400 rounded text-xs transition-colors" title="Hapus Data">
+                                    <i class="fa-solid fa-trash text-[10px]"></i>
+                                </a>
+                            </div>
                         </td>
                     </tr>
                     <?php endwhile; endif; ?>
@@ -426,7 +485,7 @@ $count_ditolak = mysqli_num_rows(mysqli_query($koneksi, "SELECT id_siswa FROM `c
             </button>
         </div>
 
-        <form action="data_calon_penerima.php" method="POST" class="space-y-3" id="form-tambah-siswa">
+        <form action="data_calon_penerima.php" method="POST" enctype="multipart/form-data" class="space-y-3" id="form-tambah-siswa">
             <input type="hidden" name="action" value="tambah_siswa">
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -481,6 +540,12 @@ $count_ditolak = mysqli_num_rows(mysqli_query($koneksi, "SELECT id_siswa FROM `c
                     <input type="text" name="tahun" value="<?= htmlspecialchars($pengaturan['tahun_ajaran'] ?? '2025/2026') ?>" 
                         class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-xs font-semibold text-gray-700 bg-gray-50">
                 </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold text-gray-600 mb-1">Unggah Pas Foto Siswa (Opsional)</label>
+                <input type="file" name="foto" accept="image/jpeg,image/png,image/webp,image/jpg" class="w-full text-xs text-slate-600 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
+                <span class="text-[10px] text-gray-400">Format: JPG, PNG, WEBP (Maksimal 3MB)</span>
             </div>
 
             <div class="border-t border-gray-100 pt-3">
@@ -547,10 +612,10 @@ $count_ditolak = mysqli_num_rows(mysqli_query($koneksi, "SELECT id_siswa FROM `c
             </div>
 
             <div class="flex gap-2 pt-3">
-                <button type="submit" class="flex-1 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg text-xs shadow flex items-center justify-center gap-1.5">
-                    <i class="fa-solid fa-floppy-disk"></i> Simpan Data Siswa
+                <button type="submit" class="flex-1 py-2.5 bg-[#162B4D] hover:bg-[#1E3A5F] text-white border border-[#2E5A8F] hover:border-blue-400 font-semibold rounded-lg text-xs shadow-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-floppy-disk text-blue-400"></i> Simpan Data Siswa
                 </button>
-                <button type="button" onclick="closeTambahModal()" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-600 font-semibold rounded-lg text-xs">
+                <button type="button" onclick="closeTambahModal()" class="px-4 py-2.5 bg-[#112240] hover:bg-[#162B4D] text-slate-300 border border-[#1E3A5F] hover:border-[#2E5A8F] font-semibold rounded-lg text-xs transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]">
                     Batal
                 </button>
             </div>
@@ -568,7 +633,7 @@ $count_ditolak = mysqli_num_rows(mysqli_query($koneksi, "SELECT id_siswa FROM `c
             <button type="button" onclick="closeEditModal()" class="text-gray-400 hover:text-gray-600 p-1.5 rounded-lg hover:bg-gray-100"><i class="fa-solid fa-xmark text-lg"></i></button>
         </div>
 
-        <form action="data_calon_penerima.php" method="POST" class="space-y-3" id="form-edit-siswa">
+        <form action="data_calon_penerima.php" method="POST" enctype="multipart/form-data" class="space-y-3" id="form-edit-siswa">
             <input type="hidden" name="action" value="edit_siswa">
             <input type="hidden" name="id_siswa" id="edit-id-siswa">
 
@@ -619,6 +684,19 @@ $count_ditolak = mysqli_num_rows(mysqli_query($koneksi, "SELECT id_siswa FROM `c
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 mb-1">Tahun Ajaran</label>
                     <input type="text" name="tahun" id="edit-tahun" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-xs font-semibold text-gray-700">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold text-gray-600 mb-1">Pas Foto Siswa (Opsional)</label>
+                <div class="flex items-center gap-3">
+                    <div id="edit-foto-preview" class="w-10 h-10 rounded-lg bg-gray-100 border border-gray-200 flex items-center justify-center overflow-hidden shrink-0">
+                        <i class="fa-solid fa-camera text-gray-400 text-xs"></i>
+                    </div>
+                    <div class="flex-1">
+                        <input type="file" name="foto" accept="image/jpeg,image/png,image/webp,image/jpg" class="w-full text-xs text-slate-600 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
+                        <span class="text-[10px] text-gray-400 block mt-0.5">Unggah jika ingin mengganti/menambahkan foto resmi (Maks. 3MB)</span>
+                    </div>
                 </div>
             </div>
 
@@ -676,10 +754,10 @@ $count_ditolak = mysqli_num_rows(mysqli_query($koneksi, "SELECT id_siswa FROM `c
             </div>
 
             <div class="flex gap-2 pt-3">
-                <button type="submit" class="flex-1 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg text-xs shadow">
-                    Simpan Perubahan
+                <button type="submit" class="flex-1 py-2.5 bg-[#162B4D] hover:bg-[#1E3A5F] text-white border border-[#2E5A8F] hover:border-blue-400 font-semibold rounded-lg text-xs shadow-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-floppy-disk text-blue-400"></i> Simpan Perubahan
                 </button>
-                <button type="button" onclick="closeEditModal()" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-600 font-semibold rounded-lg text-xs">
+                <button type="button" onclick="closeEditModal()" class="px-4 py-2.5 bg-[#112240] hover:bg-[#162B4D] text-slate-300 border border-[#1E3A5F] hover:border-[#2E5A8F] font-semibold rounded-lg text-xs transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]">
                     Batal
                 </button>
             </div>
@@ -839,10 +917,10 @@ $count_ditolak = mysqli_num_rows(mysqli_query($koneksi, "SELECT id_siswa FROM `c
                     <!-- Tombol Setujui / Tolak akan muncul di sini jika status menunggu -->
                 </div>
                 <div class="flex items-center gap-2 ml-auto">
-                    <button type="button" id="btn-detail-edit" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded-lg text-xs shadow-sm flex items-center gap-1.5 transition-colors cursor-pointer">
-                        <i class="fa-solid fa-pen-to-square text-xs"></i> Edit Data
+                    <button type="button" id="btn-detail-edit" class="px-4 py-2 bg-[#162B4D] hover:bg-[#1E3A5F] text-white border border-[#2E5A8F] hover:border-blue-400 font-semibold rounded-lg text-xs shadow-sm flex items-center gap-1.5 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] cursor-pointer">
+                        <i class="fa-solid fa-pen-to-square text-blue-400 text-xs"></i> Edit Data
                     </button>
-                    <button type="button" onclick="closeDetailModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium rounded-lg text-xs transition-colors cursor-pointer">
+                    <button type="button" onclick="closeDetailModal()" class="px-4 py-2 bg-[#112240] hover:bg-[#162B4D] text-slate-300 border border-[#1E3A5F] hover:border-[#2E5A8F] font-semibold rounded-lg text-xs transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] cursor-pointer">
                         Tutup
                     </button>
                 </div>
@@ -896,8 +974,15 @@ $count_ditolak = mysqli_num_rows(mysqli_query($koneksi, "SELECT id_siswa FROM `c
         currentDetailSiswa = siswa;
 
         // Avatar & Nama
-        const inisial = siswa.nama ? siswa.nama.trim().charAt(0).toUpperCase() : 'S';
-        document.getElementById('detail-avatar').innerText = inisial;
+        const avatarEl = document.getElementById('detail-avatar');
+        if (siswa.foto) {
+            avatarEl.innerHTML = `<img src="${siswa.foto}" alt="Foto ${siswa.nama}" class="w-full h-full object-cover rounded-xl">`;
+            avatarEl.className = 'w-14 h-14 rounded-xl border border-slate-300 overflow-hidden shrink-0 shadow-sm bg-slate-100';
+        } else {
+            const inisial = siswa.nama ? siswa.nama.trim().charAt(0).toUpperCase() : 'S';
+            avatarEl.innerText = inisial;
+            avatarEl.className = 'w-14 h-14 rounded-xl bg-slate-900 text-white flex items-center justify-center text-lg font-bold shrink-0 shadow-sm';
+        }
         document.getElementById('detail-nama').innerText = siswa.nama || '-';
         document.getElementById('detail-nisn').innerText = siswa.nisn || '-';
         document.getElementById('detail-jk').innerText = siswa.jenis_kelamin || 'Laki-laki';
@@ -1040,6 +1125,17 @@ $count_ditolak = mysqli_num_rows(mysqli_query($koneksi, "SELECT id_siswa FROM `c
         document.getElementById('edit-c3').value = siswa.kondisi_rumah;
         document.getElementById('edit-c4').value = siswa.prestasi;
         document.getElementById('edit-c5').value = siswa.jarak;
+
+        const previewEl = document.getElementById('edit-foto-preview');
+        if (previewEl) {
+            if (siswa.foto) {
+                previewEl.innerHTML = `<img src="${siswa.foto}" alt="Foto ${siswa.nama}" class="w-full h-full object-cover">`;
+            } else {
+                const inisial = siswa.nama ? siswa.nama.trim().charAt(0).toUpperCase() : '?';
+                previewEl.innerHTML = `<span class="font-bold text-slate-500 text-xs">${inisial}</span>`;
+            }
+        }
+
         document.getElementById('modal-edit-siswa').classList.remove('hidden');
     }
     function closeEditModal() {

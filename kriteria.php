@@ -24,8 +24,8 @@ require_once "sidebar.php";
             <h1 class="text-2xl font-bold text-slate-900">Data Kriteria Penilaian AHP</h1>
             <p class="text-xs text-slate-500 mt-1">Daftar 5 kriteria penentuan prioritas penerima Program Indonesia Pintar (PIP)</p>
         </div>
-        <a href="perhitungan_ahp.php" class="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-xs font-semibold shadow-sm transition-colors flex items-center gap-2 self-start">
-            <i class="fa-solid fa-calculator"></i> Ke Matriks Perhitungan AHP &rarr;
+        <a href="perhitungan_ahp.php" class="px-4 py-2 bg-[#162B4D] hover:bg-[#1E3A5F] text-white border border-[#2E5A8F] hover:border-blue-400 rounded-lg text-xs font-semibold shadow-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] flex items-center gap-2 self-start">
+            <i class="fa-solid fa-calculator text-blue-400"></i> Ke Matriks Perhitungan AHP &rarr;
         </a>
     </div>
 
@@ -91,14 +91,14 @@ require_once "sidebar.php";
             <div class="p-4 bg-slate-50/70 border border-slate-200 rounded-xl space-y-2.5">
                 <div class="flex items-center justify-between font-bold text-slate-900 border-b border-slate-200 pb-2">
                     <span>C1: Penghasilan Orang Tua</span>
-                    <span class="text-[10px] bg-slate-200 text-slate-700 font-medium px-1.5 py-0.5 rounded">Cost</span>
+                    <span class="text-[10px] bg-rose-950/70 border border-rose-700/80 text-rose-300 font-bold px-2 py-0.5 rounded-md">Cost</span>
                 </div>
                 <ul class="space-y-1.5 text-slate-600">
-                    <li class="flex justify-between items-center gap-2"><span>&lt; Rp 500.000</span> <b class="text-slate-800 bg-white border border-slate-200 px-1.5 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0">Skor 5</b></li>
-                    <li class="flex justify-between items-center gap-2"><span>Rp 600.000 - Rp 1.000.000</span> <b class="text-slate-800 bg-white border border-slate-200 px-1.5 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0">Skor 4</b></li>
-                    <li class="flex justify-between items-center gap-2"><span>Rp 1.000.000 - Rp 2.000.000</span> <b class="text-slate-800 bg-white border border-slate-200 px-1.5 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0">Skor 3</b></li>
-                    <li class="flex justify-between items-center gap-2"><span>Rp 2.000.000 - Rp 3.000.000</span> <b class="text-slate-800 bg-white border border-slate-200 px-1.5 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0">Skor 2</b></li>
-                    <li class="flex justify-between items-center gap-2"><span>&gt; Rp 4.000.000</span> <b class="text-slate-800 bg-white border border-slate-200 px-1.5 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0">Skor 1</b></li>
+                    <li class="flex justify-between items-center gap-2"><span>&lt; Rp 500.000</span> <b class="text-blue-200 bg-[#07101E] border border-[#1E3A5F] px-2 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0 font-bold">Skor 5</b></li>
+                    <li class="flex justify-between items-center gap-2"><span>Rp 600.000 - Rp 1.000.000</span> <b class="text-blue-200 bg-[#07101E] border border-[#1E3A5F] px-2 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0 font-bold">Skor 4</b></li>
+                    <li class="flex justify-between items-center gap-2"><span>Rp 1.000.000 - Rp 2.000.000</span> <b class="text-blue-200 bg-[#07101E] border border-[#1E3A5F] px-2 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0 font-bold">Skor 3</b></li>
+                    <li class="flex justify-between items-center gap-2"><span>Rp 2.000.000 - Rp 3.000.000</span> <b class="text-blue-200 bg-[#07101E] border border-[#1E3A5F] px-2 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0 font-bold">Skor 2</b></li>
+                    <li class="flex justify-between items-center gap-2"><span>&gt; Rp 4.000.000</span> <b class="text-blue-200 bg-[#07101E] border border-[#1E3A5F] px-2 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0 font-bold">Skor 1</b></li>
                 </ul>
             </div>
 
@@ -106,14 +106,14 @@ require_once "sidebar.php";
             <div class="p-4 bg-slate-50/70 border border-slate-200 rounded-xl space-y-2.5">
                 <div class="flex items-center justify-between font-bold text-slate-900 border-b border-slate-200 pb-2">
                     <span>C2: Tanggungan Keluarga</span>
-                    <span class="text-[10px] bg-slate-200 text-slate-700 font-medium px-1.5 py-0.5 rounded">Benefit</span>
+                    <span class="text-[10px] bg-emerald-950/70 border border-emerald-700/80 text-emerald-300 font-bold px-2 py-0.5 rounded-md">Benefit</span>
                 </div>
                 <ul class="space-y-1.5 text-slate-600">
-                    <li class="flex justify-between items-center gap-2"><span>&gt; 5 Orang</span> <b class="text-slate-800 bg-white border border-slate-200 px-1.5 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0">Skor 5</b></li>
-                    <li class="flex justify-between items-center gap-2"><span>4 Orang</span> <b class="text-slate-800 bg-white border border-slate-200 px-1.5 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0">Skor 4</b></li>
-                    <li class="flex justify-between items-center gap-2"><span>3 Orang</span> <b class="text-slate-800 bg-white border border-slate-200 px-1.5 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0">Skor 3</b></li>
-                    <li class="flex justify-between items-center gap-2"><span>2 Orang</span> <b class="text-slate-800 bg-white border border-slate-200 px-1.5 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0">Skor 2</b></li>
-                    <li class="flex justify-between items-center gap-2"><span>1 Orang</span> <b class="text-slate-800 bg-white border border-slate-200 px-1.5 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0">Skor 1</b></li>
+                    <li class="flex justify-between items-center gap-2"><span>&gt; 5 Orang</span> <b class="text-blue-200 bg-[#07101E] border border-[#1E3A5F] px-2 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0 font-bold">Skor 5</b></li>
+                    <li class="flex justify-between items-center gap-2"><span>4 Orang</span> <b class="text-blue-200 bg-[#07101E] border border-[#1E3A5F] px-2 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0 font-bold">Skor 4</b></li>
+                    <li class="flex justify-between items-center gap-2"><span>3 Orang</span> <b class="text-blue-200 bg-[#07101E] border border-[#1E3A5F] px-2 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0 font-bold">Skor 3</b></li>
+                    <li class="flex justify-between items-center gap-2"><span>2 Orang</span> <b class="text-blue-200 bg-[#07101E] border border-[#1E3A5F] px-2 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0 font-bold">Skor 2</b></li>
+                    <li class="flex justify-between items-center gap-2"><span>1 Orang</span> <b class="text-blue-200 bg-[#07101E] border border-[#1E3A5F] px-2 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0 font-bold">Skor 1</b></li>
                 </ul>
             </div>
 
@@ -121,14 +121,14 @@ require_once "sidebar.php";
             <div class="p-4 bg-slate-50/70 border border-slate-200 rounded-xl space-y-2.5">
                 <div class="flex items-center justify-between font-bold text-slate-900 border-b border-slate-200 pb-2">
                     <span>C3: Kondisi Rumah</span>
-                    <span class="text-[10px] bg-slate-200 text-slate-700 font-medium px-1.5 py-0.5 rounded">Benefit</span>
+                    <span class="text-[10px] bg-emerald-950/70 border border-emerald-700/80 text-emerald-300 font-bold px-2 py-0.5 rounded-md">Benefit</span>
                 </div>
                 <ul class="space-y-1.5 text-slate-600">
-                    <li class="flex justify-between items-center gap-2"><span>Tidak Layak</span> <b class="text-slate-800 bg-white border border-slate-200 px-1.5 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0">Skor 5</b></li>
-                    <li class="flex justify-between items-center gap-2"><span>Dinding Kayu</span> <b class="text-slate-800 bg-white border border-slate-200 px-1.5 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0">Skor 4</b></li>
-                    <li class="flex justify-between items-center gap-2"><span>Dinding Batu Atap Seng</span> <b class="text-slate-800 bg-white border border-slate-200 px-1.5 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0">Skor 3</b></li>
-                    <li class="flex justify-between items-center gap-2"><span>Dinding Batu Atap Genteng</span> <b class="text-slate-800 bg-white border border-slate-200 px-1.5 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0">Skor 2</b></li>
-                    <li class="flex justify-between items-center gap-2"><span>Tembok Keramik</span> <b class="text-slate-800 bg-white border border-slate-200 px-1.5 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0">Skor 1</b></li>
+                    <li class="flex justify-between items-center gap-2"><span>Tidak Layak</span> <b class="text-blue-200 bg-[#07101E] border border-[#1E3A5F] px-2 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0 font-bold">Skor 5</b></li>
+                    <li class="flex justify-between items-center gap-2"><span>Dinding Kayu</span> <b class="text-blue-200 bg-[#07101E] border border-[#1E3A5F] px-2 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0 font-bold">Skor 4</b></li>
+                    <li class="flex justify-between items-center gap-2"><span>Dinding Batu Atap Seng</span> <b class="text-blue-200 bg-[#07101E] border border-[#1E3A5F] px-2 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0 font-bold">Skor 3</b></li>
+                    <li class="flex justify-between items-center gap-2"><span>Dinding Batu Atap Genteng</span> <b class="text-blue-200 bg-[#07101E] border border-[#1E3A5F] px-2 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0 font-bold">Skor 2</b></li>
+                    <li class="flex justify-between items-center gap-2"><span>Tembok Keramik</span> <b class="text-blue-200 bg-[#07101E] border border-[#1E3A5F] px-2 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0 font-bold">Skor 1</b></li>
                 </ul>
             </div>
 
@@ -136,14 +136,14 @@ require_once "sidebar.php";
             <div class="p-4 bg-slate-50/70 border border-slate-200 rounded-xl space-y-2.5">
                 <div class="flex items-center justify-between font-bold text-slate-900 border-b border-slate-200 pb-2">
                     <span>C4: Prestasi Akademik</span>
-                    <span class="text-[10px] bg-slate-200 text-slate-700 font-medium px-1.5 py-0.5 rounded">Benefit</span>
+                    <span class="text-[10px] bg-emerald-950/70 border border-emerald-700/80 text-emerald-300 font-bold px-2 py-0.5 rounded-md">Benefit</span>
                 </div>
                 <ul class="space-y-1.5 text-slate-600">
-                    <li class="flex justify-between items-center gap-2"><span>Juara 1 - 3 Kabupaten</span> <b class="text-slate-800 bg-white border border-slate-200 px-1.5 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0">Skor 5</b></li>
-                    <li class="flex justify-between items-center gap-2"><span>Juara Harapan</span> <b class="text-slate-800 bg-white border border-slate-200 px-1.5 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0">Skor 4</b></li>
-                    <li class="flex justify-between items-center gap-2"><span>Juara Kelas 1 - 3</span> <b class="text-slate-800 bg-white border border-slate-200 px-1.5 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0">Skor 3</b></li>
-                    <li class="flex justify-between items-center gap-2"><span>Peringkat 10 Besar</span> <b class="text-slate-800 bg-white border border-slate-200 px-1.5 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0">Skor 2</b></li>
-                    <li class="flex justify-between items-center gap-2"><span>Peringkat 20 Besar</span> <b class="text-slate-800 bg-white border border-slate-200 px-1.5 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0">Skor 1</b></li>
+                    <li class="flex justify-between items-center gap-2"><span>Juara 1 - 3 Kabupaten</span> <b class="text-blue-200 bg-[#07101E] border border-[#1E3A5F] px-2 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0 font-bold">Skor 5</b></li>
+                    <li class="flex justify-between items-center gap-2"><span>Juara Harapan</span> <b class="text-blue-200 bg-[#07101E] border border-[#1E3A5F] px-2 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0 font-bold">Skor 4</b></li>
+                    <li class="flex justify-between items-center gap-2"><span>Juara Kelas 1 - 3</span> <b class="text-blue-200 bg-[#07101E] border border-[#1E3A5F] px-2 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0 font-bold">Skor 3</b></li>
+                    <li class="flex justify-between items-center gap-2"><span>Peringkat 10 Besar</span> <b class="text-blue-200 bg-[#07101E] border border-[#1E3A5F] px-2 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0 font-bold">Skor 2</b></li>
+                    <li class="flex justify-between items-center gap-2"><span>Peringkat 20 Besar</span> <b class="text-blue-200 bg-[#07101E] border border-[#1E3A5F] px-2 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0 font-bold">Skor 1</b></li>
                 </ul>
             </div>
 
@@ -151,14 +151,14 @@ require_once "sidebar.php";
             <div class="p-4 bg-slate-50/70 border border-slate-200 rounded-xl space-y-2.5">
                 <div class="flex items-center justify-between font-bold text-slate-900 border-b border-slate-200 pb-2">
                     <span>C5: Jarak ke Sekolah</span>
-                    <span class="text-[10px] bg-slate-200 text-slate-700 font-medium px-1.5 py-0.5 rounded">Benefit</span>
+                    <span class="text-[10px] bg-emerald-950/70 border border-emerald-700/80 text-emerald-300 font-bold px-2 py-0.5 rounded-md">Benefit</span>
                 </div>
                 <ul class="space-y-1.5 text-slate-600">
-                    <li class="flex justify-between items-center gap-2"><span>&gt; 5 km</span> <b class="text-slate-800 bg-white border border-slate-200 px-1.5 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0">Skor 5</b></li>
-                    <li class="flex justify-between items-center gap-2"><span>3 – 5 km</span> <b class="text-slate-800 bg-white border border-slate-200 px-1.5 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0">Skor 4</b></li>
-                    <li class="flex justify-between items-center gap-2"><span>2 km</span> <b class="text-slate-800 bg-white border border-slate-200 px-1.5 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0">Skor 3</b></li>
-                    <li class="flex justify-between items-center gap-2"><span>1 km</span> <b class="text-slate-800 bg-white border border-slate-200 px-1.5 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0">Skor 2</b></li>
-                    <li class="flex justify-between items-center gap-2"><span>&lt; 1 km</span> <b class="text-slate-800 bg-white border border-slate-200 px-1.5 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0">Skor 1</b></li>
+                    <li class="flex justify-between items-center gap-2"><span>&gt; 5 km</span> <b class="text-blue-200 bg-[#07101E] border border-[#1E3A5F] px-2 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0 font-bold">Skor 5</b></li>
+                    <li class="flex justify-between items-center gap-2"><span>3 – 5 km</span> <b class="text-blue-200 bg-[#07101E] border border-[#1E3A5F] px-2 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0 font-bold">Skor 4</b></li>
+                    <li class="flex justify-between items-center gap-2"><span>2 km</span> <b class="text-blue-200 bg-[#07101E] border border-[#1E3A5F] px-2 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0 font-bold">Skor 3</b></li>
+                    <li class="flex justify-between items-center gap-2"><span>1 km</span> <b class="text-blue-200 bg-[#07101E] border border-[#1E3A5F] px-2 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0 font-bold">Skor 2</b></li>
+                    <li class="flex justify-between items-center gap-2"><span>&lt; 1 km</span> <b class="text-blue-200 bg-[#07101E] border border-[#1E3A5F] px-2 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0 font-bold">Skor 1</b></li>
                 </ul>
             </div>
         </div>

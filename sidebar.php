@@ -3,7 +3,7 @@
 $current_file = basename($_SERVER['PHP_SELF']);
 ?>
 <!-- SIDEBAR NAVIGASI (TETAP DIAM / FIXED DI KIRI, MENDUKUNG COLLAPSE MINI) -->
-<aside id="app-sidebar" class="w-64 bg-white border-r border-slate-200 flex flex-col justify-between shrink-0 h-screen select-none z-30 transition-all duration-300">
+<aside id="app-sidebar" class="w-64 bg-[#0B192C] border-r border-[#1E3A5F] flex flex-col justify-between shrink-0 h-screen select-none z-30 transition-all duration-300">
     <script>
         // Terapkan status tersimpan langsung sebelum render agar bebas flicker
         if (localStorage.getItem('sidebar_collapsed') === 'true') {
@@ -12,9 +12,9 @@ $current_file = basename($_SERVER['PHP_SELF']);
     </script>
     <div class="p-6 overflow-y-auto flex-1 sidebar-body">
         <!-- HEADER SIDEBAR & TOMBOL TOGGLE NAVIGASI -->
-        <div class="flex items-center justify-between pb-5 border-b border-slate-100 sidebar-header">
+        <div class="flex items-center justify-between pb-5 border-b border-[#1E3A5F] sidebar-header">
             <div class="flex items-center gap-3 min-w-0">
-                <div onclick="toggleSidebar()" title="<?= htmlspecialchars($pengaturan['nama_sekolah'] ?? 'SMP Tunas Bangsa') ?> - SPK PIP (Klik untuk Ciutkan/Buka)" class="bg-white border border-slate-200 w-10 h-10 rounded-xl flex items-center justify-center shadow-sm shrink-0 cursor-pointer transition-colors overflow-hidden p-1">
+                <div onclick="toggleSidebar()" title="<?= htmlspecialchars($pengaturan['nama_sekolah'] ?? 'SMP Tunas Bangsa') ?> - SPK PIP (Klik untuk Ciutkan/Buka)" class="bg-[#112240] border border-[#1E3A5F] w-10 h-10 rounded-xl flex items-center justify-center shadow-sm shrink-0 cursor-pointer transition-colors overflow-hidden p-1">
                     <?php if (!empty($pengaturan['logo']) && file_exists($pengaturan['logo'])): ?>
                         <img src="<?= htmlspecialchars($pengaturan['logo']) ?>" alt="Logo" class="w-full h-full object-contain">
                     <?php else: ?>
@@ -24,11 +24,11 @@ $current_file = basename($_SERVER['PHP_SELF']);
                     <?php endif; ?>
                 </div>
                 <div class="sidebar-text truncate">
-                    <span class="font-bold text-slate-900 text-sm leading-tight block truncate"><?= htmlspecialchars($pengaturan['nama_sekolah'] ?? 'SMP Tunas Bangsa') ?></span>
-                    <span class="text-[11px] text-slate-400 font-medium block truncate">Sistem SPK PIP (AHP)</span>
+                    <span class="font-bold text-white text-sm leading-tight block truncate"><?= htmlspecialchars($pengaturan['nama_sekolah'] ?? 'SMP Tunas Bangsa') ?></span>
+                    <span class="text-[11px] text-blue-300 font-medium block truncate">Sistem SPK PIP (AHP)</span>
                 </div>
             </div>
-            <button type="button" onclick="toggleSidebar()" id="sidebar-toggle-btn" title="Sembunyikan Navigasi" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-800 hover:bg-slate-100 transition-colors shrink-0 cursor-pointer">
+            <button type="button" onclick="toggleSidebar()" id="sidebar-toggle-btn" title="Sembunyikan Navigasi" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-[#112240] transition-colors shrink-0 cursor-pointer">
                 <i id="sidebar-toggle-icon" class="fa-solid fa-angles-left text-xs"></i>
             </button>
         </div>
@@ -60,20 +60,20 @@ $current_file = basename($_SERVER['PHP_SELF']);
     </div>
     
     <!-- FOOTER PROFIL ADMIN & LOGOUT -->
-    <div class="p-6 border-t border-slate-100 space-y-3 shrink-0 bg-white sidebar-footer">
-        <div onclick="openProfileModal()" title="Kelola Akun (<?= htmlspecialchars($_SESSION['admin']['nama'] ?? 'Admin') ?>)" class="sidebar-profile-box flex items-center justify-between p-2 -mx-2 rounded-xl text-xs text-slate-500 hover:bg-slate-50 border border-transparent hover:border-slate-200 cursor-pointer transition-all group">
+    <div class="p-6 border-t border-[#1E3A5F] space-y-3 shrink-0 bg-[#0B192C] sidebar-footer">
+        <div onclick="openProfileModal()" title="Kelola Akun (<?= htmlspecialchars($_SESSION['admin']['nama'] ?? 'Admin') ?>)" class="sidebar-profile-box flex items-center justify-between p-2 -mx-2 rounded-xl text-xs text-slate-400 hover:bg-[#112240] border border-transparent hover:border-[#1E3A5F] cursor-pointer transition-all group">
             <div class="flex items-center gap-2.5 truncate min-w-0">
-                <div class="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 group-hover:border-slate-300 flex items-center justify-center text-slate-700 font-bold text-xs shrink-0 transition-colors">
+                <div class="w-8 h-8 rounded-full bg-[#1E3A5F] border border-[#274872] group-hover:border-blue-500 flex items-center justify-center text-blue-300 font-bold text-xs shrink-0 transition-colors">
                     <?= strtoupper(substr($_SESSION['admin']['nama'] ?? 'A', 0, 1)) ?>
                 </div>
                 <div class="sidebar-text truncate text-left">
-                    <span class="font-bold text-slate-800 block truncate group-hover:text-slate-900"><?= htmlspecialchars($_SESSION['admin']['nama'] ?? 'Admin') ?></span>
+                    <span class="font-bold text-white block truncate group-hover:text-blue-300"><?= htmlspecialchars($_SESSION['admin']['nama'] ?? 'Admin') ?></span>
                     <span class="text-[10px] text-slate-400 block truncate">@<?= htmlspecialchars($_SESSION['admin']['username'] ?? 'admin') ?></span>
                 </div>
             </div>
             <i class="sidebar-text fa-solid fa-gear text-slate-300 group-hover:text-slate-600 text-xs transition-colors shrink-0 ml-1"></i>
         </div>
-        <a href="logout.php" onclick="return confirm('Apakah Anda yakin ingin keluar dari sistem?')" title="Logout dari Sistem" class="sidebar-logout-btn w-full py-2 bg-slate-50 hover:bg-rose-50 text-slate-600 hover:text-rose-700 border border-slate-200 font-semibold rounded-lg transition-colors flex items-center justify-center gap-2 text-[11px] uppercase tracking-wider whitespace-nowrap">
+        <a href="logout.php" onclick="return confirm('Apakah Anda yakin ingin keluar dari sistem?')" title="Logout dari Sistem" class="sidebar-logout-btn w-full py-2 bg-[#112240] hover:bg-rose-950/50 text-rose-300 hover:text-rose-200 border border-[#1E3A5F] hover:border-rose-800/80 font-semibold rounded-lg transition-colors flex items-center justify-center gap-2 text-[11px] uppercase tracking-wider whitespace-nowrap">
             <i class="fa-solid fa-right-from-bracket text-xs"></i> <span class="sidebar-text">Logout</span>
         </a>
     </div>
@@ -113,10 +113,10 @@ $current_file = basename($_SERVER['PHP_SELF']);
 </script>
 
 <!-- AREA KONTEN UTAMA (TERISOLASI & BERGULIR SECARA INDEPENDEN) -->
-<main class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden bg-slate-100/80 w-full">
+<main class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden bg-[#0B192C] w-full">
     <div class="p-8 pb-16 overflow-y-auto flex-1 h-full scroll-smooth w-full">
         <?php if (!empty($flash_message)): ?>
-            <div class="p-4 mb-6 rounded-xl flex items-center justify-between shadow-sm <?= $flash_type === 'success' ? 'bg-emerald-50 border border-emerald-200 text-emerald-800' : 'bg-red-50 border border-red-200 text-red-800' ?>">
+            <div class="p-4 mb-6 rounded-xl flex items-center justify-between shadow-sm <?= $flash_type === 'success' ? 'bg-emerald-950/60 border border-emerald-700/80 text-emerald-200' : 'bg-rose-950/60 border border-rose-700/80 text-rose-200' ?>">
                 <div class="flex items-center gap-3">
                     <i class="fa-solid <?= $flash_type === 'success' ? 'fa-circle-check text-emerald-600' : 'fa-circle-exclamation text-red-600' ?> text-lg"></i>
                     <span class="text-sm font-medium"><?= htmlspecialchars($flash_message) ?></span>

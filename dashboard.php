@@ -155,10 +155,11 @@ $subkriteria_detail = [
             <h1 class="text-2xl font-bold text-gray-800">Dashboard Seleksi Siswa PIP</h1>
         </div>
         <div class="flex items-center gap-2">
-            <a href="daftar_siswa.php" target="_blank" class="px-3 py-1.5 bg-white text-slate-700 hover:bg-slate-50 text-xs font-semibold rounded-lg border border-slate-200 flex items-center gap-1.5 transition-colors shadow-sm">
-                <i class="fa-solid fa-arrow-up-right-from-square text-slate-400"></i> Pendaftaran Siswa (Publik)
+            <a href="daftar_siswa.php" target="_blank" class="px-3.5 py-1.5 bg-[#112240] hover:bg-[#162B4D] text-slate-200 border border-[#1E3A5F] hover:border-[#2E5A8F] text-xs font-medium rounded-lg flex items-center gap-1.5 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-sm">
+                <i class="fa-solid fa-arrow-up-right-from-square text-blue-400"></i>
+                <span>Pendaftaran Siswa (Publik)</span>
             </a>
-            <span class="px-3 py-1.5 bg-slate-100 text-slate-700 text-xs font-semibold rounded-lg border border-slate-200">
+            <span class="px-3 py-1.5 bg-[#162B4D] text-blue-200 text-xs font-semibold rounded-lg border border-[#2E5A8F] shadow-sm">
                 T.A. <?= htmlspecialchars($pengaturan['tahun_ajaran']) ?>
             </span>
         </div>
@@ -171,125 +172,114 @@ $subkriteria_detail = [
 
     $is_pendaftaran_buka = ($today_dash >= $tgl_buka_dash && $today_dash <= $tgl_tutup_dash);
     $status_pendaftaran_teks = 'Dibuka (Aktif)';
-    $status_badge_class = 'bg-emerald-100 text-emerald-800 border-emerald-300';
-    $status_icon = 'fa-circle-check text-emerald-600';
+    $status_badge_class = 'badge-glow-aktif';
+    $status_icon = 'fa-circle-check';
 
     if ($today_dash < $tgl_buka_dash) {
         $status_pendaftaran_teks = 'Belum Dibuka';
-        $status_badge_class = 'bg-amber-100 text-amber-800 border-amber-300';
-        $status_icon = 'fa-clock text-amber-600';
+        $status_badge_class = 'badge-glow-menunggu';
+        $status_icon = 'fa-clock';
     } elseif ($today_dash > $tgl_tutup_dash) {
         $status_pendaftaran_teks = 'Telah Ditutup';
-        $status_badge_class = 'bg-rose-100 text-rose-800 border-rose-300';
-        $status_icon = 'fa-calendar-xmark text-rose-600';
+        $status_badge_class = 'badge-glow-tutup';
+        $status_icon = 'fa-calendar-xmark';
     }
     ?>
 
     <!-- Status Jadwal Pendaftaran PIP Mandiri -->
-    <div class="p-4 bg-white border border-slate-200 rounded-xl text-xs flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-sm">
+    <div class="p-4 bg-white border border-[#1E3A5F] rounded-xl text-xs flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-sm hover:border-blue-500/40 transition-colors">
         <div>
-            <div class="flex items-center gap-2 flex-wrap">
-                <span class="font-bold text-slate-800 text-sm">Status Pendaftaran PIP Mandiri:</span>
-                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold border <?= $status_badge_class ?>">
-                    <?= $status_pendaftaran_teks ?>
+            <div class="flex items-center gap-2.5 flex-wrap">
+                <span class="font-bold text-white text-sm">Status Pendaftaran PIP Mandiri:</span>
+                <span class="px-3 py-1 rounded-full text-xs <?= $status_badge_class ?>">
+                    <i class="fa-solid <?= $status_icon ?>"></i>
+                    <span><?= $status_pendaftaran_teks ?></span>
                 </span>
             </div>
-            <p class="text-slate-500 mt-1">
-                Rentang Waktu: <strong><?= format_tgl_indo($tgl_buka_dash) ?></strong> s.d. <strong><?= format_tgl_indo($tgl_tutup_dash) ?></strong>
-                <span class="text-slate-300 mx-2">|</span>
-                Hari Ini: <span class="text-slate-700 font-medium"><?= format_tgl_indo($today_dash) ?></span>
+            <p class="text-slate-400 mt-1.5">
+                Rentang Waktu: <strong class="text-white"><?= format_tgl_indo($tgl_buka_dash) ?></strong> s.d. <strong class="text-white"><?= format_tgl_indo($tgl_tutup_dash) ?></strong>
+                <span class="text-slate-600 mx-2">|</span>
+                Hari Ini: <span class="text-blue-300 font-medium"><?= format_tgl_indo($today_dash) ?></span>
             </p>
         </div>
         <div class="flex items-center gap-2">
-            <button type="button" onclick="openProfileModal()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-lg font-semibold text-xs shadow transition-colors cursor-pointer">
-                Atur Jadwal Buka / Tutup
+            <button type="button" onclick="openProfileModal()" class="btn-glow-schedule px-4 py-2.5 rounded-lg text-xs cursor-pointer">
+                <i class="fa-solid fa-calendar-days"></i>
+                <span>Atur Jadwal Buka / Tutup</span>
             </button>
         </div>
     </div>
 
     
-    <!-- Ringkasan Kartu Atas (4 Metrik Statistik Formal & Minimalis) -->
+    <!-- Ringkasan Kartu Atas (4 Metrik Statistik Formal & Interaktif) -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <!-- 1. KOTAK SISWA TERVERIFIKASI -->
         <div onclick="openModal('modalTerverifikasi')" 
-             class="bg-white rounded-xl border border-slate-200 border-t-4 border-t-slate-800 p-5 shadow-sm hover:shadow-md hover:border-slate-400 transition-all cursor-pointer flex flex-col justify-between group">
+             class="stat-card-interactive bg-white rounded-xl border border-[#1E3A5F] border-t-4 border-t-blue-500 p-5 shadow-sm cursor-pointer flex flex-col justify-between group">
             <div>
-                <h3 class="text-base font-extrabold text-slate-900 tracking-tight">Peserta Terverifikasi</h3>
-                <p class="text-xs text-slate-500 mt-0.5">Berkas pendaftaran sah</p>
+                <h3 class="stat-card-title text-base font-extrabold text-white tracking-tight transition-colors">Peserta Terverifikasi</h3>
+                <p class="text-xs text-slate-400 mt-0.5">Berkas pendaftaran sah</p>
                 <div class="mt-4 flex items-baseline gap-2">
-                    <span class="text-3xl font-extrabold text-slate-900 tracking-tight"><?= $total_terverifikasi ?></span>
-                    <span class="text-xs font-semibold text-slate-500">Peserta Didik</span>
+                    <span class="text-3xl font-extrabold text-white tracking-tight"><?= $total_terverifikasi ?></span>
+                    <span class="text-xs font-semibold text-blue-300">Peserta Didik</span>
                 </div>
             </div>
-            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-                <span class="text-slate-500 text-[11px]">Dari total <strong><?= $count_all ?></strong> pendaftar</span>
-                <span class="text-[11px] font-semibold text-slate-700 group-hover:text-slate-900 transition-colors">
-                    Daftar Siswa &rarr;
-                </span>
+            <div class="mt-4 pt-3 border-t border-[#1E3A5F] flex items-center text-xs">
+                <span class="text-slate-400 text-[11px]">Dari total <?= $count_all ?> pendaftar</span>
             </div>
         </div>
 
         <!-- 2. KOTAK MENUNGGU VERIFIKASI -->
         <div onclick="openModal('modalMenunggu')" 
-             class="bg-white rounded-xl border border-slate-200 border-t-4 border-t-slate-800 p-5 shadow-sm hover:shadow-md hover:border-slate-400 transition-all cursor-pointer flex flex-col justify-between group">
+             class="stat-card-interactive bg-white rounded-xl border border-[#1E3A5F] border-t-4 border-t-blue-500 p-5 shadow-sm cursor-pointer flex flex-col justify-between group">
             <div>
-                <h3 class="text-base font-extrabold text-slate-900 tracking-tight">Menunggu Verifikasi</h3>
-                <p class="text-xs text-slate-500 mt-0.5">Pemeriksaan berkas fisik</p>
+                <h3 class="stat-card-title text-base font-extrabold text-white tracking-tight transition-colors">Menunggu Verifikasi</h3>
+                <p class="text-xs text-slate-400 mt-0.5">Pemeriksaan berkas fisik</p>
                 <div class="mt-4 flex items-baseline gap-2">
-                    <span class="text-3xl font-extrabold text-slate-900 tracking-tight"><?= $count_menunggu ?></span>
-                    <span class="text-xs font-semibold text-slate-500">Berkas Antrean</span>
+                    <span class="text-3xl font-extrabold text-white tracking-tight"><?= $count_menunggu ?></span>
+                    <span class="text-xs font-semibold text-blue-300">Berkas Antrean</span>
                 </div>
             </div>
-            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+            <div class="mt-4 pt-3 border-t border-[#1E3A5F] flex items-center text-xs">
                 <?php if ($count_menunggu > 0): ?>
-                    <span class="font-semibold text-slate-800 text-[11px]">Perlu verifikasi fisik</span>
-                    <span class="text-[11px] font-semibold text-slate-700 group-hover:text-slate-900 group-hover:underline transition-colors">
-                        Periksa &rarr;
-                    </span>
+                    <span class="text-slate-400 text-[11px]">Perlu verifikasi fisik</span>
                 <?php else: ?>
-                    <span class="font-medium text-slate-600 text-[11px]">Antrean nihil</span>
-                    <span class="text-[11px] font-medium text-slate-400">Tuntas</span>
+                    <span class="text-slate-400 text-[11px]">Antrean nihil</span>
                 <?php endif; ?>
             </div>
         </div>
 
         <!-- 3. KOTAK SKOR TERTINGGI (AHP) -->
         <div onclick="openModal('modalSkorTertinggi')" 
-             class="bg-white rounded-xl border border-slate-200 border-t-4 border-t-slate-800 p-5 shadow-sm hover:shadow-md hover:border-slate-400 transition-all cursor-pointer flex flex-col justify-between group">
+             class="stat-card-interactive bg-white rounded-xl border border-[#1E3A5F] border-t-4 border-t-blue-500 p-5 shadow-sm cursor-pointer flex flex-col justify-between group">
             <div>
-                <h3 class="text-base font-extrabold text-slate-900 tracking-tight">Skor Prioritas Utama</h3>
-                <p class="text-xs text-slate-500 mt-0.5">Peringkat #1 Metode AHP</p>
+                <h3 class="stat-card-title text-base font-extrabold text-white tracking-tight transition-colors">Skor Prioritas Utama</h3>
+                <p class="text-xs text-slate-400 mt-0.5">Peringkat #1 Metode AHP</p>
                 <div class="mt-4 flex items-baseline gap-2">
-                    <span class="text-3xl font-extrabold text-slate-900 font-mono tracking-tight"><?= number_format($skor_tertinggi, 4) ?></span>
-                    <span class="text-[10px] font-medium text-slate-400 uppercase">Maks 5.00</span>
+                    <span class="text-3xl font-extrabold text-white font-mono tracking-tight"><?= number_format($skor_tertinggi, 4) ?></span>
+                    <span class="text-[10px] font-medium text-blue-300 uppercase">Maks 5.00</span>
                 </div>
             </div>
-            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-                <span class="text-[11px] font-medium text-slate-600 truncate max-w-[150px] block" title="<?= htmlspecialchars($nama_tertinggi) ?>">
+            <div class="mt-4 pt-3 border-t border-[#1E3A5F] flex items-center text-xs">
+                <span class="text-slate-400 text-[11px] truncate block" title="<?= htmlspecialchars($nama_tertinggi) ?>">
                     <?= htmlspecialchars($nama_tertinggi) ?>
-                </span>
-                <span class="text-[11px] font-semibold text-slate-700 group-hover:text-slate-900 transition-colors">
-                    Rincian &rarr;
                 </span>
             </div>
         </div>
 
         <!-- 4. KOTAK KUOTA RESMI PIP -->
         <div onclick="openModal('modalKuota')" 
-             class="bg-white rounded-xl border border-slate-200 border-t-4 border-t-slate-800 p-5 shadow-sm hover:shadow-md hover:border-slate-400 transition-all cursor-pointer flex flex-col justify-between group">
+             class="stat-card-interactive bg-white rounded-xl border border-[#1E3A5F] border-t-4 border-t-blue-500 p-5 shadow-sm cursor-pointer flex flex-col justify-between group">
             <div>
-                <h3 class="text-base font-extrabold text-slate-900 tracking-tight">Alokasi Kuota Beasiswa</h3>
-                <p class="text-xs text-slate-500 mt-0.5">Ketetapan Penerima PIP</p>
+                <h3 class="stat-card-title text-base font-extrabold text-white tracking-tight transition-colors">Alokasi Kuota Beasiswa</h3>
+                <p class="text-xs text-slate-400 mt-0.5">Ketetapan Penerima PIP</p>
                 <div class="mt-4 flex items-baseline gap-2">
-                    <span class="text-3xl font-extrabold text-slate-900 tracking-tight"><?= $kuota ?></span>
-                    <span class="text-xs font-semibold text-slate-500">Peserta Didik</span>
+                    <span class="text-3xl font-extrabold text-white tracking-tight"><?= $kuota ?></span>
+                    <span class="text-xs font-semibold text-blue-300">Peserta Didik</span>
                 </div>
             </div>
-            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-                <span class="text-[11px] text-slate-500">T.A. <?= htmlspecialchars($pengaturan['tahun_ajaran']) ?></span>
-                <span class="text-[11px] font-semibold text-slate-700 group-hover:text-slate-900 group-hover:underline transition-colors">
-                    Atur Kuota &rarr;
-                </span>
+            <div class="mt-4 pt-3 border-t border-[#1E3A5F] flex items-center text-xs">
+                <span class="text-slate-400 text-[11px]">T.A. <?= htmlspecialchars($pengaturan['tahun_ajaran']) ?></span>
             </div>
         </div>
     </div>
@@ -297,7 +287,7 @@ $subkriteria_detail = [
     <!-- Grafik Sederhana & Tabel Ringkasan Top 5 -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Grafik Skor -->
-        <div class="bg-white p-6 rounded-xl border border-slate-200/90 shadow-sm">
+        <div class="bg-white p-6 rounded-xl border border-slate-200/90 shadow-sm flex flex-col justify-between">
             <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
                 <h3 class="text-sm font-bold text-slate-800">Distribusi Skor Terverifikasi (Top 5)</h3>
                 <span class="text-[11px] text-slate-400 font-medium">Skala Maks: 5.00</span>
@@ -322,60 +312,94 @@ $subkriteria_detail = [
                 </div>
                 <?php endforeach; endif; ?>
             </div>
-            <div class="text-[11px] text-slate-400 text-right mt-6">Dihitung berdasarkan 5 kriteria berbobot AHP</div>
+            <div class="mt-4 pt-3.5 border-t border-[#1E3A5F] flex items-center justify-between text-[11px] text-slate-400">
+                <span>Skala Skor: <strong class="text-white">0.00 - 5.00</strong></span>
+                <span>Dihitung berdasarkan 5 kriteria AHP</span>
+            </div>
         </div>
 
-        <!-- Tabel Ringkasan Top 5 -->
-        <div class="bg-white p-6 rounded-xl border border-slate-200/90 shadow-sm">
-            <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
-                <h3 class="text-sm font-bold text-slate-800">Peringkat Teratas Calon Penerima</h3>
-                <a href="ranking.php" class="text-xs text-slate-600 hover:text-slate-900 hover:underline font-semibold">Lihat Semua &rarr;</a>
+        <!-- Tabel Ringkasan Top 5 (Rapi, Lapang & Berimbang) -->
+        <div class="bg-white p-6 rounded-xl border border-slate-200/90 shadow-sm flex flex-col justify-between">
+            <div>
+                <div class="flex items-center justify-between mb-4 pb-3 border-b border-[#1E3A5F]">
+                    <div>
+                        <h3 class="text-sm font-bold text-white">Peringkat Teratas Calon Penerima</h3>
+                        <p class="text-[11px] text-slate-400 mt-0.5">Top kandidat penerima beasiswa PIP (Metode AHP)</p>
+                    </div>
+                    <a href="ranking.php" class="text-xs text-blue-400 hover:text-blue-300 hover:underline font-semibold flex items-center gap-1 transition-colors">
+                        <span>Lihat Semua</span>
+                        <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    </a>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead>
+                            <tr class="border-b border-[#1E3A5F] text-slate-400 uppercase text-[11px] font-semibold tracking-wider bg-[#07101E]">
+                                <th class="py-2.5 px-4 rounded-l-lg">Nama Siswa</th>
+                                <th class="py-2.5 px-3 text-center">Peringkat &amp; Status</th>
+                                <th class="py-2.5 px-4 text-right rounded-r-lg">Skor AHP</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-[#1E3A5F]/60 font-medium text-slate-300">
+                            <?php 
+                            $top_list = array_slice($siswa_terverifikasi, 0, 5);
+                            if (empty($top_list)): ?>
+                                <tr><td colspan="3" class="py-12 text-center text-slate-400 text-xs">Belum ada siswa terverifikasi</td></tr>
+                            <?php else:
+                                $r = 1;
+                                foreach ($top_list as $s): 
+                                    $is_lolos = ($r <= $kuota);
+                            ?>
+                            <tr class="hover:bg-[#162B4D]/60 transition-colors group">
+                                <td class="py-3.5 px-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 rounded-lg bg-[#07101E] border border-[#1E3A5F] text-blue-300 flex items-center justify-center font-bold text-xs shrink-0 group-hover:border-blue-500 transition-colors">
+                                            <?= strtoupper(substr($s['nama'], 0, 1)) ?>
+                                        </div>
+                                        <div class="min-w-0">
+                                            <span class="font-bold text-white text-xs block truncate group-hover:text-blue-200 transition-colors"><?= htmlspecialchars($s['nama']) ?></span>
+                                            <span class="text-[11px] text-slate-400 block truncate mt-0.5"><?= htmlspecialchars($s['sekolah_asal'] ?: 'Kelas VII') ?> &bull; <span class="font-mono"><?= htmlspecialchars($s['nisn']) ?></span></span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="py-3.5 px-3 text-center whitespace-nowrap">
+                                    <div class="inline-flex items-center gap-1.5">
+                                        <?php if ($r === 1): ?>
+                                            <span class="px-2.5 py-0.5 bg-blue-600 text-white rounded-md text-[11px] font-extrabold shadow-sm">#1</span>
+                                        <?php elseif ($r === 2): ?>
+                                            <span class="px-2.5 py-0.5 bg-[#1E3A5F] text-blue-200 border border-[#2E5A8F] rounded-md text-[11px] font-bold shadow-xs">#2</span>
+                                        <?php elseif ($r === 3): ?>
+                                            <span class="px-2.5 py-0.5 bg-[#162B4D] text-slate-300 border border-[#1E3A5F] rounded-md text-[11px] font-bold shadow-xs">#3</span>
+                                        <?php else: ?>
+                                            <span class="px-2 py-0.5 text-slate-400 font-semibold text-xs">#<?= $r ?></span>
+                                        <?php endif; ?>
+                                        <?php if ($is_lolos): ?>
+                                            <span class="px-2 py-0.5 bg-emerald-950/70 border border-emerald-700/80 text-emerald-300 text-[10px] font-bold rounded-md">Lolos</span>
+                                        <?php else: ?>
+                                            <span class="px-2 py-0.5 bg-[#162B4D] border border-[#1E3A5F] text-slate-400 text-[10px] font-medium rounded-md">Cadangan</span>
+                                        <?php endif; ?>
+                                    </div>
+                                </td>
+                                <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                                    <span class="font-mono font-bold text-white text-xs block"><?= number_format($s['skor_akhir'], 4) ?></span>
+                                    <span class="text-[10px] text-slate-400 block mt-0.5">Nilai Akhir</span>
+                                </td>
+                            </tr>
+                            <?php 
+                                $r++;
+                                endforeach; 
+                            endif; ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <table class="w-full text-left text-sm">
-                <thead>
-                    <tr class="border-b border-slate-100 text-slate-400 uppercase text-[11px] font-semibold tracking-wider">
-                        <th class="pb-2">Nama Siswa</th>
-                        <th class="pb-2 text-center">Rank</th>
-                        <th class="pb-2 text-right">Skor AHP</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
-                    <?php 
-                    $top_list = array_slice($siswa_terverifikasi, 0, 5);
-                    if (empty($top_list)): ?>
-                        <tr><td colspan="3" class="py-6 text-center text-slate-400 text-xs">Belum ada siswa terverifikasi</td></tr>
-                    <?php else:
-                        $r = 1;
-                        foreach ($top_list as $s): 
-                            $is_lolos = ($r <= $kuota);
-                    ?>
-                    <tr class="hover:bg-slate-50/70">
-                        <td class="py-2.5">
-                            <span class="font-bold text-slate-800 text-xs block"><?= htmlspecialchars($s['nama']) ?></span>
-                            <span class="text-[10px] text-slate-400 block"><?= htmlspecialchars($s['sekolah_asal'] ?: 'Kelas VII') ?> &bull; <?= htmlspecialchars($s['nisn']) ?></span>
-                        </td>
-                        <td class="py-2.5 text-center">
-                            <?php if ($r === 1): ?>
-                                <span class="px-2 py-0.5 bg-slate-900 text-white rounded text-[11px] font-bold">#1</span>
-                            <?php elseif ($r === 2): ?>
-                                <span class="px-2 py-0.5 bg-slate-200 text-slate-800 rounded text-[11px] font-bold">#2</span>
-                            <?php elseif ($r === 3): ?>
-                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 border border-slate-200 rounded text-[11px] font-bold">#3</span>
-                            <?php else: ?>
-                                <span class="text-slate-500 font-semibold text-xs">#<?= $r ?></span>
-                            <?php endif; ?>
-                            <?php if ($is_lolos): ?>
-                                <span class="block text-[9px] text-emerald-700 font-semibold mt-0.5">Lolos</span>
-                            <?php endif; ?>
-                        </td>
-                        <td class="py-2.5 text-right font-bold text-slate-900 text-xs font-mono"><?= number_format($s['skor_akhir'], 4) ?></td>
-                    </tr>
-                    <?php 
-                        $r++;
-                        endforeach; 
-                    endif; ?>
-                </tbody>
-            </table>
+            
+            <!-- Footer Penyeimbang Kartu -->
+            <div class="mt-4 pt-3.5 border-t border-[#1E3A5F] flex items-center justify-between text-[11px] text-slate-400">
+                <span>Alokasi Kuota: <strong class="text-white"><?= $kuota ?> Siswa</strong></span>
+                <span>Peringkat 1 s.d. <?= count($top_list) ?></span>
+            </div>
         </div>
     </div>
 </div>
@@ -446,13 +470,13 @@ $subkriteria_detail = [
                         <tr class="hover:bg-slate-50/70 transition-colors">
                             <td class="p-3 text-center font-bold">
                                 <?php if ($r === 1): ?>
-                                    <span class="px-2 py-0.5 bg-slate-900 text-white rounded text-[11px]">#1</span>
+                                    <span class="px-2 py-0.5 bg-blue-600 text-white rounded text-[11px] font-bold shadow-xs">#1</span>
                                 <?php elseif ($r === 2): ?>
-                                    <span class="px-2 py-0.5 bg-slate-200 text-slate-800 rounded text-[11px]">#2</span>
+                                    <span class="px-2 py-0.5 bg-[#1E3A5F] text-blue-200 border border-[#2E5A8F] rounded text-[11px] font-bold shadow-xs">#2</span>
                                 <?php elseif ($r === 3): ?>
-                                    <span class="px-2 py-0.5 bg-slate-100 text-slate-700 border border-slate-200 rounded text-[11px]">#3</span>
+                                    <span class="px-2 py-0.5 bg-[#162B4D] text-slate-300 border border-[#1E3A5F] rounded text-[11px] font-bold shadow-xs">#3</span>
                                 <?php else: ?>
-                                    <span class="text-slate-500 text-xs">#<?= $r ?></span>
+                                    <span class="text-slate-400 text-xs font-semibold">#<?= $r ?></span>
                                 <?php endif; ?>
                             </td>
                             <td class="p-3">

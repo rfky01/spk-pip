@@ -48,11 +48,13 @@ $logo_kiri_path = !empty($pengaturan['logo_kiri']) && file_exists($pengaturan['l
             </p>
         </div>
         <div class="flex items-center gap-2">
-            <a href="cetak_laporan.php?kategori=terverifikasi" target="_blank" class="px-3.5 py-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-lg text-xs font-semibold shadow-sm transition-colors">
-                Pratinjau KOP Surat
+            <a href="cetak_laporan.php?kategori=terverifikasi" target="_blank" class="px-3.5 py-2 bg-[#112240] hover:bg-[#162B4D] text-slate-200 border border-[#1E3A5F] hover:border-[#2E5A8F] rounded-lg text-xs font-medium shadow-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] flex items-center gap-2">
+                <i class="fa-solid fa-file-invoice text-blue-400"></i>
+                <span>Pratinjau KOP Surat</span>
             </a>
-            <a href="daftar_siswa.php" target="_blank" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-xs font-semibold shadow-sm transition-colors">
-                Pendaftaran Siswa
+            <a href="daftar_siswa.php" target="_blank" class="px-3.5 py-2 bg-[#162B4D] hover:bg-[#1E3A5F] text-white border border-[#2E5A8F] hover:border-blue-400 rounded-lg text-xs font-semibold shadow-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] flex items-center gap-2">
+                <i class="fa-solid fa-user-plus text-blue-400"></i>
+                <span>Pendaftaran Siswa</span>
             </a>
         </div>
     </div>
@@ -296,18 +298,20 @@ $logo_kiri_path = !empty($pengaturan['logo_kiri']) && file_exists($pengaturan['l
                 <!-- AREA TOMBOL AKSI POJOK KANAN BAWAH -->
                 <!-- 1. Kondisi Default: Mode Terkunci (Hanya Tombol Edit) -->
                 <div id="btn-view-mode" class="pt-4 border-t border-slate-100 flex items-center justify-end">
-                    <button type="button" onclick="aktifkanModeEdit()" class="px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-xs shadow-md transition-all cursor-pointer">
-                        Edit Profil Sekolah
+                    <button type="button" onclick="aktifkanModeEdit()" class="px-6 py-2.5 bg-[#162B4D] hover:bg-[#1E3A5F] text-white border border-[#2E5A8F] hover:border-blue-400 font-semibold rounded-xl text-xs transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-sm cursor-pointer flex items-center gap-2">
+                        <i class="fa-solid fa-pen-to-square text-blue-400"></i>
+                        <span>Edit Profil Sekolah</span>
                     </button>
                 </div>
 
                 <!-- 2. Kondisi Saat Tombol Edit Diklik: Mode Edit (Tombol Batal & Simpan) -->
                 <div id="btn-edit-mode" class="hidden pt-4 border-t border-slate-100 flex items-center justify-end gap-3">
-                    <button type="button" onclick="batalkanModeEdit()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl text-xs transition-colors cursor-pointer">
+                    <button type="button" onclick="batalkanModeEdit()" class="px-5 py-2.5 bg-[#112240] hover:bg-[#162B4D] text-slate-300 border border-[#1E3A5F] hover:border-[#2E5A8F] font-semibold rounded-xl text-xs transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] cursor-pointer">
                         Batal
                     </button>
-                    <button type="submit" class="px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-xs shadow-md transition-all cursor-pointer">
-                        Simpan Perubahan Profil Sekolah
+                    <button type="submit" class="px-6 py-2.5 bg-[#162B4D] hover:bg-[#1E3A5F] text-white border border-[#2E5A8F] hover:border-blue-400 font-semibold rounded-xl text-xs transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-sm cursor-pointer flex items-center gap-2">
+                        <i class="fa-solid fa-check text-blue-400"></i>
+                        <span>Simpan Perubahan Profil Sekolah</span>
                     </button>
                 </div>
             </form>
