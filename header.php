@@ -25,26 +25,58 @@ $pengaturan = mysqli_fetch_assoc($res_pengaturan) ?: [
 // Handler Ubah Profil Admin & Pengaturan Sekolah (dari Modal & Halaman Profil)
 $flash_message = "";
 $flash_type = "";
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action_profile']) && in_array($_POST['action_profile'], ['update_profile', 'update_profil_sekolah'])) {
-    $id_admin = $_SESSION['admin']['id_admin'] ?? 1;
-    $nama_baru = trim($_POST['nama_admin'] ?? '');
-    $password_baru = trim($_POST['password_baru'] ?? '');
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action_profile'])) {
+    if ($_POST['action_profile'] === 'update_jadwal') {
+        $tgl_buka_baru = trim($_POST['tgl_buka_pengajuan'] ?? $pengaturan['tgl_buka_pengajuan']);
+        $tgl_tutup_baru = trim($_POST['tgl_tutup_pengajuan'] ?? $pengaturan['tgl_tutup_pengajuan']);
 
-    // 1. Update profil akun admin (jika field dikirim)
-    if (!empty($nama_baru)) {
-        if (!empty($password_baru)) {
-            $hash = password_hash($password_baru, PASSWORD_DEFAULT);
-            $stmt = mysqli_prepare($koneksi, "UPDATE `admin` SET `nama`=?, `password`=? WHERE `id_admin`=?");
-            mysqli_stmt_bind_param($stmt, "ssi", $nama_baru, $hash, $id_admin);
+        $stmt_j = mysqli_prepare($koneksi, "UPDATE `pengaturan` SET `tgl_buka_pengajuan`=?, `tgl_tutup_pengajuan`=? WHERE `id`=1");
+        mysqli_stmt_bind_param($stmt_j, "ss", $tgl_buka_baru, $tgl_tutup_baru);
+        if (mysqli_stmt_execute($stmt_j)) {
+            $pengaturan['tgl_buka_pengajuan'] = $tgl_buka_baru;
+            $pengaturan['tgl_tutup_pengajuan'] = $tgl_tutup_baru;
+            $flash_message = "Jadwal pendaftaran PIP berhasil diperbarui!";
+            $flash_type = "success";
         } else {
-            $stmt = mysqli_prepare($koneksi, "UPDATE `admin` SET `nama`=? WHERE `id_admin`=?");
-            mysqli_stmt_bind_param($stmt, "si", $nama_baru, $id_admin);
+            $flash_message = "Gagal memperbarui jadwal pendaftaran PIP.";
+            $flash_type = "error";
         }
-        mysqli_stmt_execute($stmt);
-        $_SESSION['admin']['nama'] = $nama_baru;
-    }
+    } elseif (in_array($_POST['action_profile'], ['update_profile', 'update_akun'])) {
+        $id_admin = $_SESSION['admin']['id_admin'] ?? 1;
+        $nama_baru = trim($_POST['nama_admin'] ?? '');
+        $password_baru = trim($_POST['password_baru'] ?? '');
 
-    // 2. Update Pengaturan Sekolah: Yayasan, Nama Sekolah, Alamat, Kepala Sekolah, NIP, Tahun Ajaran, Jadwal
+        if (!empty($nama_baru)) {
+            if (!empty($password_baru)) {
+                if (strlen($password_baru) < 6) {
+                    $flash_message = "Password baru minimal harus 6 karakter!";
+                    $flash_type = "error";
+                } else {
+                    $hash = password_hash($password_baru, PASSWORD_DEFAULT);
+                    $stmt = mysqli_prepare($koneksi, "UPDATE `admin` SET `nama`=?, `password`=? WHERE `id_admin`=?");
+                    mysqli_stmt_bind_param($stmt, "ssi", $nama_baru, $hash, $id_admin);
+                    mysqli_stmt_execute($stmt);
+                    $_SESSION['admin']['nama'] = $nama_baru;
+                    if ($password_baru === 'admin123') {
+                        $flash_message = "Password akun admin berhasil di-reset kembali ke bawaan (admin123)!";
+                    } else {
+                        $flash_message = "Akun login admin & kata sandi berhasil diperbarui!";
+                    }
+                    $flash_type = "success";
+                }
+            } else {
+                $stmt = mysqli_prepare($koneksi, "UPDATE `admin` SET `nama`=? WHERE `id_admin`=?");
+                mysqli_stmt_bind_param($stmt, "si", $nama_baru, $id_admin);
+                mysqli_stmt_execute($stmt);
+                $_SESSION['admin']['nama'] = $nama_baru;
+                $flash_message = "Nama akun admin berhasil diperbarui!";
+                $flash_type = "success";
+            }
+        } else {
+            $flash_message = "Nama lengkap admin tidak boleh kosong!";
+            $flash_type = "error";
+        }
+    } elseif ($_POST['action_profile'] === 'update_profil_sekolah') {
     $nama_yayasan_baru = trim($_POST['nama_yayasan'] ?? ($pengaturan['nama_yayasan'] ?? 'YAYASAN AL QODIRI LAMPUNG'));
     $nama_sekolah_baru = trim($_POST['nama_sekolah'] ?? $pengaturan['nama_sekolah']);
     $sub_instansi_baru = trim($_POST['sub_instansi'] ?? ($pengaturan['sub_instansi'] ?? 'BANDAR MATARAM LAMPUNG TENGAH'));
@@ -72,17 +104,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action_profile']) && 
     $pengaturan['tgl_tutup_pengajuan'] = $tgl_tutup_baru;
     $pengaturan['kuota_pip'] = $kuota_baru;
 
-    // 3. Handle Reset Logo (kembali ke default)
+    // 3. Handle Reset Logo (kembali ke standar sistem: Tut Wuri Handayani)
     if (isset($_POST['reset_logo']) && $_POST['reset_logo'] === '1') {
-        if (!empty($pengaturan['logo']) && file_exists($pengaturan['logo']) && strpos($pengaturan['logo'], 'logo_default.png') === false) {
+        if (!empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
+            && strpos($pengaturan['logo'], 'logo_default.png') === false
+            && strpos($pengaturan['logo'], 'logo_tut_wuri_handayani.png') === false
+            && strpos($pengaturan['logo'], 'logo_smp_tunas_bangsa.png') === false
+            && strpos($pengaturan['logo'], 'logo_lampung_tengah.png') === false) {
             @unlink($pengaturan['logo']);
         }
-        mysqli_query($koneksi, "UPDATE `pengaturan` SET `logo` = 'uploads/logo_default.png' WHERE id=1");
-        $pengaturan['logo'] = 'uploads/logo_default.png';
+        mysqli_query($koneksi, "UPDATE `pengaturan` SET `logo` = 'uploads/logo_tut_wuri_handayani.png' WHERE id=1");
+        $pengaturan['logo'] = 'uploads/logo_tut_wuri_handayani.png';
     }
 
     // 4. Handle Upload File Logo Baru
-    if (isset($_FILES['logo']) && $_FILES['logo']['error'] === UPLOAD_ERR_OK) {
+    elseif (isset($_FILES['logo']) && $_FILES['logo']['error'] === UPLOAD_ERR_OK) {
         $allowed = ['jpg', 'jpeg', 'png', 'webp'];
         $file_name = $_FILES['logo']['name'];
         $file_tmp  = $_FILES['logo']['tmp_name'];
@@ -96,8 +132,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action_profile']) && 
                 }
                 $new_logo_name = 'uploads/logo_sekolah_' . time() . '.' . $ext;
                 if (move_uploaded_file($file_tmp, $new_logo_name)) {
-                    // Hapus file logo lama jika bukan logo_default.png
-                    if (!empty($pengaturan['logo']) && file_exists($pengaturan['logo']) && strpos($pengaturan['logo'], 'logo_default.png') === false) {
+                    // Hapus file logo kustom lama jika ada
+                    if (!empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
+                        && strpos($pengaturan['logo'], 'logo_default.png') === false
+                        && strpos($pengaturan['logo'], 'logo_tut_wuri_handayani.png') === false
+                        && strpos($pengaturan['logo'], 'logo_smp_tunas_bangsa.png') === false
+                        && strpos($pengaturan['logo'], 'logo_lampung_tengah.png') === false) {
                         @unlink($pengaturan['logo']);
                     }
                     mysqli_query($koneksi, "UPDATE `pengaturan` SET `logo` = '" . mysqli_real_escape_string($koneksi, $new_logo_name) . "' WHERE id=1");
@@ -119,6 +159,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action_profile']) && 
     if (empty($flash_message)) {
         $flash_message = "Profil sekolah & pengaturan sistem berhasil diperbarui!";
         $flash_type = "success";
+    }
+    }
+
+    // Jika request dikirim melalui AJAX (XMLHttpRequest / Fetch)
+    if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode([
+            'status'  => $flash_type ?: 'success',
+            'message' => $flash_message,
+            'data'    => [
+                'nama_yayasan'        => $pengaturan['nama_yayasan'] ?? '',
+                'nama_sekolah'        => $pengaturan['nama_sekolah'] ?? '',
+                'sub_instansi'        => $pengaturan['sub_instansi'] ?? '',
+                'alamat_sekolah'      => $pengaturan['alamat_sekolah'] ?? '',
+                'kepala_sekolah'      => $pengaturan['kepala_sekolah'] ?? '',
+                'nip_kepala_sekolah'  => $pengaturan['nip_kepala_sekolah'] ?? '-',
+                'tahun_ajaran'        => $pengaturan['tahun_ajaran'] ?? '',
+                'kuota_pip'           => (int)($pengaturan['kuota_pip'] ?? 0),
+                'logo'                => $pengaturan['logo'] ?? '',
+                'tgl_buka_pengajuan'  => $pengaturan['tgl_buka_pengajuan'] ?? '',
+                'tgl_tutup_pengajuan' => $pengaturan['tgl_tutup_pengajuan'] ?? '',
+            ]
+        ]);
+        exit;
     }
 }
 ?>
@@ -647,6 +711,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action_profile']) && 
         }
 
         @media print {
+            *, *::before, *::after, html, body, main, table, tr, td, th, div, p, span, h1, h2, h3, h4, h5, h6 {
+                font-family: 'Times New Roman', Times, serif !important;
+            }
             body, main { background: white !important; color: black !important; }
             .no-print { display: none !important; }
         }
@@ -726,9 +793,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action_profile']) && 
         ::-webkit-scrollbar-thumb:hover {
             background: #94a3b8;
         }
+
     </style>
 </head>
 <body class="bg-[#0B192C] font-sans antialiased text-slate-100 h-screen w-full overflow-hidden">
+
+<?php 
+// Memuat komponen universal popup notifikasi toast (Pojok Kanan Atas)
+require_once "notifikasi.php"; 
+?>
 
 <div class="h-screen w-full flex overflow-hidden">
 

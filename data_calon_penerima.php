@@ -6,6 +6,15 @@ require_once "header.php";
 $msg = "";
 $msg_type = "";
 
+// Generate daftar pilihan Tahun Ajaran (rentang tahun 2000 s.d. 2050)
+$daftar_tahun_ajaran = [];
+for ($y = 2000; $y <= 2050; $y++) {
+    $daftar_tahun_ajaran[] = $y . '/' . ($y + 1);
+}
+if (!empty($pengaturan['tahun_ajaran']) && !in_array($pengaturan['tahun_ajaran'], $daftar_tahun_ajaran)) {
+    array_unshift($daftar_tahun_ajaran, $pengaturan['tahun_ajaran']);
+}
+
 // A. Tambah Siswa Baru oleh Admin
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'tambah_siswa') {
     $nisn          = trim($_POST['nisn'] ?? '');
@@ -187,14 +196,9 @@ $count_ditolak = mysqli_num_rows(mysqli_query($koneksi, "SELECT id_siswa FROM `c
 
 <div class="space-y-6 w-full">
     <?php if (!empty($msg)): ?>
-        <div class="p-4 rounded-xl flex items-center justify-between shadow-sm <?= $msg_type === 'success' ? 'bg-emerald-50 border border-emerald-200 text-emerald-800' : 'bg-red-50 border border-red-200 text-red-800' ?>">
-            <div class="flex items-center gap-3">
-                <i class="fa-solid <?= $msg_type === 'success' ? 'fa-circle-check text-emerald-600' : 'fa-circle-exclamation text-red-600' ?> text-lg"></i>
-                <span class="text-sm font-medium"><?= htmlspecialchars($msg) ?></span>
-            </div>
-            <button onclick="this.parentElement.remove()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark"></i></button>
-        </div>
+        <?php toast_notifikasi($msg, $msg_type); ?>
     <?php endif; ?>
+
 
     <!-- HEADER HALAMAN -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -373,14 +377,14 @@ $count_ditolak = mysqli_num_rows(mysqli_query($koneksi, "SELECT id_siswa FROM `c
                                         <i class="fa-solid fa-check text-[11px]"></i>
                                     </a>
                                     <a href="data_calon_penerima.php?action=tolak_siswa&id=<?= $siswa['id_siswa'] ?>" 
-                                        onclick="return confirm('Apakah berkas siswa <?= htmlspecialchars(addslashes($siswa['nama'])) ?> ditolak?')"
+                                        onclick="return konfirmasiAksi(event, this, 'Apakah berkas siswa <?= htmlspecialchars(addslashes($siswa['nama'])) ?> ditolak?')"
                                         class="w-7 h-7 flex items-center justify-center bg-rose-700/90 hover:bg-rose-600 border border-rose-600 text-white rounded text-xs transition-colors shadow-xs" title="Tolak Berkas">
                                         <i class="fa-solid fa-xmark text-[11px]"></i>
                                     </a>
                                 <?php endif; ?>
 
                                 <a href="data_calon_penerima.php?action=reset_pin_siswa&id=<?= $siswa['id_siswa'] ?>" 
-                                    onclick="return confirm('Reset PIN akun pendaftar <?= htmlspecialchars(addslashes($siswa['nama'])) ?> menjadi 4 digit terakhir NISN?')" 
+                                    onclick="return konfirmasiAksi(event, this, 'Reset PIN akun pendaftar <?= htmlspecialchars(addslashes($siswa['nama'])) ?> menjadi 4 digit terakhir NISN?')" 
                                     class="w-7 h-7 flex items-center justify-center bg-[#162B4D] hover:bg-amber-900/60 border border-[#1E3A5F] hover:border-amber-500 text-slate-300 hover:text-amber-300 rounded text-xs transition-colors" title="Reset PIN Akun Siswa">
                                     <i class="fa-solid fa-key text-[10px]"></i>
                                 </a>
@@ -389,7 +393,7 @@ $count_ditolak = mysqli_num_rows(mysqli_query($koneksi, "SELECT id_siswa FROM `c
                                     <i class="fa-solid fa-pen text-[10px]"></i>
                                 </button>
                                 <a href="data_calon_penerima.php?action=hapus_siswa&id=<?= $siswa['id_siswa'] ?>" 
-                                    onclick="return confirm('Apakah Anda yakin ingin menghapus data <?= htmlspecialchars(addslashes($siswa['nama'])) ?>?')"
+                                    onclick="return konfirmasiAksi(event, this, 'Apakah Anda yakin ingin menghapus data <?= htmlspecialchars(addslashes($siswa['nama'])) ?>?')" 
                                     class="w-7 h-7 flex items-center justify-center bg-[#162B4D] hover:bg-rose-900/60 border border-[#1E3A5F] hover:border-rose-500 text-slate-400 hover:text-rose-400 rounded text-xs transition-colors" title="Hapus Data">
                                     <i class="fa-solid fa-trash text-[10px]"></i>
                                 </a>
@@ -537,8 +541,13 @@ $count_ditolak = mysqli_num_rows(mysqli_query($koneksi, "SELECT id_siswa FROM `c
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 mb-1">Tahun Ajaran</label>
-                    <input type="text" name="tahun" value="<?= htmlspecialchars($pengaturan['tahun_ajaran'] ?? '2025/2026') ?>" 
-                        class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-xs font-semibold text-gray-700 bg-gray-50">
+                    <select name="tahun" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-xs font-semibold text-gray-700 bg-gray-50 cursor-pointer">
+                        <?php foreach ($daftar_tahun_ajaran as $ta): ?>
+                            <option value="<?= htmlspecialchars($ta) ?>" <?= (($pengaturan['tahun_ajaran'] ?? '2025/2026') === $ta) ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($ta) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
             </div>
 
@@ -683,7 +692,13 @@ $count_ditolak = mysqli_num_rows(mysqli_query($koneksi, "SELECT id_siswa FROM `c
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 mb-1">Tahun Ajaran</label>
-                    <input type="text" name="tahun" id="edit-tahun" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-xs font-semibold text-gray-700">
+                    <select name="tahun" id="edit-tahun" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-xs font-semibold text-gray-700 bg-gray-50 cursor-pointer">
+                        <?php foreach ($daftar_tahun_ajaran as $ta): ?>
+                            <option value="<?= htmlspecialchars($ta) ?>">
+                                <?= htmlspecialchars($ta) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
             </div>
 
@@ -1076,7 +1091,7 @@ $count_ditolak = mysqli_num_rows(mysqli_query($koneksi, "SELECT id_siswa FROM `c
                 <a href="data_calon_penerima.php?action=verifikasi_siswa&id=${siswa.id_siswa}" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg text-xs shadow inline-flex items-center gap-1 transition-colors">
                     <i class="fa-solid fa-check"></i> Setujui Berkas
                 </a>
-                <a href="data_calon_penerima.php?action=tolak_siswa&id=${siswa.id_siswa}" onclick="return confirm('Apakah berkas siswa ini ditolak?')" class="px-3 py-1.5 bg-red-100 hover:bg-red-200 text-red-700 font-semibold rounded-lg text-xs inline-flex items-center gap-1 transition-colors">
+                <a href="data_calon_penerima.php?action=tolak_siswa&id=${siswa.id_siswa}" onclick="return konfirmasiAksi(event, this, 'Apakah berkas siswa ini ditolak?')" class="px-3 py-1.5 bg-red-100 hover:bg-red-200 text-red-700 font-semibold rounded-lg text-xs inline-flex items-center gap-1 transition-colors">
                     <i class="fa-solid fa-xmark"></i> Tolak
                 </a>
             `;

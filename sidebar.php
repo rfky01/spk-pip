@@ -73,7 +73,7 @@ $current_file = basename($_SERVER['PHP_SELF']);
             </div>
             <i class="sidebar-text fa-solid fa-gear text-slate-300 group-hover:text-slate-600 text-xs transition-colors shrink-0 ml-1"></i>
         </div>
-        <a href="logout.php" onclick="return confirm('Apakah Anda yakin ingin keluar dari sistem?')" title="Logout dari Sistem" class="sidebar-logout-btn w-full py-2 bg-[#112240] hover:bg-rose-950/50 text-rose-300 hover:text-rose-200 border border-[#1E3A5F] hover:border-rose-800/80 font-semibold rounded-lg transition-colors flex items-center justify-center gap-2 text-[11px] uppercase tracking-wider whitespace-nowrap">
+        <a href="logout.php" onclick="return konfirmasiAksi(event, this, 'Apakah Anda yakin ingin keluar dari sistem?')" title="Logout dari Sistem" class="sidebar-logout-btn w-full py-2 bg-[#112240] hover:bg-rose-950/50 text-rose-300 hover:text-rose-200 border border-[#1E3A5F] hover:border-rose-800/80 font-semibold rounded-lg transition-colors flex items-center justify-center gap-2 text-[11px] uppercase tracking-wider whitespace-nowrap">
             <i class="fa-solid fa-right-from-bracket text-xs"></i> <span class="sidebar-text">Logout</span>
         </a>
     </div>
@@ -116,11 +116,6 @@ $current_file = basename($_SERVER['PHP_SELF']);
 <main class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden bg-[#0B192C] w-full">
     <div class="p-8 pb-16 overflow-y-auto flex-1 h-full scroll-smooth w-full">
         <?php if (!empty($flash_message)): ?>
-            <div class="p-4 mb-6 rounded-xl flex items-center justify-between shadow-sm <?= $flash_type === 'success' ? 'bg-emerald-950/60 border border-emerald-700/80 text-emerald-200' : 'bg-rose-950/60 border border-rose-700/80 text-rose-200' ?>">
-                <div class="flex items-center gap-3">
-                    <i class="fa-solid <?= $flash_type === 'success' ? 'fa-circle-check text-emerald-600' : 'fa-circle-exclamation text-red-600' ?> text-lg"></i>
-                    <span class="text-sm font-medium"><?= htmlspecialchars($flash_message) ?></span>
-                </div>
-                <button onclick="this.parentElement.remove()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark"></i></button>
-            </div>
+            <?php toast_notifikasi($flash_message, $flash_type); ?>
         <?php endif; ?>
+

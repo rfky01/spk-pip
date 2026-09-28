@@ -132,14 +132,9 @@ $halaman_siswa = array_slice($tampil_siswa, $offset_ranking, $limit_ranking);
 
 <div class="space-y-6 w-full">
     <?php if (!empty($msg)): ?>
-        <div class="p-4 rounded-xl flex items-center justify-between shadow-sm <?= $msg_type === 'success' ? 'bg-emerald-50 border border-emerald-200 text-emerald-800' : 'bg-red-50 border border-red-200 text-red-800' ?>">
-            <div class="flex items-center gap-3">
-                <i class="fa-solid <?= $msg_type === 'success' ? 'fa-circle-check text-emerald-600' : 'fa-circle-exclamation text-red-600' ?> text-lg"></i>
-                <span class="text-sm font-medium"><?= htmlspecialchars($msg) ?></span>
-            </div>
-            <button onclick="this.parentElement.remove()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark"></i></button>
-        </div>
+        <?php toast_notifikasi($msg, $msg_type); ?>
     <?php endif; ?>
+
 
     <!-- Banner Peringatan jika ada berkas Menunggu Verifikasi -->
     <?php if ($count_menunggu > 0): ?>
@@ -175,49 +170,52 @@ $halaman_siswa = array_slice($tampil_siswa, $offset_ranking, $limit_ranking);
         </form>
     </div>
 
-    <!-- Filter Tab Status Verifikasi & Kelolosan Kuota -->
-    <div class="flex items-center gap-2 overflow-x-auto pb-1">
-        <a href="ranking.php?tab=lolos" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors inline-flex items-center <?= $tab_filter === 'lolos' ? 'bg-[#162B4D] text-white border border-[#3B82F6] shadow-sm' : 'bg-[#112240] text-slate-300 hover:bg-[#162B4D] hover:text-white border border-[#1E3A5F]' ?>">
-            <span>Prioritas Lolos</span>
-            <span class="ml-2 px-2 py-0.5 rounded-full text-[11px] font-bold transition-colors <?= $tab_filter === 'lolos' ? 'bg-[#1E3A5F] text-blue-200 border border-[#2E5A8F]' : 'bg-[#07101E] text-slate-400 border border-[#1E3A5F]' ?>">
-                <?= $count_lolos ?>
-            </span>
-        </a>
-        <a href="ranking.php?tab=cadangan" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors inline-flex items-center <?= $tab_filter === 'cadangan' ? 'bg-[#162B4D] text-white border border-[#3B82F6] shadow-sm' : 'bg-[#112240] text-slate-300 hover:bg-[#162B4D] hover:text-white border border-[#1E3A5F]' ?>">
-            <span>Cadangan</span>
-            <span class="ml-2 px-2 py-0.5 rounded-full text-[11px] font-bold transition-colors <?= $tab_filter === 'cadangan' ? 'bg-[#1E3A5F] text-blue-200 border border-[#2E5A8F]' : 'bg-[#07101E] text-slate-400 border border-[#1E3A5F]' ?>">
-                <?= $count_cadangan ?>
-            </span>
-        </a>
-        <a href="ranking.php?tab=terverifikasi" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors inline-flex items-center <?= $tab_filter === 'terverifikasi' ? 'bg-[#162B4D] text-white border border-[#3B82F6] shadow-sm' : 'bg-[#112240] text-slate-300 hover:bg-[#162B4D] hover:text-white border border-[#1E3A5F]' ?>">
-            <span>Terverifikasi</span>
-            <span class="ml-2 px-2 py-0.5 rounded-full text-[11px] font-bold transition-colors <?= $tab_filter === 'terverifikasi' ? 'bg-[#1E3A5F] text-blue-200 border border-[#2E5A8F]' : 'bg-[#07101E] text-slate-400 border border-[#1E3A5F]' ?>">
-                <?= $count_terverifikasi ?>
-            </span>
-        </a>
-        <a href="ranking.php?tab=menunggu" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors inline-flex items-center <?= $tab_filter === 'menunggu' ? 'bg-[#162B4D] text-white border border-[#3B82F6] shadow-sm' : 'bg-[#112240] text-slate-300 hover:bg-[#162B4D] hover:text-white border border-[#1E3A5F]' ?>">
-            <span>Menunggu Verifikasi</span>
-            <span class="ml-2 px-2 py-0.5 rounded-full text-[11px] font-bold transition-colors <?= $tab_filter === 'menunggu' ? 'bg-[#1E3A5F] text-blue-200 border border-[#2E5A8F]' : 'bg-[#07101E] text-slate-400 border border-[#1E3A5F]' ?>">
-                <?= $count_menunggu ?>
-            </span>
-        </a>
-        <a href="ranking.php?tab=ditolak" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors inline-flex items-center <?= $tab_filter === 'ditolak' ? 'bg-[#162B4D] text-white border border-[#3B82F6] shadow-sm' : 'bg-[#112240] text-slate-300 hover:bg-[#162B4D] hover:text-white border border-[#1E3A5F]' ?>">
-            <span>Ditolak</span>
-            <span class="ml-2 px-2 py-0.5 rounded-full text-[11px] font-bold transition-colors <?= $tab_filter === 'ditolak' ? 'bg-[#1E3A5F] text-blue-200 border border-[#2E5A8F]' : 'bg-[#07101E] text-slate-400 border border-[#1E3A5F]' ?>">
-                <?= $count_ditolak ?>
-            </span>
-        </a>
-        <a href="ranking.php?tab=all" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors inline-flex items-center <?= $tab_filter === 'all' ? 'bg-[#162B4D] text-white border border-[#3B82F6] shadow-sm' : 'bg-[#112240] text-slate-300 hover:bg-[#162B4D] hover:text-white border border-[#1E3A5F]' ?>">
-            <span>Semua Calon</span>
-            <span class="ml-2 px-2 py-0.5 rounded-full text-[11px] font-bold transition-colors <?= $tab_filter === 'all' ? 'bg-[#1E3A5F] text-blue-200 border border-[#2E5A8F]' : 'bg-[#07101E] text-slate-400 border border-[#1E3A5F]' ?>">
-                <?= $count_all ?>
-            </span>
-        </a>
-    </div>
+    <div class="flex flex-col lg:flex-row gap-5 items-start w-full">
+        <!-- Kolom Kiri: Menu Filter Tabs & Tabel Skor AHP (Lebar Selaras Sempurna) -->
+        <div class="flex-1 min-w-0 w-full space-y-3">
+            
+            <!-- Filter Tab Status Verifikasi & Kelolosan Kuota (Ukuran Diselaraskan dengan Tabel) -->
+            <div class="flex items-center gap-1.5 overflow-x-auto pb-1 w-full">
+                <a href="ranking.php?tab=lolos" class="flex-1 min-w-fit px-2.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors inline-flex items-center justify-center gap-1.5 <?= $tab_filter === 'lolos' ? 'bg-[#162B4D] text-white border border-[#3B82F6] shadow-sm' : 'bg-[#112240] text-slate-300 hover:bg-[#162B4D] hover:text-white border border-[#1E3A5F]' ?>">
+                    <span>Prioritas Lolos</span>
+                    <span class="px-1.5 py-0.5 rounded-full text-[11px] font-bold transition-colors <?= $tab_filter === 'lolos' ? 'bg-[#1E3A5F] text-blue-200 border border-[#2E5A8F]' : 'bg-[#07101E] text-slate-400 border border-[#1E3A5F]' ?>">
+                        <?= $count_lolos ?>
+                    </span>
+                </a>
+                <a href="ranking.php?tab=cadangan" class="flex-1 min-w-fit px-2.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors inline-flex items-center justify-center gap-1.5 <?= $tab_filter === 'cadangan' ? 'bg-[#162B4D] text-white border border-[#3B82F6] shadow-sm' : 'bg-[#112240] text-slate-300 hover:bg-[#162B4D] hover:text-white border border-[#1E3A5F]' ?>">
+                    <span>Cadangan</span>
+                    <span class="px-1.5 py-0.5 rounded-full text-[11px] font-bold transition-colors <?= $tab_filter === 'cadangan' ? 'bg-[#1E3A5F] text-blue-200 border border-[#2E5A8F]' : 'bg-[#07101E] text-slate-400 border border-[#1E3A5F]' ?>">
+                        <?= $count_cadangan ?>
+                    </span>
+                </a>
+                <a href="ranking.php?tab=terverifikasi" class="flex-1 min-w-fit px-2.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors inline-flex items-center justify-center gap-1.5 <?= $tab_filter === 'terverifikasi' ? 'bg-[#162B4D] text-white border border-[#3B82F6] shadow-sm' : 'bg-[#112240] text-slate-300 hover:bg-[#162B4D] hover:text-white border border-[#1E3A5F]' ?>">
+                    <span>Terverifikasi</span>
+                    <span class="px-1.5 py-0.5 rounded-full text-[11px] font-bold transition-colors <?= $tab_filter === 'terverifikasi' ? 'bg-[#1E3A5F] text-blue-200 border border-[#2E5A8F]' : 'bg-[#07101E] text-slate-400 border border-[#1E3A5F]' ?>">
+                        <?= $count_terverifikasi ?>
+                    </span>
+                </a>
+                <a href="ranking.php?tab=menunggu" class="flex-1 min-w-fit px-2.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors inline-flex items-center justify-center gap-1.5 <?= $tab_filter === 'menunggu' ? 'bg-[#162B4D] text-white border border-[#3B82F6] shadow-sm' : 'bg-[#112240] text-slate-300 hover:bg-[#162B4D] hover:text-white border border-[#1E3A5F]' ?>">
+                    <span>Menunggu <span class="hidden 2xl:inline">Verifikasi</span><span class="2xl:hidden">Verif</span></span>
+                    <span class="px-1.5 py-0.5 rounded-full text-[11px] font-bold transition-colors <?= $tab_filter === 'menunggu' ? 'bg-[#1E3A5F] text-blue-200 border border-[#2E5A8F]' : 'bg-[#07101E] text-slate-400 border border-[#1E3A5F]' ?>">
+                        <?= $count_menunggu ?>
+                    </span>
+                </a>
+                <a href="ranking.php?tab=ditolak" class="flex-1 min-w-fit px-2.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors inline-flex items-center justify-center gap-1.5 <?= $tab_filter === 'ditolak' ? 'bg-[#162B4D] text-white border border-[#3B82F6] shadow-sm' : 'bg-[#112240] text-slate-300 hover:bg-[#162B4D] hover:text-white border border-[#1E3A5F]' ?>">
+                    <span>Ditolak</span>
+                    <span class="px-1.5 py-0.5 rounded-full text-[11px] font-bold transition-colors <?= $tab_filter === 'ditolak' ? 'bg-[#1E3A5F] text-blue-200 border border-[#2E5A8F]' : 'bg-[#07101E] text-slate-400 border border-[#1E3A5F]' ?>">
+                        <?= $count_ditolak ?>
+                    </span>
+                </a>
+                <a href="ranking.php?tab=all" class="flex-1 min-w-fit px-2.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors inline-flex items-center justify-center gap-1.5 <?= $tab_filter === 'all' ? 'bg-[#162B4D] text-white border border-[#3B82F6] shadow-sm' : 'bg-[#112240] text-slate-300 hover:bg-[#162B4D] hover:text-white border border-[#1E3A5F]' ?>">
+                    <span>Semua Calon</span>
+                    <span class="px-1.5 py-0.5 rounded-full text-[11px] font-bold transition-colors <?= $tab_filter === 'all' ? 'bg-[#1E3A5F] text-blue-200 border border-[#2E5A8F]' : 'bg-[#07101E] text-slate-400 border border-[#1E3A5F]' ?>">
+                        <?= $count_all ?>
+                    </span>
+                </a>
+            </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-        <!-- Tabel Skor AHP & Status Kelolosan (Kiri / Lebar 2 Kolom) -->
-        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm lg:col-span-2 overflow-x-auto">
+            <!-- Tabel Skor AHP & Status Kelolosan (Kiri / Lebar Fleksibel) -->
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm w-full">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
                 <div>
                     <h3 class="text-sm font-bold text-slate-800">
@@ -255,116 +253,128 @@ $halaman_siswa = array_slice($tampil_siswa, $offset_ranking, $limit_ranking);
                 </div>
             </div>
 
-            <table class="w-full text-left text-sm min-w-[620px]">
-                <thead>
-                    <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold text-xs">
-                        <th class="p-2.5 text-center w-14">Rank</th>
-                        <th class="p-2.5">NISN</th>
-                        <th class="p-2.5">Nama Siswa</th>
-                        <th class="p-2.5 text-center">Sekolah Asal</th>
-                        <th class="p-2.5 text-center">Skor AHP</th>
-                        <th class="p-2.5 text-center">Status Berkas</th>
-                        <th class="p-2.5 text-center">Hasil Rekomendasi</th>
-                        <?php if ($tab_filter === 'menunggu'): ?>
-                            <th class="p-2.5 text-center">Aksi</th>
-                        <?php endif; ?>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-100 text-slate-700 font-medium text-xs">
-                    <?php if (empty($tampil_siswa)): ?>
-                        <tr>
-                            <td colspan="<?= $tab_filter === 'menunggu' ? '8' : '7' ?>" class="p-8 text-center text-slate-400">
-                                <i class="fa-solid fa-inbox text-3xl mb-2 text-slate-300 block"></i>
-                                <?php if ($tab_filter === 'lolos'): ?>
-                                    Belum ada siswa yang masuk kuota Prioritas Lolos.
-                                <?php elseif ($tab_filter === 'cadangan'): ?>
-                                    Tidak ada siswa berstatus cadangan (seluruh siswa terverifikasi masuk kuota).
-                                <?php else: ?>
-                                    Tidak ada data pada kategori ini.
-                                <?php endif; ?>
-                            </td>
+            <div class="overflow-x-auto w-full">
+                <table class="w-full text-left text-xs border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold text-xs">
+                            <th class="py-2.5 px-2 text-center w-12">Rank</th>
+                            <th class="py-2.5 px-2 text-center w-24">NISN</th>
+                            <th class="py-2.5 px-2">Nama Siswa</th>
+                            <th class="py-2.5 px-2 text-center">Sekolah Asal</th>
+                            <th class="py-2.5 px-2 text-center w-20">Skor AHP</th>
+                            <th class="py-2.5 px-2 text-center w-24">Status Berkas</th>
+                            <th class="py-2.5 px-2 text-center w-28">Hasil Rekomendasi</th>
+                            <?php if ($tab_filter === 'menunggu'): ?>
+                                <th class="py-2.5 px-2 text-center w-20">Aksi</th>
+                            <?php endif; ?>
                         </tr>
-                    <?php else:
-                        foreach ($halaman_siswa as $siswa): 
-                            $st = $siswa['status_verifikasi'] ?? 'Menunggu Verifikasi';
-                            $is_terverif = ($st === 'Terverifikasi');
-                            $is_ditolak = ($st === 'Ditolak');
-                            $is_lolos = ($is_terverif && $siswa['ranking'] !== null && $siswa['ranking'] <= $kuota);
-                    ?>
-                    <tr class="hover:bg-slate-50/70 transition-colors">
-                        <td class="p-2.5 text-center font-bold">
-                            <?php if ($is_terverif && $siswa['ranking'] !== null): ?>
-                                <?php if ($siswa['ranking'] === 1): ?>
-                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-slate-900 text-white rounded-full text-xs font-bold shadow-sm">1</span>
-                                <?php elseif ($siswa['ranking'] === 2): ?>
-                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-slate-200 text-slate-800 rounded-full text-xs font-bold">2</span>
-                                <?php elseif ($siswa['ranking'] === 3): ?>
-                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-slate-100 border border-slate-300 text-slate-700 rounded-full text-xs font-bold">3</span>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 text-slate-700 font-medium text-xs">
+                        <?php if (empty($tampil_siswa)): ?>
+                            <tr>
+                                <td colspan="<?= $tab_filter === 'menunggu' ? '8' : '7' ?>" class="p-8 text-center text-slate-400">
+                                    <i class="fa-solid fa-inbox text-3xl mb-2 text-slate-300 block"></i>
+                                    <?php if ($tab_filter === 'lolos'): ?>
+                                        Belum ada siswa yang masuk kuota Prioritas Lolos.
+                                    <?php elseif ($tab_filter === 'cadangan'): ?>
+                                        Tidak ada siswa berstatus cadangan (seluruh siswa terverifikasi masuk kuota).
+                                    <?php else: ?>
+                                        Tidak ada data pada kategori ini.
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                        <?php else:
+                            foreach ($halaman_siswa as $siswa): 
+                                $st = $siswa['status_verifikasi'] ?? 'Menunggu Verifikasi';
+                                $is_terverif = ($st === 'Terverifikasi');
+                                $is_ditolak = ($st === 'Ditolak');
+                                $is_lolos = ($is_terverif && $siswa['ranking'] !== null && $siswa['ranking'] <= $kuota);
+                        ?>
+                        <tr class="hover:bg-slate-50/70 transition-colors">
+                            <td class="py-2.5 px-2 text-center font-bold">
+                                <?php if ($is_terverif && $siswa['ranking'] !== null): ?>
+                                    <?php if ($siswa['ranking'] === 1): ?>
+                                        <span class="inline-flex items-center justify-center w-5 h-5 bg-slate-900 text-white rounded-full text-[11px] font-bold shadow-sm">1</span>
+                                    <?php elseif ($siswa['ranking'] === 2): ?>
+                                        <span class="inline-flex items-center justify-center w-5 h-5 bg-slate-200 text-slate-800 rounded-full text-[11px] font-bold">2</span>
+                                    <?php elseif ($siswa['ranking'] === 3): ?>
+                                        <span class="inline-flex items-center justify-center w-5 h-5 bg-slate-100 border border-slate-300 text-slate-700 rounded-full text-[11px] font-bold">3</span>
+                                    <?php else: ?>
+                                        <span class="text-slate-600 font-mono text-xs"><?= $siswa['ranking'] ?>.</span>
+                                    <?php endif; ?>
                                 <?php else: ?>
-                                    <span class="text-slate-600 font-mono"><?= $siswa['ranking'] ?>.</span>
+                                    <span class="text-slate-400 font-mono">-</span>
                                 <?php endif; ?>
-                            <?php else: ?>
-                                <span class="text-slate-300">-</span>
-                            <?php endif; ?>
-                        </td>
-                        <td class="p-2.5 font-semibold text-slate-600 font-mono"><?= htmlspecialchars($siswa['nisn']) ?></td>
-                        <td class="p-2.5 font-bold text-slate-900">
-                            <?= htmlspecialchars($siswa['nama']) ?>
-                            <?php if (!empty($siswa['nama_ortu'])): ?>
-                                <span class="block text-[10px] text-slate-400 font-normal">Wali: <?= htmlspecialchars($siswa['nama_ortu']) ?></span>
-                            <?php endif; ?>
-                        </td>
-                        <td class="p-2.5 text-center">
-                            <span class="font-bold text-slate-700 block"><?= htmlspecialchars($siswa['sekolah_asal'] ?: '-') ?></span>
-                            <div class="flex items-center justify-center gap-1">
-                                <span class="text-[10px] text-slate-600 font-semibold">Kelas VII</span>
-                                <span class="text-[10px] text-slate-400 font-medium">&bull; <?= htmlspecialchars($siswa['tahun'] ?? '2025/2026') ?></span>
-                            </div>
-                        </td>
-                        <td class="p-2.5 text-center font-mono font-extrabold text-slate-900 text-sm"><?= number_format($siswa['skor_akhir'], 4) ?></td>
-                        <td class="p-2.5 text-center">
-                            <?php if ($is_terverif): ?>
-                                <span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded text-[10px] font-bold">Terverifikasi</span>
-                            <?php elseif ($is_ditolak): ?>
-                                <span class="px-2 py-0.5 bg-slate-100 text-slate-600 border border-slate-200 rounded text-[10px] font-bold">Ditolak</span>
-                            <?php else: ?>
-                                <span class="px-2 py-0.5 bg-amber-50 text-amber-700 border border-amber-200 rounded text-[10px] font-bold">Menunggu Verif</span>
-                            <?php endif; ?>
-                        </td>
-                        <td class="p-2.5 text-center">
-                            <?php if ($is_terverif): ?>
-                                <?php if ($is_lolos): ?>
-                                    <span class="px-2.5 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-full text-[10px] font-bold inline-flex items-center gap-1">
-                                        <i class="fa-solid fa-check text-emerald-600"></i> Prioritas Lolos
-                                    </span>
-                                <?php else: ?>
-                                    <span class="px-2.5 py-1 bg-slate-100 text-slate-600 rounded-full text-[10px] font-medium">
-                                        Cadangan
-                                    </span>
-                                <?php endif; ?>
-                            <?php elseif ($is_ditolak): ?>
-                                <span class="px-2.5 py-1 bg-slate-100 text-slate-500 rounded-full text-[10px] font-medium">
-                                    Gugur / Ditolak
-                                </span>
-                            <?php else: ?>
-                                <span class="px-2.5 py-1 bg-amber-50/60 text-amber-700 rounded-full text-[10px] font-medium">
-                                    Belum Diverifikasi
-                                </span>
-                            <?php endif; ?>
-                        </td>
-                        <?php if ($tab_filter === 'menunggu'): ?>
-                            <td class="p-2.5 text-center">
-                                <a href="ranking.php?tab=menunggu&action=verifikasi_siswa&id=<?= $siswa['id_siswa'] ?>" 
-                                   onclick="return confirm('Verifikasi & setujui berkas <?= htmlspecialchars($siswa['nama']) ?>?')"
-                                   class="px-2.5 py-1 bg-slate-900 hover:bg-slate-800 text-white rounded text-xs font-bold shadow inline-flex items-center gap-1 transition-colors">
-                                    <i class="fa-solid fa-check"></i> Setujui
-                                </a>
                             </td>
-                        <?php endif; ?>
-                    </tr>
-                    <?php endforeach; endif; ?>
-                </tbody>
-            </table>
+                            <td class="py-2.5 px-2 text-center font-semibold text-slate-600 font-mono text-xs whitespace-nowrap">
+                                <?= htmlspecialchars($siswa['nisn']) ?>
+                            </td>
+                            <td class="py-2.5 px-2 font-bold text-slate-900 min-w-0">
+                                <span class="block text-xs font-bold text-slate-900 break-words" style="word-break: break-word; overflow-wrap: anywhere;">
+                                    <?= htmlspecialchars($siswa['nama']) ?>
+                                </span>
+                                <?php if (!empty($siswa['nama_ortu'])): ?>
+                                    <span class="block text-[10px] text-slate-400 font-normal break-words" style="word-break: break-word; overflow-wrap: anywhere;">
+                                        Wali: <?= htmlspecialchars($siswa['nama_ortu']) ?>
+                                    </span>
+                                <?php endif; ?>
+                            </td>
+                            <td class="py-2.5 px-2 text-center min-w-0">
+                                <span class="font-bold text-slate-700 block text-xs break-words" style="word-break: break-word; overflow-wrap: anywhere;">
+                                    <?= htmlspecialchars($siswa['sekolah_asal'] ?: '-') ?>
+                                </span>
+                                <div class="flex items-center justify-center gap-1 text-[10px] text-slate-400">
+                                    <span class="font-semibold text-slate-600">Kelas VII</span>
+                                    <span>&bull; <?= htmlspecialchars($siswa['tahun'] ?? '2025/2026') ?></span>
+                                </div>
+                            </td>
+                            <td class="py-2.5 px-2 text-center font-mono font-extrabold text-slate-900 text-xs whitespace-nowrap">
+                                <?= number_format($siswa['skor_akhir'], 4) ?>
+                            </td>
+                            <td class="py-2.5 px-2 text-center whitespace-nowrap">
+                                <?php if ($is_terverif): ?>
+                                    <span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded text-[10px] font-bold">Terverifikasi</span>
+                                <?php elseif ($is_ditolak): ?>
+                                    <span class="px-2 py-0.5 bg-slate-100 text-slate-600 border border-slate-200 rounded text-[10px] font-bold">Ditolak</span>
+                                <?php else: ?>
+                                    <span class="px-2 py-0.5 bg-amber-50 text-amber-700 border border-amber-200 rounded text-[10px] font-bold">Menunggu Verif</span>
+                                <?php endif; ?>
+                            </td>
+                            <td class="py-2.5 px-2 text-center whitespace-nowrap">
+                                <?php if ($is_terverif): ?>
+                                    <?php if ($is_lolos): ?>
+                                        <span class="px-2 py-0.5 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-full text-[10px] font-bold inline-flex items-center gap-1">
+                                            <i class="fa-solid fa-check text-emerald-600 text-[9px]"></i> Prioritas Lolos
+                                        </span>
+                                    <?php else: ?>
+                                        <span class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded-full text-[10px] font-medium">
+                                            Cadangan
+                                        </span>
+                                    <?php endif; ?>
+                                <?php elseif ($is_ditolak): ?>
+                                    <span class="px-2 py-0.5 bg-slate-100 text-slate-500 rounded-full text-[10px] font-medium">
+                                        Gugur / Ditolak
+                                    </span>
+                                <?php else: ?>
+                                    <span class="px-2 py-0.5 bg-amber-50/60 text-amber-700 rounded-full text-[10px] font-medium">
+                                        Belum Diverifikasi
+                                    </span>
+                                <?php endif; ?>
+                            </td>
+                            <?php if ($tab_filter === 'menunggu'): ?>
+                                <td class="py-2.5 px-2 text-center whitespace-nowrap">
+                                    <a href="ranking.php?tab=menunggu&action=verifikasi_siswa&id=<?= $siswa['id_siswa'] ?>" 
+                                       onclick="return konfirmasiAksi(event, this, 'Verifikasi & setujui berkas <?= htmlspecialchars($siswa['nama']) ?>?')"
+                                       class="px-2 py-1 bg-slate-900 hover:bg-slate-800 text-white rounded text-[11px] font-bold shadow inline-flex items-center gap-1 transition-colors">
+                                        <i class="fa-solid fa-check text-[9px]"></i> Setujui
+                                    </a>
+                                </td>
+                            <?php endif; ?>
+                        </tr>
+                        <?php endforeach; endif; ?>
+                    </tbody>
+                </table>
+            </div>
 
             <!-- Pagination Hasil Ranking -->
             <?php if ($total_tampil_ranking > 0): 
@@ -433,17 +443,20 @@ $halaman_siswa = array_slice($tampil_siswa, $offset_ranking, $limit_ranking);
             </div>
             <?php endif; ?>
         </div>
+        <!-- Akhir Kolom Kiri -->
+    </div>
 
-        <!-- Distribusi Visual Skor AHP (Kanan) -->
-        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
-            <h3 class="text-sm font-bold text-slate-800 mb-1">Distribusi Skor Resmi</h3>
-            <p class="text-xs text-slate-400">Sebaran nilai total AHP siswa yang telah <b>Terverifikasi</b> (Top 7).</p>
+    <!-- Distribusi Visual Skor AHP (Kanan - Dipersempit & Sejajar Kartu Tabel) -->
+    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm w-full lg:w-48 xl:w-52 shrink-0 space-y-3 lg:mt-[42px]">
+        <div>
+            <h3 class="text-xs font-bold text-slate-800 tracking-tight">Distribusi Skor Resmi</h3>
+        </div>
             
-            <div class="space-y-3 pt-2">
+            <div class="space-y-2.5 pt-0.5">
                 <?php 
                 $preview_chart = array_slice($siswa_terverifikasi, 0, 7);
                 if (empty($preview_chart)): ?>
-                    <div class="text-xs text-slate-400 text-center py-6 border border-dashed border-slate-200 rounded-lg">
+                    <div class="text-[11px] text-slate-400 text-center py-5 border border-dashed border-slate-200 rounded-lg">
                         Belum ada data siswa terverifikasi untuk ditampilkan di grafik.
                     </div>
                 <?php else:
@@ -451,23 +464,23 @@ $halaman_siswa = array_slice($tampil_siswa, $offset_ranking, $limit_ranking);
                         $pct = round(($s['skor_akhir'] / 5.0) * 100);
                 ?>
                 <div>
-                    <div class="flex justify-between text-xs mb-1">
-                        <span class="font-medium text-slate-700 truncate flex-1 min-w-0 pr-2"><?= htmlspecialchars($s['nama']) ?></span>
-                        <span class="font-bold text-slate-900 font-mono shrink-0"><?= number_format($s['skor_akhir'], 4) ?></span>
+                    <div class="flex justify-between items-center text-[11px] mb-1">
+                        <span class="font-medium text-slate-700 truncate flex-1 min-w-0 pr-1.5" title="<?= htmlspecialchars($s['nama']) ?>"><?= htmlspecialchars($s['nama']) ?></span>
+                        <span class="font-bold text-slate-900 font-mono text-[10px] shrink-0"><?= number_format($s['skor_akhir'], 4) ?></span>
                     </div>
-                    <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
-                        <div class="bg-slate-800 h-2 rounded-full transition-all duration-300" style="width: <?= $pct ?>%"></div>
+                    <div class="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                        <div class="bg-slate-800 h-1.5 rounded-full transition-all duration-300" style="width: <?= $pct ?>%"></div>
                     </div>
                 </div>
                 <?php endforeach; endif; ?>
             </div>
 
-            <div class="pt-4 border-t border-slate-100 space-y-2">
-                <button type="button" onclick="openModalPilihanCetak()" class="w-full py-2.5 bg-[#162B4D] hover:bg-[#1E3A5F] text-white border border-[#2E5A8F] hover:border-blue-400 font-semibold rounded-lg text-xs transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-sm flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap">
-                    <i class="fa-solid fa-file-pdf text-blue-400"></i> Cetak PDF (Pilih Kategori)
+            <div class="pt-2.5 border-t border-slate-100 space-y-2">
+                <button type="button" onclick="openModalPilihanCetak()" class="w-full py-1.5 px-2 bg-[#162B4D] hover:bg-[#1E3A5F] text-white border border-[#2E5A8F] hover:border-blue-400 font-semibold rounded-lg text-[11px] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-sm flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap">
+                    <i class="fa-solid fa-file-pdf text-blue-400 text-xs"></i> Cetak PDF
                 </button>
-                <button type="button" onclick="openModalPilihanExcel()" class="w-full py-2.5 bg-[#112240] hover:bg-[#162B4D] text-slate-200 border border-[#1E3A5F] hover:border-[#2E5A8F] font-medium rounded-lg text-xs transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-sm flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap">
-                    <i class="fa-solid fa-file-excel text-emerald-400"></i> Ekspor Excel (Pilih Kategori)
+                <button type="button" onclick="openModalPilihanExcel()" class="w-full py-1.5 px-2 bg-[#112240] hover:bg-[#162B4D] text-slate-200 border border-[#1E3A5F] hover:border-[#2E5A8F] font-medium rounded-lg text-[11px] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-sm flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap">
+                    <i class="fa-solid fa-file-excel text-emerald-400 text-xs"></i> Ekspor Excel
                 </button>
             </div>
         </div>
@@ -478,18 +491,13 @@ $halaman_siswa = array_slice($tampil_siswa, $offset_ranking, $limit_ranking);
 <!-- MODAL POPUP PILIHAN KATEGORI CETAK LAPORAN -->
 <!-- ========================================== -->
 <div id="modal-pilihan-cetak" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
-    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 border border-slate-200 max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
-        <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
-            <div class="flex items-center gap-2.5 text-slate-900">
-                <div class="w-9 h-9 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700 text-sm shrink-0">
-                    <i class="fa-solid fa-print"></i>
-                </div>
-                <div>
-                    <h3 class="font-bold text-slate-900 text-base leading-tight">Pilih Kategori Cetak Laporan</h3>
-                    <p class="text-[11px] text-slate-400">Tentukan data yang ingin dicetak ke dokumen dinas resmi format PDF</p>
-                </div>
+    <div class="bg-[#112240] rounded-2xl shadow-2xl w-full max-w-lg p-6 border border-[#1E3A5F] max-h-[90vh] overflow-y-auto text-white" onclick="event.stopPropagation()">
+        <div class="flex items-center justify-between pb-3 border-b border-[#1E3A5F] mb-4">
+            <div>
+                <h3 class="font-bold text-white text-base leading-tight">Pilih Kategori Cetak Laporan</h3>
+                <p class="text-[11px] text-slate-400 mt-0.5">Tentukan data yang ingin dicetak ke dokumen dinas resmi format PDF</p>
             </div>
-            <button onclick="closeModalPilihanCetak()" class="text-slate-400 hover:text-slate-600 text-lg transition-colors cursor-pointer">
+            <button onclick="closeModalPilihanCetak()" class="text-slate-400 hover:text-white text-lg transition-colors cursor-pointer w-8 h-8 rounded-lg hover:bg-[#1E3A5F] flex items-center justify-center">
                 <i class="fa-solid fa-xmark"></i>
             </button>
         </div>
@@ -497,115 +505,91 @@ $halaman_siswa = array_slice($tampil_siswa, $offset_ranking, $limit_ranking);
         <div class="space-y-2.5">
             <!-- 1. Prioritas Lolos -->
             <a href="cetak_laporan.php?kategori=lolos&tahun=<?= urlencode($pengaturan['tahun_ajaran'] ?? '2025/2026') ?>" target="_blank" onclick="closeModalPilihanCetak()" 
-               class="p-3.5 rounded-xl border border-slate-200 hover:border-slate-800 hover:bg-slate-50 transition-all flex items-center justify-between group cursor-pointer">
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center text-sm shrink-0">
-                        <i class="fa-solid fa-circle-check"></i>
-                    </div>
-                    <div class="text-left">
-                        <span class="font-bold text-slate-800 text-xs block group-hover:text-slate-900">Prioritas Lolos Saja (Penerima Kuota)</span>
-                        <span class="text-[11px] text-slate-400 block">Mencetak khusus siswa penerima kuota resmi sekolah (Maks. <?= $kuota ?> Siswa)</span>
-                    </div>
+               class="w-full p-3.5 rounded-xl bg-[#162B4D] hover:bg-[#1E3A5F] text-white border border-[#2E5A8F] hover:border-blue-400 transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-sm flex items-center justify-between group cursor-pointer">
+                <div class="text-left">
+                    <span class="font-bold text-white text-xs block group-hover:text-blue-200 transition-colors">Prioritas Lolos Saja (Penerima Kuota)</span>
+                    <span class="text-[11px] text-slate-300 block mt-0.5">Mencetak khusus siswa penerima kuota resmi sekolah (Maks. <?= $kuota ?> Siswa)</span>
                 </div>
-                <div class="flex items-center gap-2 shrink-0">
-                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200"><?= $count_lolos ?> Siswa</span>
-                    <i class="fa-solid fa-chevron-right text-slate-300 group-hover:text-slate-700 text-xs"></i>
+                <div class="shrink-0 ml-3">
+                    <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#112240] text-blue-300 border border-[#1E3A5F] group-hover:border-[#2E5A8F] transition-colors whitespace-nowrap">
+                        <?= $count_lolos ?> Siswa
+                    </span>
                 </div>
             </a>
 
             <!-- 2. Peserta Cadangan -->
             <a href="cetak_laporan.php?kategori=cadangan&tahun=<?= urlencode($pengaturan['tahun_ajaran'] ?? '2025/2026') ?>" target="_blank" onclick="closeModalPilihanCetak()" 
-               class="p-3.5 rounded-xl border border-slate-200 hover:border-slate-800 hover:bg-slate-50 transition-all flex items-center justify-between group cursor-pointer">
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-amber-50 text-amber-700 border border-amber-200 flex items-center justify-center text-sm shrink-0">
-                        <i class="fa-solid fa-user-clock"></i>
-                    </div>
-                    <div class="text-left">
-                        <span class="font-bold text-slate-800 text-xs block group-hover:text-slate-900">Peserta Cadangan Saja</span>
-                        <span class="text-[11px] text-slate-400 block">Mencetak daftar siswa cadangan di luar kuota utama</span>
-                    </div>
+               class="w-full p-3.5 rounded-xl bg-[#162B4D] hover:bg-[#1E3A5F] text-white border border-[#2E5A8F] hover:border-blue-400 transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-sm flex items-center justify-between group cursor-pointer">
+                <div class="text-left">
+                    <span class="font-bold text-white text-xs block group-hover:text-blue-200 transition-colors">Peserta Cadangan Saja</span>
+                    <span class="text-[11px] text-slate-300 block mt-0.5">Mencetak daftar siswa cadangan di luar kuota utama</span>
                 </div>
-                <div class="flex items-center gap-2 shrink-0">
-                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200"><?= $count_cadangan ?> Siswa</span>
-                    <i class="fa-solid fa-chevron-right text-slate-300 group-hover:text-slate-700 text-xs"></i>
+                <div class="shrink-0 ml-3">
+                    <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#112240] text-blue-300 border border-[#1E3A5F] group-hover:border-[#2E5A8F] transition-colors whitespace-nowrap">
+                        <?= $count_cadangan ?> Siswa
+                    </span>
                 </div>
             </a>
 
             <!-- 3. Semua Terverifikasi -->
             <a href="cetak_laporan.php?kategori=terverifikasi&tahun=<?= urlencode($pengaturan['tahun_ajaran'] ?? '2025/2026') ?>" target="_blank" onclick="closeModalPilihanCetak()" 
-               class="p-3.5 rounded-xl border border-slate-200 hover:border-slate-800 hover:bg-slate-50 transition-all flex items-center justify-between group cursor-pointer">
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-slate-100 text-slate-700 border border-slate-200 flex items-center justify-center text-sm shrink-0">
-                        <i class="fa-solid fa-list-check"></i>
-                    </div>
-                    <div class="text-left">
-                        <span class="font-bold text-slate-800 text-xs block group-hover:text-slate-900">Semua Terverifikasi (Lolos & Cadangan)</span>
-                        <span class="text-[11px] text-slate-400 block">Mencetak seluruh peserta terverifikasi berurutan sesuai ranking skor AHP</span>
-                    </div>
+               class="w-full p-3.5 rounded-xl bg-[#162B4D] hover:bg-[#1E3A5F] text-white border border-[#2E5A8F] hover:border-blue-400 transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-sm flex items-center justify-between group cursor-pointer">
+                <div class="text-left">
+                    <span class="font-bold text-white text-xs block group-hover:text-blue-200 transition-colors">Semua Terverifikasi (Lolos & Cadangan)</span>
+                    <span class="text-[11px] text-slate-300 block mt-0.5">Mencetak seluruh peserta terverifikasi berurutan sesuai ranking skor AHP</span>
                 </div>
-                <div class="flex items-center gap-2 shrink-0">
-                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200"><?= $count_terverifikasi ?> Siswa</span>
-                    <i class="fa-solid fa-chevron-right text-slate-300 group-hover:text-slate-700 text-xs"></i>
+                <div class="shrink-0 ml-3">
+                    <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#112240] text-blue-300 border border-[#1E3A5F] group-hover:border-[#2E5A8F] transition-colors whitespace-nowrap">
+                        <?= $count_terverifikasi ?> Siswa
+                    </span>
                 </div>
             </a>
 
             <!-- 4. Menunggu Verifikasi -->
             <a href="cetak_laporan.php?kategori=menunggu&tahun=<?= urlencode($pengaturan['tahun_ajaran'] ?? '2025/2026') ?>" target="_blank" onclick="closeModalPilihanCetak()" 
-               class="p-3.5 rounded-xl border border-slate-200 hover:border-slate-800 hover:bg-slate-50 transition-all flex items-center justify-between group cursor-pointer">
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-amber-50 text-amber-700 border border-amber-200 flex items-center justify-center text-sm shrink-0">
-                        <i class="fa-solid fa-clock"></i>
-                    </div>
-                    <div class="text-left">
-                        <span class="font-bold text-slate-800 text-xs block group-hover:text-slate-900">Menunggu Verifikasi Berkas</span>
-                        <span class="text-[11px] text-slate-400 block">Mencetak daftar berkas pendaftaran yang belum diverifikasi</span>
-                    </div>
+               class="w-full p-3.5 rounded-xl bg-[#162B4D] hover:bg-[#1E3A5F] text-white border border-[#2E5A8F] hover:border-blue-400 transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-sm flex items-center justify-between group cursor-pointer">
+                <div class="text-left">
+                    <span class="font-bold text-white text-xs block group-hover:text-blue-200 transition-colors">Menunggu Verifikasi Berkas</span>
+                    <span class="text-[11px] text-slate-300 block mt-0.5">Mencetak daftar berkas pendaftaran yang belum diverifikasi</span>
                 </div>
-                <div class="flex items-center gap-2 shrink-0">
-                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200"><?= $count_menunggu ?> Siswa</span>
-                    <i class="fa-solid fa-chevron-right text-slate-300 group-hover:text-slate-700 text-xs"></i>
+                <div class="shrink-0 ml-3">
+                    <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#112240] text-blue-300 border border-[#1E3A5F] group-hover:border-[#2E5A8F] transition-colors whitespace-nowrap">
+                        <?= $count_menunggu ?> Siswa
+                    </span>
                 </div>
             </a>
 
             <!-- 5. Berkas Ditolak -->
             <a href="cetak_laporan.php?kategori=ditolak&tahun=<?= urlencode($pengaturan['tahun_ajaran'] ?? '2025/2026') ?>" target="_blank" onclick="closeModalPilihanCetak()" 
-               class="p-3.5 rounded-xl border border-slate-200 hover:border-slate-800 hover:bg-slate-50 transition-all flex items-center justify-between group cursor-pointer">
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-rose-50 text-rose-700 border border-rose-200 flex items-center justify-center text-sm shrink-0">
-                        <i class="fa-solid fa-circle-xmark"></i>
-                    </div>
-                    <div class="text-left">
-                        <span class="font-bold text-slate-800 text-xs block group-hover:text-slate-900">Berkas Ditolak (Gugur)</span>
-                        <span class="text-[11px] text-slate-400 block">Mencetak daftar calon siswa yang tidak memenuhi kriteria</span>
-                    </div>
+               class="w-full p-3.5 rounded-xl bg-[#162B4D] hover:bg-[#1E3A5F] text-white border border-[#2E5A8F] hover:border-blue-400 transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-sm flex items-center justify-between group cursor-pointer">
+                <div class="text-left">
+                    <span class="font-bold text-white text-xs block group-hover:text-blue-200 transition-colors">Berkas Ditolak (Gugur)</span>
+                    <span class="text-[11px] text-slate-300 block mt-0.5">Mencetak daftar calon siswa yang tidak memenuhi kriteria</span>
                 </div>
-                <div class="flex items-center gap-2 shrink-0">
-                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200"><?= $count_ditolak ?> Siswa</span>
-                    <i class="fa-solid fa-chevron-right text-slate-300 group-hover:text-slate-700 text-xs"></i>
+                <div class="shrink-0 ml-3">
+                    <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#112240] text-blue-300 border border-[#1E3A5F] group-hover:border-[#2E5A8F] transition-colors whitespace-nowrap">
+                        <?= $count_ditolak ?> Siswa
+                    </span>
                 </div>
             </a>
 
             <!-- 6. Semua Calon -->
             <a href="cetak_laporan.php?kategori=all&tahun=<?= urlencode($pengaturan['tahun_ajaran'] ?? '2025/2026') ?>" target="_blank" onclick="closeModalPilihanCetak()" 
-               class="p-3.5 rounded-xl border border-slate-200 hover:border-slate-800 hover:bg-slate-50 transition-all flex items-center justify-between group cursor-pointer">
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-slate-100 text-slate-700 border border-slate-200 flex items-center justify-center text-sm shrink-0">
-                        <i class="fa-solid fa-users"></i>
-                    </div>
-                    <div class="text-left">
-                        <span class="font-bold text-slate-800 text-xs block group-hover:text-slate-900">Seluruh Calon Pendaftar (Semua Data)</span>
-                        <span class="text-[11px] text-slate-400 block">Rekapitulasi lengkap seluruh pengajuan pendaftaran siswa</span>
-                    </div>
+               class="w-full p-3.5 rounded-xl bg-[#162B4D] hover:bg-[#1E3A5F] text-white border border-[#2E5A8F] hover:border-blue-400 transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-sm flex items-center justify-between group cursor-pointer">
+                <div class="text-left">
+                    <span class="font-bold text-white text-xs block group-hover:text-blue-200 transition-colors">Seluruh Calon Pendaftar (Semua Data)</span>
+                    <span class="text-[11px] text-slate-300 block mt-0.5">Rekapitulasi lengkap seluruh pengajuan pendaftaran siswa</span>
                 </div>
-                <div class="flex items-center gap-2 shrink-0">
-                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200"><?= $count_all ?> Siswa</span>
-                    <i class="fa-solid fa-chevron-right text-slate-300 group-hover:text-slate-700 text-xs"></i>
+                <div class="shrink-0 ml-3">
+                    <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#112240] text-blue-300 border border-[#1E3A5F] group-hover:border-[#2E5A8F] transition-colors whitespace-nowrap">
+                        <?= $count_all ?> Siswa
+                    </span>
                 </div>
             </a>
         </div>
 
-        <div class="pt-4 mt-4 border-t border-slate-100 flex justify-end">
-            <button type="button" onclick="closeModalPilihanCetak()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg text-xs transition-colors cursor-pointer">
+        <div class="pt-4 mt-4 border-t border-[#1E3A5F] flex justify-end">
+            <button type="button" onclick="closeModalPilihanCetak()" class="px-4 py-2 bg-[#112240] hover:bg-[#162B4D] text-slate-300 border border-[#1E3A5F] hover:border-[#2E5A8F] font-semibold rounded-xl text-xs transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] cursor-pointer">
                 Batal
             </button>
         </div>
@@ -616,18 +600,13 @@ $halaman_siswa = array_slice($tampil_siswa, $offset_ranking, $limit_ranking);
 <!-- MODAL POPUP PILIHAN KATEGORI EKSPOR EXCEL  -->
 <!-- ========================================== -->
 <div id="modal-pilihan-excel" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
-    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 border border-slate-200 max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
-        <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
-            <div class="flex items-center gap-2.5 text-slate-900">
-                <div class="w-9 h-9 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700 text-sm shrink-0">
-                    <i class="fa-solid fa-file-excel"></i>
-                </div>
-                <div>
-                    <h3 class="font-bold text-slate-900 text-base leading-tight">Pilih Kategori Ekspor Excel</h3>
-                    <p class="text-[11px] text-slate-400">Unduh data perankingan dalam format spreadsheet Excel (.xls)</p>
-                </div>
+    <div class="bg-[#112240] rounded-2xl shadow-2xl w-full max-w-lg p-6 border border-[#1E3A5F] max-h-[90vh] overflow-y-auto text-white" onclick="event.stopPropagation()">
+        <div class="flex items-center justify-between pb-3 border-b border-[#1E3A5F] mb-4">
+            <div>
+                <h3 class="font-bold text-white text-base leading-tight">Pilih Kategori Ekspor Excel</h3>
+                <p class="text-[11px] text-slate-400 mt-0.5">Unduh data perankingan dalam format spreadsheet Excel (.xls)</p>
             </div>
-            <button onclick="closeModalPilihanExcel()" class="text-slate-400 hover:text-slate-600 text-lg transition-colors cursor-pointer">
+            <button onclick="closeModalPilihanExcel()" class="text-slate-400 hover:text-white text-lg transition-colors cursor-pointer w-8 h-8 rounded-lg hover:bg-[#1E3A5F] flex items-center justify-center">
                 <i class="fa-solid fa-xmark"></i>
             </button>
         </div>
@@ -635,115 +614,91 @@ $halaman_siswa = array_slice($tampil_siswa, $offset_ranking, $limit_ranking);
         <div class="space-y-2.5">
             <!-- 1. Prioritas Lolos -->
             <a href="ekspor_excel.php?kategori=lolos&tahun=<?= urlencode($pengaturan['tahun_ajaran'] ?? '2025/2026') ?>" onclick="closeModalPilihanExcel()" 
-               class="p-3.5 rounded-xl border border-slate-200 hover:border-emerald-600 hover:bg-emerald-50/40 transition-all flex items-center justify-between group cursor-pointer">
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center text-sm shrink-0">
-                        <i class="fa-solid fa-circle-check"></i>
-                    </div>
-                    <div class="text-left">
-                        <span class="font-bold text-slate-800 text-xs block group-hover:text-emerald-950">Prioritas Lolos Saja (Penerima Kuota)</span>
-                        <span class="text-[11px] text-slate-400 block">Unduh khusus siswa penerima kuota resmi sekolah (Maks. <?= $kuota ?> Siswa)</span>
-                    </div>
+               class="w-full p-3.5 rounded-xl bg-[#162B4D] hover:bg-[#1E3A5F] text-white border border-[#2E5A8F] hover:border-emerald-400 transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-sm flex items-center justify-between group cursor-pointer">
+                <div class="text-left">
+                    <span class="font-bold text-white text-xs block group-hover:text-emerald-200 transition-colors">Prioritas Lolos Saja (Penerima Kuota)</span>
+                    <span class="text-[11px] text-slate-300 block mt-0.5">Unduh khusus siswa penerima kuota resmi sekolah (Maks. <?= $kuota ?> Siswa)</span>
                 </div>
-                <div class="flex items-center gap-2 shrink-0">
-                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200"><?= $count_lolos ?> Siswa</span>
-                    <i class="fa-solid fa-download text-slate-300 group-hover:text-emerald-700 text-xs"></i>
+                <div class="shrink-0 ml-3">
+                    <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#112240] text-emerald-300 border border-[#1E3A5F] group-hover:border-[#2E5A8F] transition-colors whitespace-nowrap">
+                        <?= $count_lolos ?> Siswa
+                    </span>
                 </div>
             </a>
 
             <!-- 2. Peserta Cadangan -->
             <a href="ekspor_excel.php?kategori=cadangan&tahun=<?= urlencode($pengaturan['tahun_ajaran'] ?? '2025/2026') ?>" onclick="closeModalPilihanExcel()" 
-               class="p-3.5 rounded-xl border border-slate-200 hover:border-emerald-600 hover:bg-emerald-50/40 transition-all flex items-center justify-between group cursor-pointer">
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-amber-50 text-amber-700 border border-amber-200 flex items-center justify-center text-sm shrink-0">
-                        <i class="fa-solid fa-user-clock"></i>
-                    </div>
-                    <div class="text-left">
-                        <span class="font-bold text-slate-800 text-xs block group-hover:text-emerald-950">Peserta Cadangan Saja</span>
-                        <span class="text-[11px] text-slate-400 block">Unduh daftar siswa cadangan di luar kuota utama</span>
-                    </div>
+               class="w-full p-3.5 rounded-xl bg-[#162B4D] hover:bg-[#1E3A5F] text-white border border-[#2E5A8F] hover:border-emerald-400 transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-sm flex items-center justify-between group cursor-pointer">
+                <div class="text-left">
+                    <span class="font-bold text-white text-xs block group-hover:text-emerald-200 transition-colors">Peserta Cadangan Saja</span>
+                    <span class="text-[11px] text-slate-300 block mt-0.5">Unduh daftar siswa cadangan di luar kuota utama</span>
                 </div>
-                <div class="flex items-center gap-2 shrink-0">
-                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200"><?= $count_cadangan ?> Siswa</span>
-                    <i class="fa-solid fa-download text-slate-300 group-hover:text-emerald-700 text-xs"></i>
+                <div class="shrink-0 ml-3">
+                    <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#112240] text-emerald-300 border border-[#1E3A5F] group-hover:border-[#2E5A8F] transition-colors whitespace-nowrap">
+                        <?= $count_cadangan ?> Siswa
+                    </span>
                 </div>
             </a>
 
             <!-- 3. Semua Terverifikasi -->
             <a href="ekspor_excel.php?kategori=terverifikasi&tahun=<?= urlencode($pengaturan['tahun_ajaran'] ?? '2025/2026') ?>" onclick="closeModalPilihanExcel()" 
-               class="p-3.5 rounded-xl border border-slate-200 hover:border-emerald-600 hover:bg-emerald-50/40 transition-all flex items-center justify-between group cursor-pointer">
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-slate-100 text-slate-700 border border-slate-200 flex items-center justify-center text-sm shrink-0">
-                        <i class="fa-solid fa-list-check"></i>
-                    </div>
-                    <div class="text-left">
-                        <span class="font-bold text-slate-800 text-xs block group-hover:text-emerald-950">Semua Terverifikasi (Lolos & Cadangan)</span>
-                        <span class="text-[11px] text-slate-400 block">Unduh seluruh peserta terverifikasi berurutan sesuai ranking skor AHP</span>
-                    </div>
+               class="w-full p-3.5 rounded-xl bg-[#162B4D] hover:bg-[#1E3A5F] text-white border border-[#2E5A8F] hover:border-emerald-400 transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-sm flex items-center justify-between group cursor-pointer">
+                <div class="text-left">
+                    <span class="font-bold text-white text-xs block group-hover:text-emerald-200 transition-colors">Semua Terverifikasi (Lolos & Cadangan)</span>
+                    <span class="text-[11px] text-slate-300 block mt-0.5">Unduh seluruh peserta terverifikasi berurutan sesuai ranking skor AHP</span>
                 </div>
-                <div class="flex items-center gap-2 shrink-0">
-                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200"><?= $count_terverifikasi ?> Siswa</span>
-                    <i class="fa-solid fa-download text-slate-300 group-hover:text-emerald-700 text-xs"></i>
+                <div class="shrink-0 ml-3">
+                    <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#112240] text-emerald-300 border border-[#1E3A5F] group-hover:border-[#2E5A8F] transition-colors whitespace-nowrap">
+                        <?= $count_terverifikasi ?> Siswa
+                    </span>
                 </div>
             </a>
 
             <!-- 4. Menunggu Verifikasi -->
             <a href="ekspor_excel.php?kategori=menunggu&tahun=<?= urlencode($pengaturan['tahun_ajaran'] ?? '2025/2026') ?>" onclick="closeModalPilihanExcel()" 
-               class="p-3.5 rounded-xl border border-slate-200 hover:border-emerald-600 hover:bg-emerald-50/40 transition-all flex items-center justify-between group cursor-pointer">
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-amber-50 text-amber-700 border border-amber-200 flex items-center justify-center text-sm shrink-0">
-                        <i class="fa-solid fa-clock"></i>
-                    </div>
-                    <div class="text-left">
-                        <span class="font-bold text-slate-800 text-xs block group-hover:text-emerald-950">Menunggu Verifikasi Berkas</span>
-                        <span class="text-[11px] text-slate-400 block">Unduh daftar berkas pendaftaran yang belum diverifikasi</span>
-                    </div>
+               class="w-full p-3.5 rounded-xl bg-[#162B4D] hover:bg-[#1E3A5F] text-white border border-[#2E5A8F] hover:border-emerald-400 transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-sm flex items-center justify-between group cursor-pointer">
+                <div class="text-left">
+                    <span class="font-bold text-white text-xs block group-hover:text-emerald-200 transition-colors">Menunggu Verifikasi Berkas</span>
+                    <span class="text-[11px] text-slate-300 block mt-0.5">Unduh daftar berkas pendaftaran yang belum diverifikasi</span>
                 </div>
-                <div class="flex items-center gap-2 shrink-0">
-                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200"><?= $count_menunggu ?> Siswa</span>
-                    <i class="fa-solid fa-download text-slate-300 group-hover:text-emerald-700 text-xs"></i>
+                <div class="shrink-0 ml-3">
+                    <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#112240] text-emerald-300 border border-[#1E3A5F] group-hover:border-[#2E5A8F] transition-colors whitespace-nowrap">
+                        <?= $count_menunggu ?> Siswa
+                    </span>
                 </div>
             </a>
 
             <!-- 5. Berkas Ditolak -->
             <a href="ekspor_excel.php?kategori=ditolak&tahun=<?= urlencode($pengaturan['tahun_ajaran'] ?? '2025/2026') ?>" onclick="closeModalPilihanExcel()" 
-               class="p-3.5 rounded-xl border border-slate-200 hover:border-emerald-600 hover:bg-emerald-50/40 transition-all flex items-center justify-between group cursor-pointer">
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-rose-50 text-rose-700 border border-rose-200 flex items-center justify-center text-sm shrink-0">
-                        <i class="fa-solid fa-circle-xmark"></i>
-                    </div>
-                    <div class="text-left">
-                        <span class="font-bold text-slate-800 text-xs block group-hover:text-emerald-950">Berkas Ditolak (Gugur)</span>
-                        <span class="text-[11px] text-slate-400 block">Unduh daftar calon siswa yang ditolak / tidak memenuhi kriteria</span>
-                    </div>
+               class="w-full p-3.5 rounded-xl bg-[#162B4D] hover:bg-[#1E3A5F] text-white border border-[#2E5A8F] hover:border-emerald-400 transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-sm flex items-center justify-between group cursor-pointer">
+                <div class="text-left">
+                    <span class="font-bold text-white text-xs block group-hover:text-emerald-200 transition-colors">Berkas Ditolak (Gugur)</span>
+                    <span class="text-[11px] text-slate-300 block mt-0.5">Unduh daftar calon siswa yang ditolak / tidak memenuhi kriteria</span>
                 </div>
-                <div class="flex items-center gap-2 shrink-0">
-                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200"><?= $count_ditolak ?> Siswa</span>
-                    <i class="fa-solid fa-download text-slate-300 group-hover:text-emerald-700 text-xs"></i>
+                <div class="shrink-0 ml-3">
+                    <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#112240] text-emerald-300 border border-[#1E3A5F] group-hover:border-[#2E5A8F] transition-colors whitespace-nowrap">
+                        <?= $count_ditolak ?> Siswa
+                    </span>
                 </div>
             </a>
 
             <!-- 6. Semua Calon -->
             <a href="ekspor_excel.php?kategori=all&tahun=<?= urlencode($pengaturan['tahun_ajaran'] ?? '2025/2026') ?>" onclick="closeModalPilihanExcel()" 
-               class="p-3.5 rounded-xl border border-slate-200 hover:border-emerald-600 hover:bg-emerald-50/40 transition-all flex items-center justify-between group cursor-pointer">
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-slate-100 text-slate-700 border border-slate-200 flex items-center justify-center text-sm shrink-0">
-                        <i class="fa-solid fa-users"></i>
-                    </div>
-                    <div class="text-left">
-                        <span class="font-bold text-slate-800 text-xs block group-hover:text-emerald-950">Seluruh Calon Pendaftar (Semua Data)</span>
-                        <span class="text-[11px] text-slate-400 block">Rekapitulasi lengkap seluruh pengajuan pendaftaran siswa</span>
-                    </div>
+               class="w-full p-3.5 rounded-xl bg-[#162B4D] hover:bg-[#1E3A5F] text-white border border-[#2E5A8F] hover:border-emerald-400 transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-sm flex items-center justify-between group cursor-pointer">
+                <div class="text-left">
+                    <span class="font-bold text-white text-xs block group-hover:text-emerald-200 transition-colors">Seluruh Calon Pendaftar (Semua Data)</span>
+                    <span class="text-[11px] text-slate-300 block mt-0.5">Rekapitulasi lengkap seluruh pengajuan pendaftaran siswa</span>
                 </div>
-                <div class="flex items-center gap-2 shrink-0">
-                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200"><?= $count_all ?> Siswa</span>
-                    <i class="fa-solid fa-download text-slate-300 group-hover:text-emerald-700 text-xs"></i>
+                <div class="shrink-0 ml-3">
+                    <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#112240] text-emerald-300 border border-[#1E3A5F] group-hover:border-[#2E5A8F] transition-colors whitespace-nowrap">
+                        <?= $count_all ?> Siswa
+                    </span>
                 </div>
             </a>
         </div>
 
-        <div class="pt-4 mt-4 border-t border-slate-100 flex justify-end">
-            <button type="button" onclick="closeModalPilihanExcel()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg text-xs transition-colors cursor-pointer">
+        <div class="pt-4 mt-4 border-t border-[#1E3A5F] flex justify-end">
+            <button type="button" onclick="closeModalPilihanExcel()" class="px-4 py-2 bg-[#112240] hover:bg-[#162B4D] text-slate-300 border border-[#1E3A5F] hover:border-[#2E5A8F] font-semibold rounded-xl text-xs transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] cursor-pointer">
                 Batal
             </button>
         </div>

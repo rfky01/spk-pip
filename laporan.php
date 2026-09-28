@@ -318,45 +318,45 @@ $count_ditolak = mysqli_num_rows(mysqli_query($koneksi, "SELECT id_siswa FROM `c
                     </button>
                     
                     <!-- Dropdown Menu (Muncul ke atas agar tidak terpotong) -->
-                    <div id="menu-dropdown-cetak" class="hidden absolute right-0 bottom-full mb-2 w-64 bg-[#112240] rounded-xl shadow-xl border border-[#1E3A5F] z-50 py-1.5 divide-y divide-[#1E3A5F]">
-                        <div class="px-3.5 py-1.5">
+                    <div id="menu-dropdown-cetak" class="hidden absolute right-0 bottom-full mb-2 w-72 bg-[#112240] rounded-xl shadow-2xl border border-[#1E3A5F] z-50 p-2.5 space-y-2">
+                        <div class="px-1 pb-1 border-b border-[#1E3A5F]">
                             <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Pilih Opsi Cetak Laporan</p>
                         </div>
-                        <div class="py-1">
-                            <a href="cetak_laporan.php?kategori=terverifikasi&tahun=<?= urlencode($filter_tahun) ?>" target="_blank" onclick="closeDropdownCetak()" class="flex items-center gap-3 px-3.5 py-2.5 text-xs text-slate-200 hover:bg-[#162B4D] hover:text-white transition-colors group">
-                                <div class="w-7 h-7 rounded-lg bg-[#162B4D] group-hover:bg-[#1E3A5F] border border-[#1E3A5F] flex items-center justify-center text-blue-400 text-xs shrink-0">
-                                    <i class="fa-solid fa-list-check"></i>
+                        <div class="space-y-1.5 pt-0.5">
+                            <a href="cetak_laporan.php?kategori=terverifikasi&tahun=<?= urlencode($filter_tahun) ?>" target="_blank" onclick="closeDropdownCetak()" 
+                               class="w-full p-2.5 rounded-xl bg-[#162B4D] hover:bg-[#1E3A5F] text-white border border-[#2E5A8F] hover:border-blue-400 transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-sm flex items-center justify-between group cursor-pointer">
+                                <div class="text-left">
+                                    <span class="font-bold text-white text-xs block group-hover:text-blue-200 transition-colors">Cetak Semua</span>
+                                    <span class="text-[10px] text-slate-300 block mt-0.5">Seluruh siswa terverifikasi</span>
                                 </div>
-                                <div class="flex-1 min-w-0">
-                                    <div class="font-bold text-white flex items-center justify-between">
-                                        <span>Cetak Semua</span>
-                                        <span class="text-[10px] text-blue-300 bg-[#07101E] border border-[#1E3A5F] px-1.5 py-0.5 rounded font-medium"><?= $total_terverifikasi ?> Siswa</span>
-                                    </div>
-                                    <div class="text-[10px] text-slate-400 truncate">Seluruh siswa terverifikasi</div>
-                                </div>
-                            </a>
-                            <a href="cetak_laporan.php?kategori=lolos&tahun=<?= urlencode($filter_tahun) ?>" target="_blank" onclick="closeDropdownCetak()" class="flex items-center gap-3 px-3.5 py-2.5 text-xs text-slate-200 hover:bg-[#162B4D] hover:text-white transition-colors group">
-                                <div class="w-7 h-7 rounded-lg bg-emerald-950/60 group-hover:bg-emerald-900/60 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-xs shrink-0">
-                                    <i class="fa-solid fa-circle-check"></i>
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <div class="font-bold text-white flex items-center justify-between">
-                                        <span>Cetak Yang Lolos</span>
-                                        <span class="text-[10px] text-emerald-300 bg-emerald-950/80 border border-emerald-500/40 px-1.5 py-0.5 rounded font-bold"><?= $count_lolos ?> Siswa</span>
-                                    </div>
-                                    <div class="text-[10px] text-slate-400 truncate">Prioritas penerima kuota resmi</div>
+                                <div class="shrink-0 ml-2">
+                                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#112240] text-blue-300 border border-[#1E3A5F] group-hover:border-[#2E5A8F] transition-colors whitespace-nowrap">
+                                        <?= $total_terverifikasi ?> Siswa
+                                    </span>
                                 </div>
                             </a>
-                            <a href="cetak_laporan.php?kategori=tidak_lolos&tahun=<?= urlencode($filter_tahun) ?>" target="_blank" onclick="closeDropdownCetak()" class="flex items-center gap-3 px-3.5 py-2.5 text-xs text-slate-200 hover:bg-[#162B4D] hover:text-white transition-colors group">
-                                <div class="w-7 h-7 rounded-lg bg-amber-950/60 group-hover:bg-amber-900/60 border border-amber-500/30 flex items-center justify-center text-amber-400 text-xs shrink-0">
-                                    <i class="fa-solid fa-user-clock"></i>
+                            <a href="cetak_laporan.php?kategori=lolos&tahun=<?= urlencode($filter_tahun) ?>" target="_blank" onclick="closeDropdownCetak()" 
+                               class="w-full p-2.5 rounded-xl bg-[#162B4D] hover:bg-[#1E3A5F] text-white border border-[#2E5A8F] hover:border-blue-400 transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-sm flex items-center justify-between group cursor-pointer">
+                                <div class="text-left">
+                                    <span class="font-bold text-white text-xs block group-hover:text-blue-200 transition-colors">Cetak Yang Lolos</span>
+                                    <span class="text-[10px] text-slate-300 block mt-0.5">Prioritas penerima kuota resmi</span>
                                 </div>
-                                <div class="flex-1 min-w-0">
-                                    <div class="font-bold text-white flex items-center justify-between">
-                                        <span>Cetak Yang Tidak Lolos</span>
-                                        <span class="text-[10px] text-amber-300 bg-amber-950/80 border border-amber-500/40 px-1.5 py-0.5 rounded font-bold"><?= $count_cadangan ?> Siswa</span>
-                                    </div>
-                                    <div class="text-[10px] text-slate-400 truncate">Peserta cadangan di luar kuota</div>
+                                <div class="shrink-0 ml-2">
+                                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#112240] text-blue-300 border border-[#1E3A5F] group-hover:border-[#2E5A8F] transition-colors whitespace-nowrap">
+                                        <?= $count_lolos ?> Siswa
+                                    </span>
+                                </div>
+                            </a>
+                            <a href="cetak_laporan.php?kategori=tidak_lolos&tahun=<?= urlencode($filter_tahun) ?>" target="_blank" onclick="closeDropdownCetak()" 
+                               class="w-full p-2.5 rounded-xl bg-[#162B4D] hover:bg-[#1E3A5F] text-white border border-[#2E5A8F] hover:border-blue-400 transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-sm flex items-center justify-between group cursor-pointer">
+                                <div class="text-left">
+                                    <span class="font-bold text-white text-xs block group-hover:text-blue-200 transition-colors">Cetak Yang Tidak Lolos</span>
+                                    <span class="text-[10px] text-slate-300 block mt-0.5">Peserta cadangan di luar kuota</span>
+                                </div>
+                                <div class="shrink-0 ml-2">
+                                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#112240] text-blue-300 border border-[#1E3A5F] group-hover:border-[#2E5A8F] transition-colors whitespace-nowrap">
+                                        <?= $count_cadangan ?> Siswa
+                                    </span>
                                 </div>
                             </a>
                         </div>
@@ -372,45 +372,45 @@ $count_ditolak = mysqli_num_rows(mysqli_query($koneksi, "SELECT id_siswa FROM `c
                     </button>
                     
                     <!-- Dropdown Menu (Muncul ke atas) -->
-                    <div id="menu-dropdown-excel" class="hidden absolute right-0 bottom-full mb-2 w-64 bg-[#112240] rounded-xl shadow-xl border border-[#1E3A5F] z-50 py-1.5 divide-y divide-[#1E3A5F]">
-                        <div class="px-3.5 py-1.5">
+                    <div id="menu-dropdown-excel" class="hidden absolute right-0 bottom-full mb-2 w-72 bg-[#112240] rounded-xl shadow-2xl border border-[#1E3A5F] z-50 p-2.5 space-y-2">
+                        <div class="px-1 pb-1 border-b border-[#1E3A5F]">
                             <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Pilih Opsi Ekspor Excel</p>
                         </div>
-                        <div class="py-1">
-                            <a href="ekspor_excel.php?kategori=terverifikasi&tahun=<?= urlencode($filter_tahun) ?>" onclick="closeDropdownExcel()" class="flex items-center gap-3 px-3.5 py-2.5 text-xs text-slate-200 hover:bg-[#162B4D] hover:text-white transition-colors group">
-                                <div class="w-7 h-7 rounded-lg bg-[#162B4D] group-hover:bg-[#1E3A5F] border border-[#1E3A5F] flex items-center justify-center text-blue-400 text-xs shrink-0">
-                                    <i class="fa-solid fa-list-check"></i>
+                        <div class="space-y-1.5 pt-0.5">
+                            <a href="ekspor_excel.php?kategori=terverifikasi&tahun=<?= urlencode($filter_tahun) ?>" onclick="closeDropdownExcel()" 
+                               class="w-full p-2.5 rounded-xl bg-[#162B4D] hover:bg-[#1E3A5F] text-white border border-[#2E5A8F] hover:border-emerald-400 transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-sm flex items-center justify-between group cursor-pointer">
+                                <div class="text-left">
+                                    <span class="font-bold text-white text-xs block group-hover:text-emerald-200 transition-colors">Unduh Semua</span>
+                                    <span class="text-[10px] text-slate-300 block mt-0.5">Semua data siswa terverifikasi</span>
                                 </div>
-                                <div class="flex-1 min-w-0">
-                                    <div class="font-bold text-white flex items-center justify-between">
-                                        <span>Unduh Semua</span>
-                                        <span class="text-[10px] text-blue-300 bg-[#07101E] border border-[#1E3A5F] px-1.5 py-0.5 rounded font-medium"><?= $total_terverifikasi ?> Siswa</span>
-                                    </div>
-                                    <div class="text-[10px] text-slate-400 truncate">Semua data siswa terverifikasi</div>
-                                </div>
-                            </a>
-                            <a href="ekspor_excel.php?kategori=lolos&tahun=<?= urlencode($filter_tahun) ?>" onclick="closeDropdownExcel()" class="flex items-center gap-3 px-3.5 py-2.5 text-xs text-slate-200 hover:bg-[#162B4D] hover:text-white transition-colors group">
-                                <div class="w-7 h-7 rounded-lg bg-emerald-950/60 group-hover:bg-emerald-900/60 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-xs shrink-0">
-                                    <i class="fa-solid fa-circle-check"></i>
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <div class="font-bold text-white flex items-center justify-between">
-                                        <span>Unduh Yang Lolos</span>
-                                        <span class="text-[10px] text-emerald-300 bg-emerald-950/80 border border-emerald-500/40 px-1.5 py-0.5 rounded font-bold"><?= $count_lolos ?> Siswa</span>
-                                    </div>
-                                    <div class="text-[10px] text-slate-400 truncate">Prioritas penerima kuota resmi</div>
+                                <div class="shrink-0 ml-2">
+                                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#112240] text-emerald-300 border border-[#1E3A5F] group-hover:border-[#2E5A8F] transition-colors whitespace-nowrap">
+                                        <?= $total_terverifikasi ?> Siswa
+                                    </span>
                                 </div>
                             </a>
-                            <a href="ekspor_excel.php?kategori=tidak_lolos&tahun=<?= urlencode($filter_tahun) ?>" onclick="closeDropdownExcel()" class="flex items-center gap-3 px-3.5 py-2.5 text-xs text-slate-200 hover:bg-[#162B4D] hover:text-white transition-colors group">
-                                <div class="w-7 h-7 rounded-lg bg-amber-950/60 group-hover:bg-amber-900/60 border border-amber-500/30 flex items-center justify-center text-amber-400 text-xs shrink-0">
-                                    <i class="fa-solid fa-user-clock"></i>
+                            <a href="ekspor_excel.php?kategori=lolos&tahun=<?= urlencode($filter_tahun) ?>" onclick="closeDropdownExcel()" 
+                               class="w-full p-2.5 rounded-xl bg-[#162B4D] hover:bg-[#1E3A5F] text-white border border-[#2E5A8F] hover:border-emerald-400 transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-sm flex items-center justify-between group cursor-pointer">
+                                <div class="text-left">
+                                    <span class="font-bold text-white text-xs block group-hover:text-emerald-200 transition-colors">Unduh Yang Lolos</span>
+                                    <span class="text-[10px] text-slate-300 block mt-0.5">Prioritas penerima kuota resmi</span>
                                 </div>
-                                <div class="flex-1 min-w-0">
-                                    <div class="font-bold text-white flex items-center justify-between">
-                                        <span>Unduh Yang Tidak Lolos</span>
-                                        <span class="text-[10px] text-amber-300 bg-amber-950/80 border border-amber-500/40 px-1.5 py-0.5 rounded font-bold"><?= $count_cadangan ?> Siswa</span>
-                                    </div>
-                                    <div class="text-[10px] text-slate-400 truncate">Peserta cadangan di luar kuota</div>
+                                <div class="shrink-0 ml-2">
+                                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#112240] text-emerald-300 border border-[#1E3A5F] group-hover:border-[#2E5A8F] transition-colors whitespace-nowrap">
+                                        <?= $count_lolos ?> Siswa
+                                    </span>
+                                </div>
+                            </a>
+                            <a href="ekspor_excel.php?kategori=tidak_lolos&tahun=<?= urlencode($filter_tahun) ?>" onclick="closeDropdownExcel()" 
+                               class="w-full p-2.5 rounded-xl bg-[#162B4D] hover:bg-[#1E3A5F] text-white border border-[#2E5A8F] hover:border-emerald-400 transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-sm flex items-center justify-between group cursor-pointer">
+                                <div class="text-left">
+                                    <span class="font-bold text-white text-xs block group-hover:text-emerald-200 transition-colors">Unduh Yang Tidak Lolos</span>
+                                    <span class="text-[10px] text-slate-300 block mt-0.5">Peserta cadangan di luar kuota</span>
+                                </div>
+                                <div class="shrink-0 ml-2">
+                                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#112240] text-emerald-300 border border-[#1E3A5F] group-hover:border-[#2E5A8F] transition-colors whitespace-nowrap">
+                                        <?= $count_cadangan ?> Siswa
+                                    </span>
                                 </div>
                             </a>
                         </div>

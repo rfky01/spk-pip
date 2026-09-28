@@ -234,29 +234,34 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
 
         <!-- KARTU INFORMASI JADWAL -->
         <div class="mb-6 p-4 rounded-2xl border text-xs shadow-xs
-            <?= $is_registration_open ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-rose-50 border-rose-200 text-rose-900' ?>">
-            <div>
-                <div class="font-bold text-xs uppercase tracking-wider">
-                    <?= $is_registration_open ? 'Pendaftaran Bantuan PIP Sedang Dibuka' : 'Periode Pendaftaran Telah Ditutup' ?>
+            <?= $is_registration_open ? 'bg-emerald-950/40 border-emerald-700/60 text-emerald-200' : 'bg-rose-950/40 border-rose-700/60 text-rose-200' ?>">
+            <div class="flex items-center gap-3.5">
+                <div class="w-9 h-9 rounded-xl <?= $is_registration_open ? 'bg-emerald-900/40 text-emerald-400 border border-emerald-700/50' : 'bg-rose-900/40 text-rose-400 border border-rose-700/50' ?> flex items-center justify-center text-sm shrink-0">
+                    <i class="fa-solid <?= $is_registration_open ? 'fa-bullhorn' : 'fa-calendar-xmark' ?>"></i>
                 </div>
-                <div class="text-[11px] text-slate-600 mt-1 flex flex-wrap items-center gap-1.5">
-                    <span>Tahun Ajaran: <b><?= htmlspecialchars($pengaturan['tahun_ajaran']) ?></b></span>
-                    <span class="text-slate-300">&bull;</span>
-                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg <?= $is_registration_open ? 'bg-white/90 hover:bg-white text-emerald-800 border border-emerald-200/90 hover:border-emerald-300' : 'bg-white/90 hover:bg-white text-rose-800 border border-rose-200/90 hover:border-rose-300' ?> font-semibold shadow-2xs hover:shadow-xs transition-all cursor-default" title="Rentang Waktu Pendaftaran">
-                        <i class="fa-regular fa-clock text-[10px] <?= $is_registration_open ? 'text-emerald-600' : 'text-rose-600' ?>"></i>
-                        <span>Jadwal: <b><?= format_tgl_indo($tgl_buka) ?> s.d. <?= format_tgl_indo($tgl_tutup) ?></b></span>
-                    </span>
+                <div class="flex-1 min-w-0">
+                    <div class="font-bold text-xs uppercase tracking-wider <?= $is_registration_open ? 'text-emerald-300' : 'text-rose-300' ?>">
+                        <?= $is_registration_open ? 'Pendaftaran Bantuan PIP Sedang Dibuka' : 'Periode Pendaftaran Telah Ditutup' ?>
+                    </div>
+                    <div class="text-[11px] text-slate-300 mt-1 flex flex-wrap items-center gap-2">
+                        <span>Tahun Ajaran: <b class="text-white"><?= htmlspecialchars($pengaturan['tahun_ajaran']) ?></b></span>
+                        <span class="text-slate-500">&bull;</span>
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg <?= $is_registration_open ? 'bg-[#0B192C] text-emerald-300 border border-emerald-800/80' : 'bg-[#0B192C] text-rose-300 border border-rose-800/80' ?> font-semibold transition-all cursor-default" title="Rentang Waktu Pendaftaran">
+                            <i class="fa-regular fa-clock text-[10px] <?= $is_registration_open ? 'text-emerald-400' : 'text-rose-400' ?>"></i>
+                            <span>Jadwal: <b class="text-white"><?= format_tgl_indo($tgl_buka) ?> s.d. <?= format_tgl_indo($tgl_tutup) ?></b></span>
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
 
         <?php if (!empty($error)): ?>
-            <div class="mb-6 p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-semibold shadow-xs flex items-start justify-between gap-3">
+            <div class="mb-6 p-4 rounded-2xl bg-rose-950/40 border border-rose-700/60 text-rose-200 text-xs font-semibold shadow-xs flex items-start justify-between gap-3">
                 <div class="flex items-start gap-2.5">
-                    <i class="fa-solid fa-triangle-exclamation text-rose-500 text-sm mt-0.5 shrink-0"></i>
+                    <i class="fa-solid fa-triangle-exclamation text-rose-400 text-sm mt-0.5 shrink-0"></i>
                     <div class="leading-relaxed"><?= $error ?></div>
                 </div>
-                <button type="button" onclick="this.parentElement.remove()" class="text-rose-400 hover:text-rose-600 font-bold text-base leading-none">&times;</button>
+                <button type="button" onclick="this.parentElement.remove()" class="text-rose-400 hover:text-white font-bold text-base leading-none cursor-pointer">&times;</button>
             </div>
         <?php endif; ?>
 

@@ -12,6 +12,12 @@ if (!isset($_SESSION['siswa']) || empty($_SESSION['siswa']['id_siswa'])) {
     exit;
 }
 
+// Handler unduh berkas bukti PDF resmi 2 lembar
+if (isset($_GET['action']) && $_GET['action'] === 'unduh_pdf') {
+    require_once "unduh_bukti_pdf.php";
+    exit;
+}
+
 $id_siswa_sess = (int)$_SESSION['siswa']['id_siswa'];
 
 // Ambil info sekolah & pengaturan
@@ -73,15 +79,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             $msg = "Mohon lengkapi Nama Siswa, Nama Wali, dan Nomor HP!";
             $msg_type = "error";
         } else {
+            // Cek jika ada unggahan foto baru
+            $foto_path = $siswa['foto'] ?? null;
+            if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+                $file_tmp = $_FILES['foto']['tmp_name'];
+                $file_name = $_FILES['foto']['name'];
+                $file_size = $_FILES['foto']['size'];
+                $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+                $allowed_ext = ['jpg', 'jpeg', 'png', 'webp'];
+                if (in_array($file_ext, $allowed_ext) && $file_size <= 3 * 1024 * 1024) {
+                    $clean_nisn = preg_replace('/[^a-zA-Z0-9_-]/', '', $siswa['nisn']);
+                    $new_foto_name = "uploads/foto_siswa/siswa_" . $clean_nisn . "_" . time() . "." . $file_ext;
+                    if (!is_dir("uploads/foto_siswa")) {
+                        @mkdir("uploads/foto_siswa", 0777, true);
+                    }
+                    if (move_uploaded_file($file_tmp, $new_foto_name)) {
+                        if (!empty($siswa['foto']) && file_exists($siswa['foto']) && strpos($siswa['foto'], 'default') === false) {
+                            @unlink($siswa['foto']);
+                        }
+                        $foto_path = $new_foto_name;
+                    }
+                }
+            }
+
             // Jika sebelumnya Ditolak, kembalikan ke Menunggu Verifikasi agar diperiksa ulang
             $status_simpan = ($siswa['status_verifikasi'] === 'Ditolak') ? 'Menunggu Verifikasi' : $siswa['status_verifikasi'];
 
             $stmt_upd = mysqli_prepare($koneksi, "UPDATE `calon_penerima` SET 
-                `nama`=?, `nama_ortu`=?, `no_hp`=?, `jenis_kelamin`=?, `sekolah_asal`=?, `alamat`=?, 
+                `nama`=?, `nama_ortu`=?, `no_hp`=?, `foto`=?, `jenis_kelamin`=?, `sekolah_asal`=?, `alamat`=?, 
                 `penghasilan`=?, `tanggungan`=?, `kondisi_rumah`=?, `prestasi`=?, `jarak`=?, 
                 `status_verifikasi`=? 
                 WHERE `id_siswa`=?");
-            mysqli_stmt_bind_param($stmt_upd, "ssssssiiiiisi", $nama, $nama_ortu, $no_hp, $jenis_kelamin, $sekolah_asal, $alamat, $c1, $c2, $c3, $c4, $c5, $status_simpan, $id_siswa_sess);
+            mysqli_stmt_bind_param($stmt_upd, "sssssssiiiiisi", $nama, $nama_ortu, $no_hp, $foto_path, $jenis_kelamin, $sekolah_asal, $alamat, $c1, $c2, $c3, $c4, $c5, $status_simpan, $id_siswa_sess);
 
             if (mysqli_stmt_execute($stmt_upd)) {
                 $msg = "pembaruan data pengajuan Anda berhasil disimpan!";
@@ -183,6 +212,18 @@ $label_jarak = [
 $is_locked = ($siswa['status_verifikasi'] === 'Terverifikasi');
 $nama_sekolah = $pengaturan['nama_sekolah'] ?? 'SMP Tunas Bangsa';
 $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) ? $pengaturan['logo'] : 'uploads/logo_default.png';
+
+// Siapkan Pas Foto Siswa Base64 untuk Export PDF (menghindari CORS / delay canvas)
+$foto_siswa_base64 = '';
+if (!empty($siswa['foto']) && file_exists($siswa['foto'])) {
+    $img_data = @file_get_contents($siswa['foto']);
+    if ($img_data !== false) {
+        $ext = strtolower(pathinfo($siswa['foto'], PATHINFO_EXTENSION));
+        $mime = ($ext === 'png') ? 'image/png' : (($ext === 'webp') ? 'image/webp' : 'image/jpeg');
+        $foto_siswa_base64 = 'data:' . $mime . ';base64,' . base64_encode($img_data);
+    }
+}
+$foto_siswa_src = !empty($foto_siswa_base64) ? $foto_siswa_base64 : (!empty($siswa['foto']) ? $siswa['foto'] : '');
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -209,13 +250,138 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
     </script>
     <style>
         body, input, button, select, textarea { font-family: 'Roboto', sans-serif !important; }
-        @media print {
-            body { background: white !important; color: black !important; }
-            .no-print { display: none !important; }
-            .print-only { display: block !important; }
-            .print-card { box-shadow: none !important; border: 1px solid #ccc !important; }
-        }
         .print-only { display: none; }
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 8mm 12mm 8mm 12mm;
+            }
+            *, *::before, *::after, html, body, main, input, button, select, textarea, p, span, h1, h2, h3, h4, h5, h6, table, tr, td, th, div, label { 
+                font-family: 'Times New Roman', Times, serif !important;
+            }
+            html, body { 
+                background: white !important; 
+                color: #0f172a !important; 
+                margin: 0 !important;
+                padding: 0 !important;
+                display: block !important;
+                width: 100% !important;
+                height: auto !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            main {
+                margin: 0 !important;
+                padding: 0 !important;
+                max-width: 100% !important;
+                width: 100% !important;
+                display: block !important;
+            }
+            .no-print { 
+                display: none !important; 
+            }
+            .print-only { 
+                display: block !important; 
+            }
+            
+            /* LEMBAR 1: FORMULIR BIODATA & KRITERIA PENDAFTARAN */
+            .print-sheet-1 {
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: space-between !important;
+                height: 260mm !important;
+                min-height: 260mm !important;
+                box-sizing: border-box !important;
+                page-break-after: always !important;
+                break-after: page !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+                background: white !important;
+                color: #0f172a !important;
+                border: 2px solid #0f172a !important;
+                border-radius: 12px !important;
+                padding: 18px 22px !important;
+                margin: 0 !important;
+                box-shadow: none !important;
+            }
+            .print-sheet-1 form {
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: flex-start !important;
+                flex: 1 !important;
+                height: 100% !important;
+                margin: 0 !important;
+            }
+            .print-sheet-1 * {
+                color: #0f172a !important;
+                font-family: 'Times New Roman', Times, serif !important;
+            }
+            .print-sheet-1 input, 
+            .print-sheet-1 select, 
+            .print-sheet-1 textarea {
+                background: #f8fafc !important;
+                border: 1.5px solid #475569 !important;
+                color: #0f172a !important;
+                padding: 8px 12px !important;
+                font-size: 12.5px !important;
+                line-height: 1.4 !important;
+                border-radius: 8px !important;
+                box-shadow: none !important;
+            }
+            .print-sheet-1 textarea {
+                height: 92px !important;
+                resize: none !important;
+            }
+            .print-sheet-1 label {
+                color: #0f172a !important;
+                font-size: 12px !important;
+                font-weight: 700 !important;
+                margin-bottom: 5px !important;
+                display: block !important;
+            }
+            .print-sheet-1 .print-section-title {
+                color: #0f172a !important;
+                border-bottom: 2px solid #1e293b !important;
+                padding-bottom: 5px !important;
+                margin-bottom: 12px !important;
+                margin-top: 14px !important;
+                font-size: 13.5px !important;
+                font-weight: 800 !important;
+                letter-spacing: 0.5px !important;
+            }
+            .print-sheet-1 .print-photo-box {
+                border: 1.5px solid #475569 !important;
+                background: #f8fafc !important;
+                padding: 6px 12px !important;
+                border-radius: 8px !important;
+                height: 92px !important;
+                box-sizing: border-box !important;
+                display: flex !important;
+                align-items: center !important;
+            }
+
+            /* LEMBAR 2: TANDA TERIMA & BUKTI PENDAFTARAN */
+            .print-sheet-2 {
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: space-between !important;
+                min-height: 254mm !important;
+                box-sizing: border-box !important;
+                page-break-before: always !important;
+                break-before: page !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+                background: white !important;
+                color: black !important;
+                padding: 10px 14px !important;
+                margin: 0 auto !important;
+                max-width: 100% !important;
+            }
+            .print-sheet-2 * {
+                color: black !important;
+                font-family: 'Times New Roman', Times, serif !important;
+            }
+        }
     </style>
 </head>
 <body class="bg-[#0B192C] min-h-screen text-slate-100 font-sans flex flex-col justify-between">
@@ -235,9 +401,18 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
 
             <!-- USER INFO & LOGOUT -->
             <div class="flex items-center gap-2 sm:gap-3">
-                <div class="hidden md:block text-right">
-                    <div class="text-xs font-bold text-white leading-tight"><?= htmlspecialchars($siswa['nama']) ?></div>
-                    <div class="text-[11px] text-slate-400 font-mono">NISN: <?= htmlspecialchars($siswa['nisn']) ?></div>
+                <div class="hidden md:flex items-center gap-2.5 text-right">
+                    <div>
+                        <div class="text-xs font-bold text-white leading-tight"><?= htmlspecialchars($siswa['nama']) ?></div>
+                        <div class="text-[11px] text-slate-400 font-mono">NISN: <?= htmlspecialchars($siswa['nisn']) ?></div>
+                    </div>
+                    <div class="w-8 h-9 rounded-lg overflow-hidden border border-[#2E5A8F] bg-[#07101E] shrink-0 flex items-center justify-center shadow-xs">
+                        <?php if (!empty($siswa['foto']) && file_exists($siswa['foto'])): ?>
+                            <img src="<?= htmlspecialchars($siswa['foto']) ?>" alt="Foto" class="w-full h-full object-cover">
+                        <?php else: ?>
+                            <i class="fa-solid fa-user text-slate-400 text-xs"></i>
+                        <?php endif; ?>
+                    </div>
                 </div>
 
                 <button type="button" onclick="bukaModalGantiPin()" class="px-3 py-1.5 bg-[#1E3A5F] hover:bg-[#274872] text-white rounded-xl text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer" title="Ganti PIN Keamanan">
@@ -282,14 +457,32 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
         <?php endif; ?>
 
         <!-- KARTU STATUS PENGAJUAN (HERO BANNER) -->
-        <div class="bg-[#112240] rounded-2xl border border-[#1E3A5F] shadow-lg p-6 overflow-hidden">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-100">
-                <div>
-                    <span class="text-xs font-bold text-blue-400 uppercase tracking-wider block">Status Pengajuan PIP Siswa:</span>
-                    <h2 class="text-xl font-extrabold text-white mt-1"><?= htmlspecialchars($siswa['nama']) ?></h2>
-                    <p class="text-xs text-slate-300 mt-0.5">
-                        NISN: <span class="font-mono font-bold text-blue-300"><?= htmlspecialchars($siswa['nisn']) ?></span> &bull; Asal: <?= htmlspecialchars($siswa['sekolah_asal'] ?: 'SD/MI') ?> &bull; Tingkat: <?= htmlspecialchars($siswa['kelas']) ?>
-                    </p>
+        <div class="bg-[#112240] rounded-2xl border border-[#1E3A5F] shadow-lg p-6 overflow-hidden no-print">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-5 pb-5 border-b border-[#1E3A5F]">
+                <div class="flex items-center gap-4 sm:gap-5">
+                    <!-- FOTO SISWA RESMI (3x4) -->
+                    <div class="w-16 h-20 sm:w-20 sm:h-24 rounded-xl overflow-hidden border-2 border-[#2E5A8F] bg-[#07101E] shrink-0 shadow-md flex items-center justify-center relative">
+                        <?php if (!empty($siswa['foto']) && file_exists($siswa['foto'])): ?>
+                            <img src="<?= htmlspecialchars($siswa['foto']) ?>" alt="Foto <?= htmlspecialchars($siswa['nama']) ?>" class="w-full h-full object-cover">
+                        <?php else: ?>
+                            <div class="text-center p-2 text-slate-500">
+                                <i class="fa-solid fa-user text-2xl text-slate-600 block mb-1"></i>
+                                <span class="text-[9px] font-semibold text-slate-500 block">3 x 4</span>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+
+                    <div>
+                        <span class="text-xs font-bold text-blue-400 uppercase tracking-wider block">Status Pengajuan PIP Siswa:</span>
+                        <h2 class="text-xl sm:text-2xl font-extrabold text-white mt-0.5"><?= htmlspecialchars($siswa['nama']) ?></h2>
+                        <p class="text-xs text-slate-300 mt-1 flex flex-wrap items-center gap-1.5">
+                            <span>NISN: <b class="font-mono font-bold text-blue-300"><?= htmlspecialchars($siswa['nisn']) ?></b></span>
+                            <span class="text-slate-500">&bull;</span>
+                            <span>Asal: <b class="text-white"><?= htmlspecialchars($siswa['sekolah_asal'] ?: 'SD/MI') ?></b></span>
+                            <span class="text-slate-500">&bull;</span>
+                            <span>Tingkat: <b class="text-white"><?= htmlspecialchars($siswa['kelas']) ?></b></span>
+                        </p>
+                    </div>
                 </div>
 
                 <!-- BADGE STATUS -->
@@ -313,12 +506,18 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
                 </div>
             </div>
 
-            <!-- ACTION BAR: CETAK BUKTI & EDIT BUTTON -->
+            <!-- ACTION BAR: CETAK BUKTI & UNDUH PDF -->
             <div class="mt-5 pt-4 border-t border-[#1E3A5F] flex flex-wrap items-center justify-between gap-3 no-print">
-                <button type="button" onclick="window.print()" class="px-4 py-2 bg-[#162B4D] hover:bg-[#1E3A5F] text-white border border-[#2E5A8F] hover:border-blue-400 rounded-xl text-xs font-semibold shadow-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] inline-flex items-center gap-2 cursor-pointer">
-                    <i class="fa-solid fa-print text-xs text-blue-400"></i>
-                    <span>Cetak Tanda Terima Pengajuan</span>
-                </button>
+                <div class="flex flex-wrap items-center gap-2.5">
+                    <button type="button" onclick="window.print()" class="px-4 py-2 bg-[#162B4D] hover:bg-[#1E3A5F] text-white border border-[#2E5A8F] hover:border-blue-400 rounded-xl text-xs font-semibold shadow-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] inline-flex items-center gap-2 cursor-pointer">
+                        <i class="fa-solid fa-print text-xs text-blue-400"></i>
+                        <span>Cetak Tanda Terima Pengajuan</span>
+                    </button>
+                    <a href="unduh_bukti_pdf.php" id="btn-unduh-pdf" onclick="animasiUnduhPDF(this)" class="px-4 py-2 bg-emerald-950/70 hover:bg-emerald-900/90 text-emerald-200 border border-emerald-700/80 hover:border-emerald-400 rounded-xl text-xs font-semibold shadow-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] inline-flex items-center gap-2 cursor-pointer" title="Unduh langsung dokumen bukti pendaftaran 2 lembar resmi dalam format PDF">
+                        <i class="fa-solid fa-file-pdf text-xs text-emerald-400"></i>
+                        <span>Unduh PDF</span>
+                    </a>
+                </div>
 
                 <div class="flex items-center gap-2 text-xs text-slate-500">
                     <?php if ($is_locked): ?>
@@ -333,34 +532,32 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
             </div>
         </div>
 
-        <!-- FORM DETAIL DATA PENGAJUAN (BISA DIEDIT JIKA BELUM TERVERIFIKASI) -->
-        <div class="bg-[#112240] rounded-2xl border border-[#1E3A5F] shadow-lg p-6">
-            <div class="flex items-center justify-between pb-4 border-b border-[#1E3A5F] mb-6">
+        <!-- FORM DETAIL DATA PENGAJUAN (LEMBAR 1 SAAT DICETAK) -->
+        <div class="bg-[#112240] rounded-2xl border border-[#1E3A5F] shadow-lg p-6 print-sheet-1">
+            <div class="flex items-center justify-between pb-4 border-b border-[#1E3A5F] mb-5 print:pb-2.5 print:mb-3">
                 <div>
-                    <h3 class="text-sm font-bold text-white">Rincian &amp; Formulir Pembaruan Data</h3>
-                    <p class="text-[11px] text-slate-400">Kelola informasi pribadi dan kriteria sosial ekonomi pendaftar</p>
+                    <h3 class="text-sm font-bold text-white print:text-base print:font-black print:text-slate-900">Rincian &amp; Formulir Pembaruan Data</h3>
+                    <p class="text-[11px] text-slate-400 print:text-[11px] print:font-semibold print:text-slate-600">SMP TUNAS BANGSA &bull; Tahun Ajaran <?= htmlspecialchars($pengaturan['tahun_ajaran']) ?></p>
                 </div>
 
-                <?php if ($is_locked): ?>
-                    <span class="text-[11px] text-slate-400 italic">Formulir Terkunci Resmi</span>
-                <?php endif; ?>
+                <span class="text-[11px] text-slate-400 italic font-semibold print:text-xs print:font-bold print:text-slate-800 print:bg-slate-100 print:px-2.5 print:py-1 print:rounded-md print:border print:border-slate-300">Lembar 1: Formulir Pendaftaran</span>
             </div>
 
-            <form action="portal_siswa.php" method="POST" class="space-y-6">
+            <form action="portal_siswa.php" method="POST" enctype="multipart/form-data" class="space-y-5 print:space-y-0">
                 <input type="hidden" name="action" value="update_mandiri">
 
                 <!-- BAGIAN 1: BIODATA SISWA -->
                 <div>
-                    <h4 class="text-xs font-extrabold uppercase tracking-wider text-blue-300 mb-3">
+                    <h4 class="text-xs font-extrabold uppercase tracking-wider text-blue-300 mb-3 print:mb-2 print-section-title">
                         Biodata Siswa &amp; Wali Murid
                     </h4>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs print:grid-cols-2 print:gap-3">
                         <div>
                             <label class="block font-bold text-slate-300 mb-1">Nomor Induk Siswa Nasional (NISN)</label>
                             <input type="text" value="<?= htmlspecialchars($siswa['nisn']) ?>" disabled 
                                 class="w-full px-3.5 py-2.5 border border-[#1E3A5F] rounded-xl bg-[#0B192C] text-slate-400 font-mono font-bold cursor-not-allowed">
-                            <span class="text-[10px] text-slate-400 mt-1 block">NISN merupakan nomor identitas unik dan tidak dapat diubah.</span>
+                            <span class="text-[10px] text-slate-400 mt-1 block print:hidden">NISN merupakan nomor identitas unik dan tidak dapat diubah.</span>
                         </div>
 
                         <div>
@@ -396,21 +593,56 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
                                 class="w-full px-3.5 py-2.5 border border-[#1E3A5F] rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-xs font-semibold text-white <?= $is_locked ? 'bg-[#0B192C] text-slate-400 cursor-not-allowed' : 'bg-[#0B192C]' ?>">
                         </div>
 
-                        <div class="sm:col-span-2">
+                        <div class="sm:col-span-2 print:col-span-1">
                             <label class="block font-bold text-slate-300 mb-1">Alamat Tempat Tinggal</label>
                             <textarea name="alamat" rows="2" <?= $is_locked ? 'disabled' : '' ?>
-                                class="w-full px-3.5 py-2.5 border border-[#1E3A5F] rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-xs font-semibold text-white <?= $is_locked ? 'bg-[#0B192C] text-slate-400 cursor-not-allowed' : 'bg-[#0B192C]' ?>"><?= htmlspecialchars($siswa['alamat'] ?? '') ?></textarea>
+                                class="w-full px-3.5 py-2 border border-[#1E3A5F] rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-xs font-semibold text-white <?= $is_locked ? 'bg-[#0B192C] text-slate-400 cursor-not-allowed' : 'bg-[#0B192C]' ?>"><?= htmlspecialchars($siswa['alamat'] ?? '') ?></textarea>
+                        </div>
+
+                        <div class="sm:col-span-2 print:col-span-1">
+                            <label class="block font-bold text-slate-300 mb-1">
+                                Pas Foto Siswa (3x4) Resmi
+                            </label>
+                            <div class="flex items-center gap-3 p-2.5 rounded-xl border border-[#1E3A5F] bg-[#07101E] print-photo-box">
+                                <div class="w-14 h-18 sm:w-16 sm:h-20 rounded-lg border-2 border-dashed border-[#1E3A5F] flex items-center justify-center overflow-hidden shrink-0 bg-[#0B192C]" id="preview-foto-container">
+                                    <?php if (!empty($siswa['foto']) && file_exists($siswa['foto'])): ?>
+                                        <img id="preview-foto-siswa" src="<?= htmlspecialchars($siswa['foto']) ?>" alt="Foto Siswa" class="w-full h-full object-cover">
+                                        <div id="placeholder-foto" class="text-center p-1 text-slate-500 hidden">
+                                            <i class="fa-solid fa-camera text-base block mb-0.5"></i>
+                                            <span class="text-[8px] block">3 x 4</span>
+                                        </div>
+                                    <?php else: ?>
+                                        <img id="preview-foto-siswa" src="" alt="Pratinjau Foto" class="w-full h-full object-cover hidden">
+                                        <div id="placeholder-foto" class="text-center p-1 text-slate-500">
+                                            <i class="fa-solid fa-camera text-base block mb-0.5"></i>
+                                            <span class="text-[8px] block">3 x 4</span>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="flex-1 w-full min-w-0">
+                                    <?php if (!$is_locked): ?>
+                                        <input type="file" name="foto" id="input-foto" accept="image/jpeg,image/png,image/webp,image/jpg" onchange="previewFotoSiswa(event)"
+                                            class="w-full text-xs text-slate-300 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border border-[#2E5A8F] file:text-[11px] file:font-semibold file:bg-[#162B4D] file:text-blue-300 hover:file:bg-[#1E3A5F] hover:file:border-blue-400 file:cursor-pointer cursor-pointer print:hidden">
+                                        <p class="text-[10px] text-slate-400 mt-1 leading-relaxed print:hidden">
+                                            Format: JPG, PNG, WEBP (Maks. 3MB).
+                                        </p>
+                                        <span class="hidden print:block text-[11px] text-slate-700 font-medium">Pas foto pendaftaran siswa resmi.</span>
+                                    <?php else: ?>
+                                        <span class="text-[11px] text-slate-400 print:text-slate-700 italic">Pas foto resmi telah terverifikasi dalam sistem.</span>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- BAGIAN 2: KRITERIA SOSIAL EKONOMI -->
-                <div class="pt-4 border-t border-[#1E3A5F]">
-                    <h4 class="text-xs font-extrabold uppercase tracking-wider text-blue-300 mb-3">
+                <div class="pt-3 border-t border-[#1E3A5F] print:pt-2">
+                    <h4 class="text-xs font-extrabold uppercase tracking-wider text-blue-300 mb-2.5 print:mb-2 print-section-title">
                         Kriteria Penilaian AHP
                     </h4>
 
-                    <div class="space-y-4 text-xs">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs print:grid-cols-2 print:gap-3">
                         <div>
                             <label class="block font-bold text-slate-300 mb-1">Penghasilan Rata-rata Orang Tua per Bulan *</label>
                             <?php $c1 = (int)($siswa['penghasilan'] ?? 5); ?>
@@ -463,7 +695,7 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
                             </select>
                         </div>
 
-                        <div>
+                        <div class="sm:col-span-2 print:col-span-1">
                             <label class="block font-bold text-slate-300 mb-1">Jarak Rumah Siswa ke Sekolah *</label>
                             <?php $c5 = (int)($siswa['jarak'] ?? 4); ?>
                             <select name="jarak" <?= $is_locked ? 'disabled' : '' ?>
@@ -475,7 +707,42 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
                                 <option value="1" <?= $c5 === 1 ? 'selected' : '' ?>>&lt; 1 km</option>
                             </select>
                         </div>
+
+                        <div class="hidden print:block col-span-1">
+                            <label class="block font-bold text-slate-300 mb-1">Status Verifikasi Berkas Pendaftaran</label>
+                            <input type="text" value="<?= htmlspecialchars($siswa['status_verifikasi']) ?>" disabled
+                                class="w-full px-3.5 py-2.5 border border-[#1E3A5F] rounded-xl font-bold <?= $siswa['status_verifikasi'] === 'Terverifikasi' ? 'text-emerald-700' : 'text-amber-700' ?>">
+                        </div>
                     </div>
+                </div>
+
+                <!-- BAGIAN 3: PERNYATAAN & TANDA TANGAN PENDAFTAR (PRINT ONLY) -->
+                <div class="hidden print:block pt-3 border-t border-slate-300 mt-2">
+                    <div class="p-2.5 rounded-lg border border-slate-300 bg-slate-50 text-[10.5px] leading-relaxed text-slate-700 mb-3">
+                        <b>Pernyataan Kebenaran Data:</b> Saya menyatakan dengan sesungguhnya bahwa seluruh data yang tercantum dalam formulir ini adalah benar, sah, dan dapat dipertanggungjawabkan sesuai dokumen pendukung fisik calon penerima bantuan Program Indonesia Pintar (PIP).
+                    </div>
+                    <div class="flex items-end justify-between text-xs text-slate-800 px-2">
+                        <div>
+                            <p class="text-[11px] text-slate-600">Tanggal Cetak: <b class="text-slate-800"><?= date('d F Y') ?></b></p>
+                            <p class="text-[11px] font-semibold text-slate-700">Status Akun: Terdaftar Resmi &bull; NISN: <?= htmlspecialchars($siswa['nisn']) ?></p>
+                        </div>
+                        <div class="text-center w-52">
+                            <p class="text-[11px]">Calon Penerima / Wali Murid,</p>
+                            <div class="h-10 border-b border-dotted border-slate-600 mx-auto w-40 mt-1"></div>
+                            <p class="text-[11px] font-bold mt-1">( <?= htmlspecialchars($siswa['nama_ortu'] ?: $siswa['nama']) ?> )</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LEMBAR 1 FOOTER: CATATAN & NOMOR HALAMAN (PRINT ONLY) -->
+                <div class="hidden print:flex items-center justify-between pt-2.5 border-t-2 border-slate-800 text-[10.5px] text-slate-600 font-medium">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-file-lines text-slate-700"></i>
+                        <span>Salinan Resmi Formulir Pendaftaran PIP &bull; Dicetak Mandiri melalui Portal Siswa</span>
+                    </div>
+                    <span class="font-bold text-slate-800 bg-slate-100 px-2 py-0.5 rounded border border-slate-300">
+                        Halaman 1 dari 2
+                    </span>
                 </div>
 
                 <!-- SUBMIT PERUBAHAN -->
@@ -551,27 +818,42 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
         </div>
     </div>
 
-    <!-- TAMPILAN CETAK BUKTI PENDAFTARAN RESMI (PRINT ONLY) -->
-    <div class="print-only p-8 text-black text-xs leading-relaxed max-w-2xl mx-auto">
-        <div class="text-center pb-4 border-b-2 border-black mb-6">
+    <!-- TAMPILAN CETAK BUKTI PENDAFTARAN RESMI (PRINT ONLY - LEMBAR 2) -->
+    <div class="print-only print-sheet-2 p-6 text-black text-xs leading-relaxed max-w-2xl mx-auto">
+        <div class="flex items-center justify-between text-[10px] text-gray-500 mb-2 border-b border-gray-200 pb-1 font-semibold italic">
+            <span>Lembar 2: Tanda Terima &amp; Bukti Pendaftaran Resmi</span>
+            <span>No. NISN: <?= htmlspecialchars($siswa['nisn']) ?> &bull; Tanggal Cetak: <?= date('d/m/Y') ?></span>
+        </div>
+
+        <div class="text-center pb-3 border-b-2 border-black mb-5">
             <h2 class="text-base font-extrabold uppercase"><?= htmlspecialchars($pengaturan['nama_yayasan'] ?? 'YAYASAN AL QODIRI LAMPUNG') ?></h2>
             <h1 class="text-lg font-black uppercase"><?= htmlspecialchars($nama_sekolah) ?></h1>
             <p class="text-[11px]"><?= htmlspecialchars($pengaturan['sub_instansi'] ?? 'KABUPATEN LAMPUNG TENGAH') ?></p>
             <p class="text-[10px] mt-0.5">Tanda Terima &amp; Bukti Pendaftaran Calon Penerima Bantuan PIP (Metode AHP) &bull; T.A. <?= htmlspecialchars($pengaturan['tahun_ajaran']) ?></p>
         </div>
 
-        <div class="mb-4">
-            <h3 class="font-bold text-sm uppercase mb-2 border-b border-gray-300 pb-1">I. Data Calon Penerima</h3>
-            <table class="w-full text-xs">
-                <tr><td class="w-40 py-1 font-semibold">Nomor NISN</td><td class="w-4">:</td><td class="font-mono font-bold"><?= htmlspecialchars($siswa['nisn']) ?></td></tr>
-                <tr><td class="py-1 font-semibold">Nama Siswa</td><td>:</td><td class="font-bold"><?= htmlspecialchars($siswa['nama']) ?></td></tr>
-                <tr><td class="py-1 font-semibold">Jenis Kelamin</td><td>:</td><td><?= htmlspecialchars($siswa['jenis_kelamin'] ?? 'Laki-laki') ?></td></tr>
-                <tr><td class="py-1 font-semibold">Sekolah Asal</td><td>:</td><td><?= htmlspecialchars($siswa['sekolah_asal'] ?: 'SD/MI') ?></td></tr>
-                <tr><td class="py-1 font-semibold">Tingkat Kelas</td><td>:</td><td><?= htmlspecialchars($siswa['kelas']) ?></td></tr>
-                <tr><td class="py-1 font-semibold">Nama Wali Murid</td><td>:</td><td><?= htmlspecialchars($siswa['nama_ortu'] ?? '-') ?></td></tr>
-                <tr><td class="py-1 font-semibold">Nomor Kontak / HP</td><td>:</td><td><?= htmlspecialchars($siswa['no_hp'] ?? '-') ?></td></tr>
-                <tr><td class="py-1 font-semibold">Alamat</td><td>:</td><td><?= htmlspecialchars($siswa['alamat'] ?? '-') ?></td></tr>
-            </table>
+        <div class="mb-4 flex items-start justify-between gap-4">
+            <div class="flex-1">
+                <h3 class="font-bold text-sm uppercase mb-2 border-b border-gray-300 pb-1">I. Data Calon Penerima</h3>
+                <table class="w-full text-xs">
+                    <tr><td class="w-40 py-1 font-semibold">Nomor NISN</td><td class="w-4">:</td><td class="font-mono font-bold"><?= htmlspecialchars($siswa['nisn']) ?></td></tr>
+                    <tr><td class="py-1 font-semibold">Nama Siswa</td><td>:</td><td class="font-bold"><?= htmlspecialchars($siswa['nama']) ?></td></tr>
+                    <tr><td class="py-1 font-semibold">Jenis Kelamin</td><td>:</td><td><?= htmlspecialchars($siswa['jenis_kelamin'] ?? 'Laki-laki') ?></td></tr>
+                    <tr><td class="py-1 font-semibold">Sekolah Asal</td><td>:</td><td><?= htmlspecialchars($siswa['sekolah_asal'] ?: 'SD/MI') ?></td></tr>
+                    <tr><td class="py-1 font-semibold">Tingkat Kelas</td><td>:</td><td><?= htmlspecialchars($siswa['kelas']) ?></td></tr>
+                    <tr><td class="py-1 font-semibold">Nama Wali Murid</td><td>:</td><td><?= htmlspecialchars($siswa['nama_ortu'] ?? '-') ?></td></tr>
+                    <tr><td class="py-1 font-semibold">Nomor Kontak / HP</td><td>:</td><td><?= htmlspecialchars($siswa['no_hp'] ?? '-') ?></td></tr>
+                    <tr><td class="py-1 font-semibold">Alamat</td><td>:</td><td><?= htmlspecialchars($siswa['alamat'] ?? '-') ?></td></tr>
+                </table>
+            </div>
+            <!-- FOTO RESMI SISWA 3x4 (PRINT) -->
+            <div class="w-24 h-32 border-2 border-gray-400 flex items-center justify-center shrink-0 overflow-hidden bg-gray-50">
+                <?php if (!empty($siswa['foto']) && file_exists($siswa['foto'])): ?>
+                    <img src="<?= htmlspecialchars($siswa['foto']) ?>" alt="Foto <?= htmlspecialchars($siswa['nama']) ?>" class="w-full h-full object-cover">
+                <?php else: ?>
+                    <span class="text-gray-400 text-[10px] font-bold">FOTO 3x4</span>
+                <?php endif; ?>
+            </div>
         </div>
 
         <div class="mb-6">
@@ -613,6 +895,32 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
         }
         function tutupModalGantiPin() {
             document.getElementById('modal-ganti-pin').classList.add('hidden');
+        }
+        function previewFotoSiswa(event) {
+            const file = event.target.files[0];
+            const img = document.getElementById('preview-foto-siswa');
+            const placeholder = document.getElementById('placeholder-foto');
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    if (img) {
+                        img.src = e.target.result;
+                        img.classList.remove('hidden');
+                    }
+                    if (placeholder) placeholder.classList.add('hidden');
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function animasiUnduhPDF(btn) {
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-xs text-emerald-400"></i> <span>Menyiapkan PDF...</span>';
+            btn.classList.add('opacity-75', 'pointer-events-none');
+            setTimeout(function() {
+                btn.innerHTML = originalContent;
+                btn.classList.remove('opacity-75', 'pointer-events-none');
+            }, 4000);
         }
     </script>
 </body>

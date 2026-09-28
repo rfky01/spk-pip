@@ -203,7 +203,7 @@ $subkriteria_detail = [
             </p>
         </div>
         <div class="flex items-center gap-2">
-            <button type="button" onclick="openProfileModal()" class="btn-glow-schedule px-4 py-2.5 rounded-lg text-xs cursor-pointer">
+            <button type="button" onclick="openJadwalModal()" class="btn-glow-schedule px-4 py-2.5 rounded-lg text-xs cursor-pointer">
                 <i class="fa-solid fa-calendar-days"></i>
                 <span>Atur Jadwal Buka / Tutup</span>
             </button>
@@ -600,7 +600,7 @@ $subkriteria_detail = [
                             </td>
                             <td class="p-3 text-center whitespace-nowrap">
                                 <div class="flex items-center justify-center gap-1.5">
-                                    <a href="dashboard.php?action=verifikasi_siswa&id=<?= $m['id_siswa'] ?>" onclick="return confirm('Setujui dan verifikasi berkas <?= addslashes($m['nama']) ?> sekarang?')" 
+                                    <a href="dashboard.php?action=verifikasi_siswa&id=<?= $m['id_siswa'] ?>" onclick="return konfirmasiAksi(event, this, 'Setujui dan verifikasi berkas <?= addslashes($m['nama']) ?> sekarang?')" 
                                         class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold shadow-sm inline-flex items-center gap-1 transition-colors">
                                         <i class="fa-solid fa-check text-[10px]"></i> Setujui
                                     </a>
