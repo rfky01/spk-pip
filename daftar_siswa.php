@@ -204,6 +204,17 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
     </script>
     <style>
         body, input, button, select, textarea { font-family: 'Roboto', sans-serif !important; }
+
+        /* Pertahankan tampilan gelap elegan saat browser melakukan autofill */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus, 
+        input:-webkit-autofill:active {
+            -webkit-box-shadow: 0 0 0 1000px #0B192C inset !important;
+            -webkit-text-fill-color: #FFFFFF !important;
+            caret-color: #FFFFFF !important;
+            transition: background-color 5000s ease-in-out 0s;
+        }
     </style>
 </head>
 <body class="bg-[#0B192C] min-h-screen text-slate-100 font-sans flex flex-col justify-between">
@@ -298,8 +309,8 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
                             <div class="relative flex items-center">
                                 <input type="password" name="pin" id="input-pin" required maxlength="10" placeholder="Minimal 4 - 6 digit angka (misal: 123456)"
                                     class="w-full pl-3.5 pr-11 py-2.5 border border-[#1E3A5F] rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-xs font-semibold text-white bg-[#0B192C]">
-                                <button type="button" onclick="togglePin('input-pin', 'icon-eye-1')" class="absolute right-0 inset-y-0 px-3.5 flex items-center text-slate-400 hover:text-slate-700 cursor-pointer select-none" title="Lihat/Sembunyikan PIN">
-                                    <i class="fa-solid fa-eye text-sm" id="icon-eye-1"></i>
+                                <button type="button" onclick="togglePin('input-pin', 'icon-eye-1')" class="absolute right-1.5 inset-y-1.5 px-2.5 flex items-center justify-center rounded-lg text-slate-400 hover:text-blue-400 hover:bg-[#162B4D] active:scale-95 transition-all duration-200 cursor-pointer select-none group" title="Lihat/Sembunyikan PIN">
+                                    <i class="fa-solid fa-eye text-sm transition-transform duration-200 group-hover:scale-110" id="icon-eye-1"></i>
                                 </button>
                             </div>
                             <span class="text-[10px] text-slate-400 mt-1 block">Buat PIN yang mudah Anda ingat, contoh: 6 digit tanggal lahir.</span>
@@ -312,8 +323,8 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
                             <div class="relative flex items-center">
                                 <input type="password" name="pin_konfirmasi" id="input-pin-confirm" required maxlength="10" placeholder="Ketik ulang PIN yang sama"
                                     class="w-full pl-3.5 pr-11 py-2.5 border border-[#1E3A5F] rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-xs font-semibold text-white bg-[#0B192C]">
-                                <button type="button" onclick="togglePin('input-pin-confirm', 'icon-eye-2')" class="absolute right-0 inset-y-0 px-3.5 flex items-center text-slate-400 hover:text-slate-700 cursor-pointer select-none" title="Lihat/Sembunyikan PIN">
-                                    <i class="fa-solid fa-eye text-sm" id="icon-eye-2"></i>
+                                <button type="button" onclick="togglePin('input-pin-confirm', 'icon-eye-2')" class="absolute right-1.5 inset-y-1.5 px-2.5 flex items-center justify-center rounded-lg text-slate-400 hover:text-blue-400 hover:bg-[#162B4D] active:scale-95 transition-all duration-200 cursor-pointer select-none group" title="Lihat/Sembunyikan PIN">
+                                    <i class="fa-solid fa-eye text-sm transition-transform duration-200 group-hover:scale-110" id="icon-eye-2"></i>
                                 </button>
                             </div>
                             <span class="text-[10px] text-slate-400 mt-1 block">Pastikan PIN konfirmasi sama persis.</span>

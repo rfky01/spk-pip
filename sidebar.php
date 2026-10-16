@@ -25,7 +25,6 @@ $current_file = basename($_SERVER['PHP_SELF']);
                 </div>
                 <div class="sidebar-text truncate">
                     <span class="font-bold text-white text-sm leading-tight block truncate"><?= htmlspecialchars($pengaturan['nama_sekolah'] ?? 'SMP Tunas Bangsa') ?></span>
-                    <span class="text-[11px] text-blue-300 font-medium block truncate">Sistem SPK PIP (AHP)</span>
                 </div>
             </div>
             <button type="button" onclick="toggleSidebar()" id="sidebar-toggle-btn" title="Sembunyikan Navigasi" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-[#112240] transition-colors shrink-0 cursor-pointer">

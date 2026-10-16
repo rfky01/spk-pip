@@ -113,6 +113,26 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
     </script>
     <style>
         body, input, button, select, textarea { font-family: 'Roboto', sans-serif !important; }
+
+        /* Pertahankan tampilan gelap elegan saat browser melakukan autofill akun/password */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus, 
+        input:-webkit-autofill:active {
+            -webkit-box-shadow: 0 0 0 1000px #0B192C inset !important;
+            -webkit-text-fill-color: #FFFFFF !important;
+            caret-color: #FFFFFF !important;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+
+        /* Styling dan animasi sinkron tombol toggle PIN/Password */
+        .btn-eye-toggle {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-eye-toggle:hover {
+            color: #60A5FA !important; /* Biru terang cerah yang kontras dan sinkron dengan tema */
+            background-color: #162B4D !important;
+        }
     </style>
 </head>
 <body class="bg-[#0B192C] min-h-screen flex items-center justify-center p-4 font-sans text-slate-100">
@@ -126,7 +146,7 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
             </div>
             <h1 class="text-xl font-extrabold text-white tracking-tight">Login Akun Pendaftar</h1>
             <p class="text-xs font-semibold text-blue-300 uppercase tracking-wider mt-0.5">
-                Portal Siswa &bull; <?= htmlspecialchars($nama_sekolah) ?>
+                Login Siswa &bull; <?= htmlspecialchars($nama_sekolah) ?>
             </p>
         </div>
 
@@ -170,8 +190,10 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
                     <input type="password" name="pin" id="input-pin" required maxlength="10" 
                         placeholder="Masukkan PIN Anda" 
                         class="w-full pl-3.5 pr-11 py-2.5 border border-[#1E3A5F] rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none text-xs font-semibold text-white bg-[#0B192C] placeholder:text-slate-500 transition-all">
-                    <button type="button" onclick="togglePin()" id="btn-toggle-pin" class="absolute right-0 inset-y-0 px-3.5 flex items-center text-slate-400 hover:text-white cursor-pointer select-none" title="Lihat/Sembunyikan PIN">
-                        <i class="fa-solid fa-eye text-sm" id="icon-pin"></i>
+                    <button type="button" onclick="togglePin()" id="btn-toggle-pin" 
+                        class="btn-eye-toggle absolute right-1.5 inset-y-1.5 px-2.5 flex items-center justify-center rounded-lg text-slate-400 hover:text-blue-400 hover:bg-[#162B4D] active:scale-95 transition-all duration-200 cursor-pointer select-none group" 
+                        title="Lihat/Sembunyikan PIN">
+                        <i class="fa-solid fa-eye text-sm transition-transform duration-200 group-hover:scale-110" id="icon-pin"></i>
                     </button>
                 </div>
             </div>
