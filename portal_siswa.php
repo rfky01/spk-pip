@@ -230,7 +230,7 @@ $foto_siswa_src = !empty($foto_siswa_base64) ? $foto_siswa_base64 : (!empty($sis
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Akun Pendaftar PIP - <?= htmlspecialchars($siswa['nama']) ?></title>
+    <title>Portal Akun Siswa PIP - <?= htmlspecialchars($siswa['nama']) ?></title>
     <!-- Google Fonts: Roboto -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -391,10 +391,10 @@ $foto_siswa_src = !empty($foto_siswa_base64) ? $foto_siswa_base64 : (!empty($sis
         <div class="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-[#0B192C] border border-[#1E3A5F] p-1 flex items-center justify-center shrink-0">
-                    <img src="<?= htmlspecialchars($logo_sekolah) ?>" alt="Logo Sekolah" class="max-h-full max-w-full object-contain">
+                    <img src="<?= htmlspecialchars($logo_sekolah) ?><?= file_exists($logo_sekolah) ? '?v=' . filemtime($logo_sekolah) : '' ?>" alt="Logo Sekolah" class="max-h-full max-w-full object-contain">
                 </div>
                 <div>
-                    <h1 class="text-sm font-extrabold text-white leading-tight">Portal Akun Pendaftar PIP</h1>
+                    <h1 class="text-sm font-extrabold text-white leading-tight">Portal Akun Siswa PIP</h1>
                     <p class="text-[11px] font-semibold text-blue-300 uppercase tracking-wider"><?= htmlspecialchars($nama_sekolah) ?></p>
                 </div>
             </div>
@@ -420,7 +420,7 @@ $foto_siswa_src = !empty($foto_siswa_base64) ? $foto_siswa_base64 : (!empty($sis
                     <span class="hidden sm:inline">Ganti PIN</span>
                 </button>
 
-                <a href="logout_siswa.php" onclick="return confirm('Apakah Anda yakin ingin keluar dari Akun Pendaftar?')" class="px-3.5 py-1.5 bg-rose-950/40 hover:bg-rose-900/60 text-rose-300 border border-rose-800/60 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5">
+                <a href="logout_siswa.php" onclick="return confirm('Apakah Anda yakin ingin keluar dari Akun Siswa?')" class="px-3.5 py-1.5 bg-rose-950/40 hover:bg-rose-900/60 text-rose-300 border border-rose-800/60 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5">
                     <i class="fa-solid fa-arrow-right-from-bracket text-xs"></i>
                     <span class="hidden sm:inline">Logout</span>
                 </a>

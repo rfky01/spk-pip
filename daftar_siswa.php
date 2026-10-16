@@ -224,7 +224,7 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
         <div class="max-w-4xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-[#0B192C] border border-[#1E3A5F] p-1 flex items-center justify-center shrink-0">
-                    <img src="<?= htmlspecialchars($logo_sekolah) ?>" alt="Logo Sekolah" class="max-h-full max-w-full object-contain">
+                    <img src="<?= htmlspecialchars($logo_sekolah) ?><?= file_exists($logo_sekolah) ? '?v=' . filemtime($logo_sekolah) : '' ?>" alt="Logo Sekolah" class="max-h-full max-w-full object-contain">
                 </div>
                 <div>
                     <h1 class="text-sm font-extrabold text-white leading-tight">Pendaftaran Pengajuan PIP</h1>
@@ -234,7 +234,7 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
             <div class="flex items-center gap-2">
                 <a href="login_siswa.php" class="px-3.5 py-1.5 bg-[#162B4D] hover:bg-[#1E3A5F] text-white border border-[#2E5A8F] hover:border-blue-400 rounded-xl text-xs font-semibold transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] inline-flex items-center gap-1.5">
                     <i class="fa-solid fa-right-to-bracket text-xs text-blue-400"></i>
-                    <span>Login Pendaftar</span>
+                    <span>Login Siswa</span>
                 </a>
             </div>
         </div>
@@ -280,9 +280,9 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
         <div class="bg-[#112240] rounded-2xl border border-[#1E3A5F] shadow-2xl overflow-hidden">
             
             <div class="p-6 bg-gradient-to-r from-[#07101E] to-[#1E3A5F] text-white border-b border-[#1E3A5F]">
-                <h2 class="text-lg font-bold">Formulir Pendaftaran Akun Pendaftar PIP</h2>
+                <h2 class="text-lg font-bold">Formulir Pendaftaran Akun Siswa PIP</h2>
                 <p class="text-xs text-blue-200 mt-1">
-                    Isi biodata anak, buat PIN keamanan akun Anda, dan lengkapi kriteria sosial ekonomi.
+                    Isi biodata siswa, buat PIN keamanan akun, dan lengkapi kriteria sosial ekonomi.
                 </p>
             </div>
 

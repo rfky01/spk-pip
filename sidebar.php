@@ -16,7 +16,7 @@ $current_file = basename($_SERVER['PHP_SELF']);
             <div class="flex items-center gap-3 min-w-0">
                 <div onclick="toggleSidebar()" title="<?= htmlspecialchars($pengaturan['nama_sekolah'] ?? 'SMP Tunas Bangsa') ?> - SPK PIP (Klik untuk Ciutkan/Buka)" class="bg-[#112240] border border-[#1E3A5F] w-10 h-10 rounded-xl flex items-center justify-center shadow-sm shrink-0 cursor-pointer transition-colors overflow-hidden p-1">
                     <?php if (!empty($pengaturan['logo']) && file_exists($pengaturan['logo'])): ?>
-                        <img src="<?= htmlspecialchars($pengaturan['logo']) ?>" alt="Logo" class="w-full h-full object-contain">
+                        <img src="<?= htmlspecialchars($pengaturan['logo']) ?><?= '?v=' . filemtime($pengaturan['logo']) ?>" alt="Logo" class="w-full h-full object-contain">
                     <?php else: ?>
                         <div class="bg-slate-900 text-white w-full h-full rounded-lg flex items-center justify-center text-sm">
                             <i class="fa-solid fa-graduation-cap"></i>

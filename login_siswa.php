@@ -22,7 +22,7 @@ $error = "";
 $info = "";
 
 if (isset($_GET['msg']) && $_GET['msg'] === 'logout') {
-    $info = "Anda telah berhasil keluar (logout) dari Akun Pendaftar.";
+    $info = "Anda telah berhasil keluar (logout) dari Akun Siswa.";
 }
 
 // Pre-fill NISN jika dikirim lewat URL
@@ -93,7 +93,7 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Akun Pendaftar PIP - <?= htmlspecialchars($nama_sekolah) ?></title>
+    <title>Login Akun Siswa PIP - <?= htmlspecialchars($nama_sekolah) ?></title>
     <!-- Google Fonts: Roboto -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -142,9 +142,9 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
         <!-- LOGO & HEADER -->
         <div class="text-center mb-6">
             <div class="inline-flex items-center justify-center w-16 h-16 bg-[#0B192C] border border-[#1E3A5F] rounded-2xl p-2 mb-3 shadow-xs">
-                <img src="<?= htmlspecialchars($logo_sekolah) ?>" alt="Logo Sekolah" class="max-w-full max-h-full object-contain">
+                <img src="<?= htmlspecialchars($logo_sekolah) ?><?= file_exists($logo_sekolah) ? '?v=' . filemtime($logo_sekolah) : '' ?>" alt="Logo Sekolah" class="max-w-full max-h-full object-contain">
             </div>
-            <h1 class="text-xl font-extrabold text-white tracking-tight">Login Akun Pendaftar</h1>
+            <h1 class="text-xl font-extrabold text-white tracking-tight">Login Akun Siswa</h1>
             <p class="text-xs font-semibold text-blue-300 uppercase tracking-wider mt-0.5">
                 Login Siswa &bull; <?= htmlspecialchars($nama_sekolah) ?>
             </p>
@@ -200,7 +200,7 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
 
             <button type="submit" class="w-full py-2.5 mt-2 bg-[#162B4D] hover:bg-[#1E3A5F] text-white border border-[#2E5A8F] hover:border-blue-400 font-bold rounded-xl shadow-md transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] text-xs tracking-wide cursor-pointer flex items-center justify-center gap-2">
                 <i class="fa-solid fa-right-to-bracket text-blue-400"></i>
-                <span>Masuk ke Akun Pendaftar</span>
+                <span>Masuk ke Akun Siswa</span>
             </button>
         </form>
 

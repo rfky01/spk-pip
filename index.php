@@ -7,6 +7,6 @@ if (isset($_SESSION['admin'])) {
 } elseif (isset($_SESSION['siswa'])) {
     header("Location: portal_siswa.php");
 } else {
-    header("Location: daftar_siswa.php");
+    header("Location: login_siswa.php");
 }
 exit;

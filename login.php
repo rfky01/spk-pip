@@ -115,7 +115,7 @@ $logo_sekolah = !empty($row_p['logo']) && file_exists($row_p['logo']) ? $row_p['
         <!-- LOGO SEKOLAH -->
         <div class="inline-flex items-center justify-center w-20 h-20 bg-[#0B192C] border border-[#1E3A5F] rounded-2xl p-2.5 mb-4 shadow-sm">
             <?php if (file_exists($logo_sekolah)): ?>
-                <img src="<?= htmlspecialchars($logo_sekolah) ?>" alt="Logo Sekolah" class="max-w-full max-h-full object-contain">
+                <img src="<?= htmlspecialchars($logo_sekolah) ?><?= file_exists($logo_sekolah) ? '?v=' . filemtime($logo_sekolah) : '' ?>" alt="Logo Sekolah" class="max-w-full max-h-full object-contain">
             <?php else: ?>
                 <span class="text-sm font-bold text-blue-400">SMP TB</span>
             <?php endif; ?>
