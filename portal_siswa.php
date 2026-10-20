@@ -1,5 +1,5 @@
 <?php
-// portal_siswa.php - Dashboard & Portal Akun Pendaftar PIP Mandiri
+// portal_siswa.php - Dashboard & Akun Pendaftar PIP Mandiri
 require_once "koneksi.php";
 
 if (session_status() === PHP_SESSION_NONE) {
@@ -230,7 +230,7 @@ $foto_siswa_src = !empty($foto_siswa_base64) ? $foto_siswa_base64 : (!empty($sis
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Akun Siswa PIP - <?= htmlspecialchars($siswa['nama']) ?></title>
+    <title>Akun Siswa PIP - <?= htmlspecialchars($siswa['nama']) ?></title>
     <!-- Google Fonts: Roboto -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -394,7 +394,7 @@ $foto_siswa_src = !empty($foto_siswa_base64) ? $foto_siswa_base64 : (!empty($sis
                     <img src="<?= htmlspecialchars($logo_sekolah) ?><?= file_exists($logo_sekolah) ? '?v=' . filemtime($logo_sekolah) : '' ?>" alt="Logo Sekolah" class="max-h-full max-w-full object-contain">
                 </div>
                 <div>
-                    <h1 class="text-sm font-extrabold text-white leading-tight">Portal Akun Siswa PIP</h1>
+                    <h1 class="text-sm font-extrabold text-white leading-tight">Akun Siswa PIP</h1>
                     <p class="text-[11px] font-semibold text-blue-300 uppercase tracking-wider"><?= htmlspecialchars($nama_sekolah) ?></p>
                 </div>
             </div>
@@ -782,7 +782,7 @@ $foto_siswa_src = !empty($foto_siswa_base64) ? $foto_siswa_base64 : (!empty($sis
             </div>
 
             <p class="text-xs text-slate-300 leading-relaxed">
-                PIN ini digunakan untuk login ke portal akun pendaftar agar data anak Anda terlindungi dari pihak lain.
+                PIN ini digunakan untuk login ke akun pendaftar agar data anak Anda terlindungi dari pihak lain.
             </p>
 
             <form action="portal_siswa.php" method="POST" class="space-y-3.5 text-xs">

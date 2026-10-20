@@ -1,0 +1,167 @@
+ 
+48 
+ 
+ 
+Tabel 3.4 Nilai Alternatif 
+Kriteria 
+C1 
+C2 
+C3 
+C4 
+C5 
+C1(penghasilan
+) 
+< Rp 
+500.000 
+Rp 600rb-
+1jt 
+Rp 1jt – 
+2jt 
+Rp 2jt – 
+3jt 
+> Rp 4jt 
+C2(tanggungan) 
+> 5 Orang 
+4 Orang 
+3 Orang 
+2 Orang 
+1 Orang 
+C3(kondisi 
+Rumah) 
+Tidak 
+Layak 
+Dinding 
+Kayu 
+Dinding 
+batu 
+atap 
+seng 
+Dinding 
+Batu 
+atap 
+genteng 
+Tembok 
+Kramik 
+C4(prestasi) 
+Juara 1-3 
+Kab 
+Juara 
+Harapan 
+Juara 
+kelas 1-
+3 
+Juara 10 
+besar 
+Juara 20 
+besar 
+C5(jarak) 
+> 5 km 
+3 – 5 km 
+2 km 
+1 km 
+< 1 km 
+ 
+3.4.5 Normalisasi Matriks 
+Setelah matriks perbandingan berpasangan terbentuk, langkah 
+selanjutnya adalah melakukan normalisasi matriks. Normalisasi bertujuan 
+untuk mengubah nilai pada matriks perbandingan menjadi nilai yang 
+proporsional sehingga dapat digunakan untuk menghitung bobot prioritas 
+setiap kriteria. 
+Proses normalisasi dilakukan dengan membagi setiap elemen pada 
+matriks perbandingan dengan jumlah nilai pada kolom yang bersangkutan. 
+Hasil normalisasi kemudian digunakan untuk menghitung priority vector 
+atau bobot prioritas masing-masing kriteria dengan mencari nilai rata-rata 
+pada setiap baris matriks normalisasi. 
+Rumus normalisasi matriks adalah sebagai berikut. 
+𝑁𝑖𝑗=
+𝑎𝑖𝑗
+∑
+𝑎𝑖𝑗
+𝑛
+𝑖=1
+ 
+Keterangan: 
+𝑁𝑖𝑗= Nilai hasil normalisasi 
+𝑎𝑖𝑗= Nilai matriks perbandingan pada baris ke-𝑖 dan kolom ke-𝑗 
+∑𝑎𝑖𝑗= Jumlah nilai pada kolom ke-𝑗 
+𝑛= Jumlah kriteria 
+
+=== PAGE 66 ===
+ 
+49 
+ 
+Jadi setiap sel di bagi dengan jumlah kolom 
+Contoh: 1.00 / 2.28 = 0.4386 
+Tabel 3.5 Nomalisasi Matriks 
+Kriteria 
+C1 
+C2 
+C3 
+C4 
+C5 
+Bobot 
+C1 
+0.4386 
+0.4982 
+0.4392 
+0.3810 
+0.3333 
+0.4165 
+C2 
+0.2193 
+0.2451 
+0.2928 
+0.2857 
+0.2667 
+0.2619 
+C3 
+0.1447 
+0.1225 
+0.1464 
+0.1905 
+0.2000 
+0.1608 
+C4 
+0.1096 
+0.0809 
+0.0732 
+0.0952 
+0.1333 
+0.0985 
+C5 
+0.0877 
+0.0613 
+0.0483 
+0.0476 
+0.0667 
+0.0623 
+ 
+Jadi hasil bobot dari setiap kriteria yaitu 
+a. Penghasilan Orang Tua = 41.65% 
+b. Jumlah tanggungan keluarga = 26.19% 
+c. Kondisi Tempat Tinggal/Rumah = 16.08% 
+d. Prestasi akademik = 9.85% 
+e. Jarak tempuh ke sekolah = 6.23% 
+Hasil normalisasi tersebut digunakan sebagai dasar dalam 
+menentukan bobot prioritas masing-masing kriteria yang akan digunakan 
+pada proses perhitungan selanjutnya. 
+3.4.6 Perhitungan Nilai Evaluasi 
+Setelah bobot prioritas diperoleh, dilakukan pengujian konsistensi 
+terhadap matriks perbandingan untuk mengetahui apakah penilaian yang 
+diberikan telah memenuhi tingkat konsistensi yang dipersyaratkan dalam 
+metode Analytical Hierarchy Process (AHP). Pengujian konsistensi 
+dilakukan 
+melalui 
+perhitungan 
+Eigen 
+Value 
+Maksimum 
+(𝜆𝑚𝑎𝑥), 
+Consistency Index (CI), dan Consistency Ratio (CR) [43]. 
+Perhitungan Consistency Index (CI) menggunakan rumus berikut. 
+𝐶𝐼= 𝜆𝑚𝑎𝑥−𝑛
+𝑛−1 
+Keterangan: 
+CI = Consistency Index 
+𝜆𝑚𝑎𝑥= Nilai eigen maksimum 
+𝑛= Jumlah kriteria 

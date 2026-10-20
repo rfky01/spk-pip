@@ -53,13 +53,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             }
         }
 
-        $pin_default = password_hash(substr($nisn, -4) ?: '123456', PASSWORD_DEFAULT);
+        $pin_default = password_hash($nisn ?: '123456', PASSWORD_DEFAULT);
         $stmt = mysqli_prepare($koneksi, "INSERT INTO `calon_penerima` 
             (`nisn`, `nama`, `nama_ortu`, `no_hp`, `foto`, `pin`, `jenis_kelamin`, `kelas`, `sekolah_asal`, `alamat`, `penghasilan`, `tanggungan`, `kondisi_rumah`, `prestasi`, `jarak`, `status_verifikasi`, `tahun`) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Terverifikasi', ?)");
         mysqli_stmt_bind_param($stmt, "ssssssssssiiiiis", $nisn, $nama, $nama_ortu, $no_hp, $foto_path, $pin_default, $jenis_kelamin, $kelas, $sekolah_asal, $alamat, $c1, $c2, $c3, $c4, $c5, $tahun);
         if (mysqli_stmt_execute($stmt)) {
-            $msg = "Data calon penerima ($nama) berhasil disimpan untuk Tahun Ajaran $tahun dan langsung Terverifikasi! (PIN Akun Default: 4 digit terakhir NISN)";
+            $msg = "Data calon penerima ($nama) berhasil disimpan untuk Tahun Ajaran $tahun dan langsung Terverifikasi! (PIN Akun: Nomor NISN Siswa)";
             $msg_type = "success";
         } else {
             $msg = "Gagal menyimpan data siswa (NISN mungkin sudah terdaftar).";
@@ -153,11 +153,11 @@ if (isset($_GET['action']) && $_GET['action'] === 'reset_pin_siswa') {
     if ($id_rp > 0) {
         $q_s = mysqli_query($koneksi, "SELECT nisn, nama FROM `calon_penerima` WHERE `id_siswa` = $id_rp LIMIT 1");
         if ($s_row = mysqli_fetch_assoc($q_s)) {
-            $default_pin = substr($s_row['nisn'], -4);
+            $default_pin = $s_row['nisn'];
             if (empty($default_pin)) $default_pin = '123456';
             $h_pin = password_hash($default_pin, PASSWORD_DEFAULT);
             mysqli_query($koneksi, "UPDATE `calon_penerima` SET `pin` = '$h_pin' WHERE `id_siswa` = $id_rp");
-            $msg = "PIN Akun Pendaftar untuk siswa <b>" . htmlspecialchars($s_row['nama']) . "</b> (NISN: <b>{$s_row['nisn']}</b>) berhasil direset menjadi: <b>$default_pin</b> (4 digit terakhir NISN).";
+            $msg = "PIN Akun Pendaftar untuk siswa <b>" . htmlspecialchars($s_row['nama']) . "</b> (NISN: <b>{$s_row['nisn']}</b>) berhasil direset menjadi: <b>$default_pin</b> (Nomor NISN Siswa).";
             $msg_type = "success";
         }
     }

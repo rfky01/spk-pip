@@ -186,9 +186,8 @@ $logo_sekolah = !empty($pengaturan['logo']) && file_exists($pengaturan['logo']) 
 
             <div>
                 <label class="block text-xs font-bold text-slate-300 mb-1.5">PIN Keamanan Akun</label>
-                <div class="relative flex items-center">
-                    <input type="password" name="pin" id="input-pin" required maxlength="10" 
-                        placeholder="Masukkan PIN Anda" 
+                    <input type="password" name="pin" id="input-pin" required maxlength="20" 
+                        placeholder="Masukkan PIN (Nomor NISN)" 
                         class="w-full pl-3.5 pr-11 py-2.5 border border-[#1E3A5F] rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none text-xs font-semibold text-white bg-[#0B192C] placeholder:text-slate-500 transition-all">
                     <button type="button" onclick="togglePin()" id="btn-toggle-pin" 
                         class="btn-eye-toggle absolute right-1.5 inset-y-1.5 px-2.5 flex items-center justify-center rounded-lg text-slate-400 hover:text-blue-400 hover:bg-[#162B4D] active:scale-95 transition-all duration-200 cursor-pointer select-none group" 
