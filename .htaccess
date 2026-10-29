@@ -1,0 +1,18 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /spk-pip/
+
+    # Jangan alihkan file aset fisik (gambar, logo, sql, pdf, css)
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteCond %{REQUEST_URI} \.(jpg|jpeg|png|gif|ico|css|js|svg|webp|sql|pdf)$ [NC]
+    RewriteRule ^ - [L]
+
+    # Jangan alihkan jika mengakses index.php
+    RewriteRule ^index\.php$ - [L]
+
+    # Alihkan request lain atau request file lama ke index.php
+    RewriteCond %{REQUEST_FILENAME} !-f [OR]
+    RewriteCond %{REQUEST_URI} \.php$ [NC]
+    RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>
+
