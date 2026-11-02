@@ -384,7 +384,7 @@ $count_ditolak = mysqli_num_rows(mysqli_query($koneksi, "SELECT id_siswa FROM `c
                                 <?php endif; ?>
 
                                 <a href="?v=ZGF0YV9jYWxvbl9wZW5lcmltYQ&action=reset_pin_siswa&id=<?= $siswa['id_siswa'] ?>" 
-                                    onclick="return konfirmasiAksi(event, this, 'Reset PIN akun pendaftar <?= htmlspecialchars(addslashes($siswa['nama'])) ?> menjadi 4 digit terakhir NISN?')" 
+                                    onclick="return konfirmasiAksi(event, this, 'Reset PIN akun pendaftar <?= htmlspecialchars(addslashes($siswa['nama'])) ?> menjadi Nomor NISN siswa?')" 
                                     class="w-7 h-7 flex items-center justify-center bg-slate-100 hover:bg-amber-900/60 border border-slate-200 hover:border-amber-500 text-slate-600 hover:text-amber-300 rounded text-xs transition-colors" title="Reset PIN Akun Siswa">
                                     <i class="fa-solid fa-key text-[10px]"></i>
                                 </a>
